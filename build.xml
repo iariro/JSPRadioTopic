@@ -1,0 +1,103 @@
+<project default="deploy">
+
+	<!-- JSP RadioTopic build.xml -->
+
+	<!-- web.xml
+
+	<context-param>
+		<param-name>RadioTopicSqlserverUrl</param-name>
+		<param-value>jdbc:sqlserver://localhost:2144;DatabaseName=RadioTopic;User=sa;Password=p@ssw0rd;</param-value>
+	</context-param>
+
+	-->
+
+	<property file="../../../../../build.properties" />
+
+	<condition property="have.tomcat">
+		<available file="${TOMCAT_SITE_HOME}" />
+	</condition>
+
+	<target name="zip">
+		<zip
+			destfile="${PDA_HOME}/Temp/JSPRadioTopic.zip"
+			basedir=".."
+			includes="project/**"
+			excludes="project/bin/**"/>
+	</target>
+
+	<target name="codeguess">
+		<taskdef name="codeguess" classname="kumagai.codeguess.CodeGuessTask" classpath="${JAVAPROJECTCHECKER_LIB}" />
+		<codeguess targetfilepath="src/">
+			<exclude extension="java" code="UTF-8" />
+		</codeguess>
+		<codeguess targetfilepath="html/">
+			<exclude extension="jsp" code="UTF-8" />
+			<exclude extension="jpg" />
+		</codeguess>
+	</target>
+
+	<target name="javadoc">
+		<javadoc
+			destdir="../javadoc"
+			sourcepath="src"
+			encoding="utf-8"
+			classpath="${JUNIT_LIB};${SQLSERVER_JDBC_LIB};${SERVLET_LIB};${STRUTS_LIB};${STRUTS2_CORE_LIB};${STRUTS2_CONVENTION_LIB}">
+		</javadoc>
+	</target>
+
+	<target name="deploy" if="have.tomcat">
+
+		<!-- Struts2 -->
+		<!--<delete dir="${TOMCAT_SITE_HOME}/radiotopic/" />-->
+		<!--<delete dir="${TOMCAT_SITE_HOME}/WEB-INF/classes/kumagai/radiotopic/" />-->
+		<copy todir="${TOMCAT_SITE_HOME}/radiotopic/">
+			<fileset dir="html">
+				<include name="**/*.html" />
+				<include name="**/*.js" />
+				<include name="**/*.jsp" />
+				<include name="**/*.css" />
+				<include name="**/*.jpg" />
+				<include name="**/*.png" />
+				<include name="**/*.gif" />
+			</fileset>
+		</copy>
+
+		<copy todir="${TOMCAT_SITE_HOME}/WEB-INF/classes">
+			<fileset dir="bin">
+				<include name="kumagai/radiotopic/*.class" />
+				<include name="kumagai/radiotopic/struts2/*.class" />
+			</fileset>
+		</copy>
+
+	</target>
+
+	<target name="jspcheck">
+		<taskdef name="jspcheck" classname="kumagai.jspchecker.JspCheckerTask" classpath="${JSPCHECKER_LIB}" />
+		<jspcheck actionClassPath="src/kumagai/radiotopic/struts2" jspFilePath="html"/>
+	</target>
+
+	<target name="restart" depends="deploy">
+		<exec executable="sc">
+			<arg line="stop tomcat6" />
+		</exec>
+		<sleep seconds="1" />
+		<exec executable="sc">
+			<arg line="start tomcat6" />
+		</exec>
+	</target>
+
+	<target name="import">
+		<java classname="kumagai.radiotopic.importtext.ImportText" classpath="bin;${SQLSERVER_JDBC_LIB}">
+			<arg value="竹達・沼倉の初めてでもいいですか？"/>
+			<arg value="${PDA_HOME}/Private/tvradio/hajimete.TXT"/>
+			<arg value="-nd"/>
+		</java>
+	</target>
+
+	<target name="export">
+		<java classname="kumagai.radiotopic.exporttext.ExportText" classpath="bin;${KTOOL_LIB};${SQLSERVER_JDBC_LIB}">
+			<arg value="${PDA_HOME}/Private/wradio"/>
+		</java>
+	</target>
+
+</project>
