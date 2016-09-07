@@ -49,8 +49,6 @@ public class AddDayLump2Action
 			{
 				DriverManager.registerDriver(new SQLServerDriver());
 
-				Integer.valueOf(no);
-
 				Connection connection = DriverManager.getConnection(url);
 
 				String [] lines = topics.split("\r\n");
@@ -73,6 +71,7 @@ public class AddDayLump2Action
 				{
 					// ２行目が日付としてパースされなかった＝トピックのみの内容と判断
 
+					Integer.valueOf(no);
 					date = StringTool.parseDate(date);
 				}
 
@@ -98,7 +97,7 @@ public class AddDayLump2Action
 		}
 		catch (Exception exception)
 		{
-			message = exception.getMessage();
+			message += exception.getMessage();
 
 			return "error";
 		}
