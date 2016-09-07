@@ -1,5 +1,6 @@
 package kumagai.radiotopic.struts2;
 
+import java.util.regex.*;
 import java.sql.*;
 import javax.servlet.*;
 import com.microsoft.sqlserver.jdbc.*;
@@ -19,6 +20,9 @@ import kumagai.radiotopic.*;
 })
 public class AddDayLump2Action
 {
+	static private final Pattern dateFormat =
+		Pattern.compile("[0-9]{4}/[0-9]{2}/[0-9]{2}");
+
 	public int programName;
 	public int programid;
 	public String date;
@@ -37,7 +41,60 @@ public class AddDayLump2Action
 	{
 		try
 		{
-			Integer.valueOf(no);
+			ServletContext context = ServletActionContext.getServletContext();
+
+			String url = context.getInitParameter("RadioTopicSqlserverUrl");
+
+			if (url != null)
+			{
+				DriverManager.registerDriver(new SQLServerDriver());
+
+				Integer.valueOf(no);
+
+				Connection connection = DriverManager.getConnection(url);
+
+				String [] lines = topics.split("\r\n");
+				String date2 = StringTool.parseDate(lines[1]);
+				Matcher matcher = dateFormat.matcher(date2);
+
+				int index = 0;
+
+				if (matcher.matches())
+				{
+					// ２行目が日付としてパースされた
+
+					// １行目を回数・２行目を日付として扱う
+					no = lines[0];
+					date = date2;
+
+					index = 2;
+				}
+				else
+				{
+					// ２行目が日付としてパースされなかった＝トピックのみの内容と判断
+
+					date = StringTool.parseDate(date);
+				}
+
+				// Dayエントリ作成
+				int newDayId = DayCollection.insertDay(connection, programid, date, no);
+
+				// トピックを登録
+				for (int i=index ; i<lines.length ; i++)
+				{
+					TopicCollection.insertTopic(connection, newDayId, lines[i]);
+				}
+
+				connection.close();
+
+				return "success";
+			}
+			else
+			{
+				message = "RadioTopicSqlserverUrl設定なし";
+
+				return "error";
+			}
 		}
 		catch (Exception exception)
 		{
@@ -45,26 +102,5 @@ public class AddDayLump2Action
 
 			return "error";
 		}
-
-		ServletContext context = ServletActionContext.getServletContext();
-
-		DriverManager.registerDriver(new SQLServerDriver());
-
-		Connection connection =
-			DriverManager.getConnection
-				(context.getInitParameter("RadioTopicSqlserverUrl"));
-
-		date = StringTool.parseDate(date);
-
-		int newDayId = DayCollection.insertDay(connection, programid, date, no);
-
-		for (String topic : topics.split("\r\n"))
-		{
-			TopicCollection.insertTopic(connection, newDayId, topic);
-		}
-
-		connection.close();
-
-		return "success";
 	}
 }
