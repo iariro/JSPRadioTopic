@@ -80,7 +80,7 @@
 		<exec executable="sc">
 			<arg line="stop tomcat6" />
 		</exec>
-		<sleep seconds="1" />
+		<sleep seconds="3" />
 		<exec executable="sc">
 			<arg line="start tomcat6" />
 		</exec>
