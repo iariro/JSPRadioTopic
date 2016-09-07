@@ -39,5 +39,6 @@ public class StringTest extends TestCase
 		assertEquals("2015/12/22", StringTool.parseDate("(2015.12.22)"));
 		assertEquals("2015/12/22", StringTool.parseDate("(2015年12月22)"));
 		assertEquals("2015/12/22", StringTool.parseDate("(2015年12月22日)"));
+		assertEquals("2016/09/07", StringTool.parseDate("9/7"));
 	}
 }

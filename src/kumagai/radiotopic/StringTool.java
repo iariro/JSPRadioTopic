@@ -1,6 +1,7 @@
 package kumagai.radiotopic;
 
 import java.util.regex.*;
+import ktool.datetime.*;
 
 /**
  * 文字列関連
@@ -18,6 +19,9 @@ public class StringTool
 		Pattern.compile("\\(*([0-9]{4})年([0-9]*)月([0-9]*)日*\\)*");
 	static private final String outFormat =
 		"%04d/%02d/%02d";
+
+	static private final Pattern dateYearless =
+		Pattern.compile("([0-9]*)/([0-9]*)");
 
 	/**
 	 * 日付をyyyy/mm/dd形式に整形する。
@@ -76,6 +80,19 @@ public class StringTool
 					2000 + Integer.parseInt(matcher.group(1)),
 					Integer.parseInt(matcher.group(2)),
 					Integer.parseInt(matcher.group(3)));
+		}
+
+		matcher = dateYearless.matcher(date);
+		if (matcher.matches())
+		{
+			// mm/dd形式にマッチ
+
+			return
+				String.format(
+					outFormat,
+					new DateTime().getYear(),
+					Integer.parseInt(matcher.group(1)),
+					Integer.parseInt(matcher.group(2)));
 		}
 
 		return date;
