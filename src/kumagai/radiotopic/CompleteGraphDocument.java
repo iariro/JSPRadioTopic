@@ -302,11 +302,14 @@ public class CompleteGraphDocument
 
 					if (diffDay == 0 || date.getMonth() == 1)
 					{
+						// 先頭または月初め
+
 						dateText =
 							String.format("%d/%02d/%02d", date.getYear(), date.getMonth(), date.getDay());
 					}
 					else
 					{
+						// 先頭でも月初めでもない
 
 						dateText =
 							String.format("%02d/%02d", date.getMonth(), date.getDay());
@@ -318,7 +321,7 @@ public class CompleteGraphDocument
 						String.valueOf(origin.x + xscale * diffDay));
 					element.setAttribute(
 						"y",
-						String.valueOf(origin.y + screen.height + 25));
+						String.valueOf(origin.y + screen.height + 25 + 20));
 					element.setAttribute("font-family", fontFamily);
 					element.setAttribute("text-anchor", "middle");
 					element.appendChild(createTextNode(dateText));
@@ -374,8 +377,29 @@ public class CompleteGraphDocument
 
 				int diffDay = date.diff(minDate2).getDay();
 
-				String dateText =
-					String.format("%02d/%02d", date.getMonth(), date.getDay());
+				String dateText;
+
+				if (diffDay == 0 || date.getMonth() == 1)
+				{
+					// 先頭または月初め
+
+					dateText =
+						String.format(
+							"%04d/%02d/%02d",
+							date.getYear(),
+							date.getMonth(),
+							date.getDay());
+				}
+				else
+				{
+					// 先頭でも月初めでもない
+
+					dateText =
+						String.format(
+							"%02d/%02d",
+							date.getMonth(),
+							date.getDay());
+				}
 
 				if ((int)(origin.x + xscale * diffDay) - datex < 50)
 				{
