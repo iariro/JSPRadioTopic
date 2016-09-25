@@ -29,6 +29,13 @@
 
 			<h2><s:property value="programName" /></h2>
 
+			<br>
+			<s:form action="adddaylump1" theme="simple">
+				<input type="hidden" name="programid" value="<s:property value="programid" />">
+				<input type="hidden" name="programName" value="<s:property value="programName" />">
+				<s:submit value="日追加（内容含め一括）" />
+			</s:form>
+
 			<table>
 			<tr>
 				<td>
@@ -100,12 +107,6 @@
 				<input type="text" name="no">回
 				日付：<input type="text" name="date">
 				<s:submit value="日追加" />
-			</s:form>
-
-			<s:form action="adddaylump1" theme="simple">
-				<input type="hidden" name="programid" value="<s:property value="programid" />">
-				<input type="hidden" name="programName" value="<s:property value="programName" />">
-				<s:submit value="日追加（内容含め一括）" />
 			</s:form>
 
 		</div>
