@@ -62,7 +62,7 @@ public class ExportText
 				continue;
 			}
 
-			File path = new File(args[0], entry.getKey().shortname + ".txt");
+			File path = new File(args[0], entry.getKey().shortname + ".html");
 
 			PrintWriter writer =
 				new PrintWriter(
@@ -105,6 +105,13 @@ public class ExportText
 			}
 
 			int pno = -1;
+
+			writer.println("<html>");
+			writer.println("<head>");
+			writer.printf("<title>%s</title>\n", entry.getKey().name);
+			writer.println("</head>");
+			writer.println("<body>");
+			writer.println("<pre>");
 
 			for (Day day : entry.getValue())
 			{
@@ -158,6 +165,10 @@ public class ExportText
 				}
 				writer.println();
 			}
+
+			writer.println("</pre>");
+			writer.println("</body>");
+			writer.println("</html>");
 
 			writer.close();
 
