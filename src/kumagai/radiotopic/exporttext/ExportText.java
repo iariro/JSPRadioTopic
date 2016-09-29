@@ -67,7 +67,7 @@ public class ExportText
 			PrintWriter writer =
 				new PrintWriter(
 					new OutputStreamWriter(
-						new FileOutputStream(path)));
+						new FileOutputStream(path), "utf-8"));
 
 			DateNoPrinter dateNoPrinter;
 
@@ -107,6 +107,7 @@ public class ExportText
 			int pno = -1;
 
 			writer.println("<html>");
+			writer.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />");
 			writer.println("<head>");
 			writer.printf("<title>%s</title>\n", entry.getKey().name);
 			writer.println("</head>");
