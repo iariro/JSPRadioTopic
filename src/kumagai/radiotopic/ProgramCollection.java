@@ -142,6 +142,10 @@ public class ProgramCollection
 		}
 	}
 
+	public ProgramCollection()
+	{
+	}
+
 	/**
 	 * 番組コレクションを構築
 	 * @param connection DB接続オブジェクト

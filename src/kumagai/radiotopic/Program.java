@@ -2,6 +2,7 @@ package kumagai.radiotopic;
 
 import java.sql.*;
 import java.text.*;
+import ktool.datetime.*;
 
 /**
  * 番組情報
@@ -27,6 +28,31 @@ public class Program
 
 	/**
 	 * 指定の値をメンバーに割り当て
+	 * @param id ID
+	 * @param name 番組名
+	 * @param shortname ファイル名用番組名
+	 * @param age 年代
+	 * @param sortOrder ソート順
+	 * @param exportformat エクスポート形式
+	 * @param originUpdateDate 起点日付
+	 * @param maxupdatedate 更新日
+	 */
+	public Program(int id, String name, String shortname, String age,
+		int sortOrder, String exportformat, Date originUpdateDate,
+		Date maxupdatedate)
+	{
+		this.id = id;
+		this.name = name;
+		this.shortname = shortname;
+		this.age = age;
+		this.sortOrder = sortOrder;
+		this.exportformat = exportformat;
+		this.originUpdateDate = originUpdateDate;
+		this.maxupdatedate = maxupdatedate;
+	}
+
+	/**
+	 * DBレコードの値をメンバーに割り当て
 	 * @param results DBレコード
 	 */
 	public Program(ResultSet results)
@@ -58,5 +84,47 @@ public class Program
 	public String getOriginUpdateDate()
 	{
 		return format.format(originUpdateDate);
+	}
+
+	/**
+	 * 開始日を取得。
+	 * @return 開始日／null=開始日なし
+	 */
+	public DateTime getStartDate()
+		throws ParseException
+	{
+		String [] ageField = age.split("-");
+
+		if (ageField.length >= 1)
+		{
+			// 始点あり
+
+			return DateTime.parseDateString(ageField[0]);
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	/**
+	 * 終了日を取得。
+	 * @return 終了日／null=終了日なし
+	 */
+	public DateTime getEndDate()
+		throws ParseException
+	{
+		String [] ageField = age.split("-");
+
+		if (ageField.length == 2)
+		{
+			// 終点あり
+
+			return DateTime.parseDateString(ageField[1]);
+		}
+		else
+		{
+			return null;
+		}
 	}
 }
