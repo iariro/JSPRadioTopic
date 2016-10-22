@@ -66,6 +66,7 @@
 			<fileset dir="bin">
 				<include name="kumagai/radiotopic/*.class" />
 				<include name="kumagai/radiotopic/struts2/*.class" />
+				<include name="kumagai/radiotopic/servlet/*.class" />
 			</fileset>
 		</copy>
 

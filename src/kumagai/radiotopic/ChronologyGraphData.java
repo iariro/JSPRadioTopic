@@ -11,6 +11,8 @@ import ktool.datetime.*;
 public class ChronologyGraphData
 	extends ArrayList<ChronologyGraphDataElement>
 {
+	static private int headerHeight = 20;
+
 	public int width;
 	public int height;
 	public float scaleX;
@@ -74,7 +76,7 @@ public class ChronologyGraphData
 
 		dayRange = max.diff(min);
 		scaleX = (float)width / (float)dayRange.getDay();
-		scaleY = (float)height / (float)programCollection.size();
+		scaleY = (float)(height - headerHeight) / (float)programCollection.size();
 
 		for (int i=0 ; i<programCollection.size() ; i++)
 		{
@@ -98,8 +100,10 @@ public class ChronologyGraphData
 				add(
 					new ChronologyGraphDataElement(
 						program.name,
+						program.id,
+						program.sortOrder,
 						(int)(start.diff(min).getDay() * scaleX),
-						(int)(i * scaleY),
+						(int)(i * scaleY) + headerHeight,
 						(int)(end.diff(start).getDay() * scaleX),
 						(int)scaleY));
 			}

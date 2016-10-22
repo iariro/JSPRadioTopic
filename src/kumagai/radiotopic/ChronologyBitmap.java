@@ -7,6 +7,7 @@ import java.sql.*;
 import java.text.*;
 import javax.imageio.*;
 import com.microsoft.sqlserver.jdbc.*;
+import ktool.datetime.*;
 
 /**
  * 年表グラフイメージ。
@@ -69,16 +70,35 @@ public class ChronologyBitmap
 			RenderingHints.KEY_ANTIALIASING,
 			RenderingHints.VALUE_ANTIALIAS_ON);
 
-		BasicStroke wideStroke = new BasicStroke(4.0f);
-		graphics.setStroke(wideStroke);
-		graphics.setPaint(Color.blue);
 		Font font = graphics.getFont();
-		graphics.setFont(new Font(font.getName(), font.getStyle(), 20));
+		graphics.setFont(new Font(font.getName(), font.getStyle(), 15));
 
+		// 縦線
+		Color barColor = new Color(0xcc, 0xcc, 0xcc);
+		graphics.setPaint(Color.black);
+		int i = 0;
+		for (DateTime day=chronologyGraphData.min ; day.compareTo(chronologyGraphData.max) < 0 ; day.addDay(1))
+		{
+			if (day.getMonth() == 1 && day.getDay() == 1)
+			{
+				int x = (int)(i * chronologyGraphData.scaleX);
+				graphics.drawLine(x, 0, x, chronologyGraphData.height);
+				graphics.drawString(String.format("%d年", day.getYear()), x + 4, 12);
+			}
+
+			i++;
+		}
+
+		// 棒グラフ
 		for (ChronologyGraphDataElement element : chronologyGraphData)
 		{
-			graphics.drawString(element.name, element.x + 10, element.y + chronologyGraphData.scaleY / 2);
+			graphics.setPaint(barColor);
+			graphics.fillRect(element.x, element.y, element.width, element.height);
+			graphics.setPaint(Color.blue);
 			graphics.drawRect(element.x, element.y, element.width, element.height);
+
+			graphics.setPaint(Color.black);
+			graphics.drawString(element.name, element.x + 5, element.y + chronologyGraphData.scaleY / 2 + 6);
 		}
 	}
 }

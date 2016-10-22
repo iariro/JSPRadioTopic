@@ -22,6 +22,10 @@
 				<s:submit value="最近聞いた回リスト" />
 			</s:form>
 
+			<s:form action="chronologygraph" theme="simple">
+				<s:submit value="年表グラフ" />
+			</s:form>
+
 			<h2>視聴途中</h2>
 
 			<s:if test="%{tochuuDays.size()>0}">

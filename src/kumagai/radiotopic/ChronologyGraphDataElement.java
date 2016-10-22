@@ -6,7 +6,9 @@ package kumagai.radiotopic;
  */
 public class ChronologyGraphDataElement
 {
-	String name;
+	public String name;
+	public int id;
+	public int sortOrder;
 	int x;
 	int y;
 	int width;
@@ -15,18 +17,32 @@ public class ChronologyGraphDataElement
 	/**
 	 * 指定の値をメンバーに割り当てる。
 	 * @param name 番組名
+	 * @param id 番組ID
+	 * @param sortOrder ソートオーダー
 	 * @param x X座標
 	 * @param y Y座標
 	 * @param width 横幅
 	 * @param height 縦幅
 	 */
-	public ChronologyGraphDataElement(String name, int x, int y, int width, int height)
+	public ChronologyGraphDataElement(String name, int id, int sortOrder, int x,
+		int y, int width, int height)
 	{
 		this.name = name;
+		this.id = id;
+		this.sortOrder = sortOrder;
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
+	}
+
+	/**
+	 * 指定の値をメンバーに割り当てる。
+	 * @return 区立夏ぶるマップ用座標文字列を生成・取得
+	 */
+	public String getCoords()
+	{
+		return String.format("%d,%d,%d,%d", x, y, x + width, y + height);
 	}
 
 	/**
