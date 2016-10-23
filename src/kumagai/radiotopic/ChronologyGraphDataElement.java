@@ -38,7 +38,7 @@ public class ChronologyGraphDataElement
 
 	/**
 	 * 指定の値をメンバーに割り当てる。
-	 * @return 区立夏ぶるマップ用座標文字列を生成・取得
+	 * @return クリッカブルマップ用座標文字列を生成・取得
 	 */
 	public String getCoords()
 	{

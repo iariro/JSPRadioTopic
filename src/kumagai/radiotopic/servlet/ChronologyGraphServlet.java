@@ -51,6 +51,8 @@ public class ChronologyGraphServlet
 			}
 			else
 			{
+				// URL定義なし
+
 				readImage = new BufferedImage(100, 100, BufferedImage.TYPE_INT_BGR);
 				Graphics2D graphics = readImage.createGraphics();
 				graphics.drawString("url not found", 0, 0);

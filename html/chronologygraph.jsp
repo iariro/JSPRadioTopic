@@ -11,7 +11,7 @@
 	</head>
 
 	<body>
-		<h1>ラジオ番組一覧</h1>
+		<h1>ラジオ番組一覧 - 年表</h1>
 
 		<div class=hatena-body>
 		<div class=main>
