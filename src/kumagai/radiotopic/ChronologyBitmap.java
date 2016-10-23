@@ -64,7 +64,7 @@ public class ChronologyBitmap
 
 		Graphics2D graphics = createGraphics();
 
-		graphics.setPaint(Color.white);
+		graphics.setPaint(new Color(0xee, 0xee, 0xee));
 		graphics.fillRect(0, 0, chronologyGraphData.width, chronologyGraphData.height);
 		graphics.setRenderingHint(
 			RenderingHints.KEY_ANTIALIASING,
@@ -74,7 +74,6 @@ public class ChronologyBitmap
 		graphics.setFont(new Font(font.getName(), font.getStyle(), 15));
 
 		// 縦線
-		Color barColor = new Color(0xcc, 0xcc, 0xcc);
 		graphics.setPaint(Color.black);
 		int i = 0;
 		for (DateTime day=chronologyGraphData.min ; day.compareTo(chronologyGraphData.max) < 0 ; day.addDay(1))
@@ -90,6 +89,7 @@ public class ChronologyBitmap
 		}
 
 		// 棒グラフ
+		Color barColor = new Color(0xcc, 0xcc, 0xff);
 		for (ChronologyGraphDataElement element : chronologyGraphData)
 		{
 			graphics.setPaint(barColor);
