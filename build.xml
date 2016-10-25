@@ -41,7 +41,7 @@
 			destdir="../javadoc"
 			sourcepath="src"
 			encoding="utf-8"
-			classpath="${JUNIT_LIB};${SQLSERVER_JDBC_LIB};${SERVLET_LIB};${STRUTS_LIB};${STRUTS2_CORE_LIB};${STRUTS2_CONVENTION_LIB}">
+			classpath="${KTOOL_LIB};${JUNIT_LIB};${SQLSERVER_JDBC_LIB};${SERVLET_LIB};${STRUTS_LIB};${STRUTS2_CORE_LIB};${STRUTS2_CONVENTION_LIB}">
 		</javadoc>
 	</target>
 
