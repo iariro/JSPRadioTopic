@@ -30,10 +30,8 @@ public class DayDigest
 	}
 
 	/**
-	 * 指定の値をメンバーに割り当てる
-	 * @param programName 番組名
-	 * @param date 日付
-	 * @param no 番号
+	 * DBレコード中の値をメンバーに割り当てる
+	 * @param results DBレコード
 	 */
 	public DayDigest(ResultSet results)
 		throws SQLException

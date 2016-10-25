@@ -153,8 +153,7 @@ public class ExportText
 				{
 					for (int i=pno ; i>intNo ; i--)
 					{
-						dateNoPrinter.printDateNo
-							(null, Integer.toString(i));
+						dateNoPrinter.printDateNo(null, Integer.toString(i));
 						writer.println();
 					}
 				}
@@ -207,7 +206,8 @@ public class ExportText
 	 */
 	static protected void outputIndexHtml(String outputPath,
 		ProgramCollection programCollection)
-		throws ParseException, IOException, UnsupportedEncodingException, FileNotFoundException
+		throws ParseException, IOException, UnsupportedEncodingException,
+			FileNotFoundException
 	{
 		ChronologyGraphData chronologyGraphData =
 			new ChronologyGraphData(programCollection, 1200, 600);

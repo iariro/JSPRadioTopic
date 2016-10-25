@@ -132,7 +132,6 @@ public class DayCollection
 	/**
 	 * 入力途中の日情報を取得
 	 * @param connection DB接続オブジェクト
-	 * @param topicid トピックID
 	 * @return 入力途中の日情報
 	 */
 	static public ArrayList<DayDigest> getTochuuTopic(Connection connection)
