@@ -1,8 +1,11 @@
 package kumagai.radiotopic.exporttext;
 
+import java.awt.image.*;
 import java.io.*;
 import java.sql.*;
+import java.text.ParseException;
 import java.util.*;
+import javax.imageio.*;
 import com.microsoft.sqlserver.jdbc.*;
 import ktool.datetime.*;
 import kumagai.radiotopic.*;
@@ -14,18 +17,28 @@ import kumagai.radiotopic.*;
 public class ExportText
 {
 	/**
-	 * @param args [0] 出力ディレクトリパス [1]=-n/-dn/-d
+	 * @param args [0]=出力ディレクトリパス [1]=-n/-dn/-d
 	 */
 	public static void main(String[] args)
 		throws Exception
 	{
+		String argFlag = "-dn";
+
+		if (args.length == 2)
+		{
+			// オプションあり
+
+			argFlag = args[1];
+		}
+
 		DriverManager.registerDriver(new SQLServerDriver());
 
 		Connection connection = RadioTopicDatabase.getConnection();
 
+		ProgramCollection programCollection = new ProgramCollection(connection);
+
 		HashMap<Program, DayCollection> programAndTopic =
 			new HashMap<Program, DayCollection>();
-		ProgramCollection programCollection = new ProgramCollection(connection);
 
 		for (Program program : programCollection)
 		{
@@ -38,15 +51,6 @@ public class ExportText
 		}
 
 		connection.close();
-
-		String argFlag = "-dn";
-
-		if (args.length == 2)
-		{
-			// オプションあり
-
-			argFlag = args[1];
-		}
 
 		DateTime today = new DateTime();
 
@@ -62,12 +66,13 @@ public class ExportText
 				continue;
 			}
 
-			File path = new File(args[0], entry.getKey().shortname + ".html");
+			File htmlFile =
+				new File(args[0], entry.getKey().shortname + ".html");
 
 			PrintWriter writer =
 				new PrintWriter(
 					new OutputStreamWriter(
-						new FileOutputStream(path), "utf-8"));
+						new FileOutputStream(htmlFile), "utf-8"));
 
 			DateNoPrinter dateNoPrinter;
 
@@ -104,76 +109,140 @@ public class ExportText
 					new DateNoPrinter(writer, entry.getValue().getMaxNo());
 			}
 
-			int pno = -1;
+			outputProgramHtml
+				(entry.getKey(), entry.getValue(), writer, dateNoPrinter);
 
-			writer.println("<html>");
-			writer.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />");
-			writer.println("<head>");
-			writer.printf("<title>%s</title>\n", entry.getKey().name);
-			writer.println("</head>");
-			writer.println("<body>");
-			writer.println("<pre>");
+			System.out.printf("%s written.\n", htmlFile);
+		}
 
-			for (Day day : entry.getValue())
+		outputIndexHtml(args[0], programCollection);
+	}
+
+	/**
+	 * 番組HTMLファイル出力
+	 * @param program 番組情報
+	 * @param dayCollection 全日ごとの情報
+	 * @param writer ファイルオブジェクト
+	 * @param dateNoPrinter ファイル出力オブジェクト
+	 */
+	static protected void outputProgramHtml(Program program,
+		DayCollection dayCollection, PrintWriter writer,
+		DateNoPrinter dateNoPrinter)
+		throws UnsupportedEncodingException, FileNotFoundException
+	{
+		writer.println("<html>");
+		writer.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />");
+		writer.println("<head>");
+		writer.printf("<title>%s</title>\n", program.name);
+		writer.println("</head>");
+		writer.println("<body>");
+		writer.println("<pre>");
+
+		int pno = -1;
+
+		for (Day day : dayCollection)
+		{
+			String date = day.getDate();
+
+			try
 			{
-				String date = day.getDate();
+				int intNo = Integer.valueOf(day.getNo());
 
-				try
+				// 補間
+				if (pno >= 0)
 				{
-					int intNo = Integer.valueOf(day.getNo());
-
-					// 補間
-					if (pno >= 0)
+					for (int i=pno ; i>intNo ; i--)
 					{
-						for (int i=pno ; i>intNo ; i--)
-						{
-							dateNoPrinter.printDateNo
-								(null, Integer.toString(i));
-							writer.println();
-						}
+						dateNoPrinter.printDateNo
+							(null, Integer.toString(i));
+						writer.println();
 					}
-
-					pno = intNo - 1;
-				}
-				catch (NumberFormatException exception)
-				{
-					// 何もしない
 				}
 
-				if (date != null)
-				{
-					// 日付あり
-
-					dateNoPrinter.printDateNo(date, day.getNo());
-				}
-				else
-				{
-					// 日付なし
-
-					dateNoPrinter.printDateNo(null, day.getNo());
-				}
-
-				for (int i=0 ; i<day.topicCollection.size() ; i++)
-				{
-					if (i > 0)
-					{
-						// ２個目以降
-
-						writer.print(" ");
-					}
-
-					writer.print(day.topicCollection.get(i).text);
-				}
-				writer.println();
+				pno = intNo - 1;
+			}
+			catch (NumberFormatException exception)
+			{
+				// 何もしない
 			}
 
-			writer.println("</pre>");
-			writer.println("</body>");
-			writer.println("</html>");
+			if (date != null)
+			{
+				// 日付あり
 
-			writer.close();
+				dateNoPrinter.printDateNo(date, day.getNo());
+			}
+			else
+			{
+				// 日付なし
 
-			System.out.printf("%s written.\n", path);
+				dateNoPrinter.printDateNo(null, day.getNo());
+			}
+
+			for (int i=0 ; i<day.topicCollection.size() ; i++)
+			{
+				if (i > 0)
+				{
+					// ２個目以降
+
+					writer.print(" ");
+				}
+
+				writer.print(day.topicCollection.get(i).text);
+			}
+			writer.println();
 		}
+
+		writer.println("</pre>");
+		writer.println("</body>");
+		writer.println("</html>");
+
+		writer.close();
+	}
+
+	/**
+	 * インデックスHTML出力。年表イメージも含む。
+	 * @param outputPath 出力パス
+	 * @param programCollection 全番組情報
+	 */
+	static protected void outputIndexHtml(String outputPath,
+		ProgramCollection programCollection)
+		throws ParseException, IOException, UnsupportedEncodingException, FileNotFoundException
+	{
+		ChronologyGraphData chronologyGraphData =
+			new ChronologyGraphData(programCollection, 1200, 600);
+
+		BufferedImage readImage = new ChronologyBitmap(chronologyGraphData);
+
+		File imageFile = new File(outputPath, "Chronology.png");
+
+		ImageIO.write(readImage, "png", imageFile);
+
+		File indexFile = new File(outputPath, "index.html");
+
+		PrintWriter writer =
+			new PrintWriter(
+				new OutputStreamWriter(
+					new FileOutputStream(indexFile), "utf-8"));
+
+		writer.println("<html>");
+		writer.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />");
+		writer.println("<body>");
+
+		writer.println("<img src='Chronology.png' usemap='#menu'>");
+		writer.println("<map name='menu'>");
+		for (ChronologyGraphDataElement element : chronologyGraphData)
+		{
+			writer.printf(
+				"<area shape='rect' coords='%s' href='%s'>",
+				element.getCoords(),
+				element.name);
+		}
+		writer.println("</map>");
+
+		writer.println("</body>");
+		writer.println("</html>");
+
+		writer.close();
 	}
 }
