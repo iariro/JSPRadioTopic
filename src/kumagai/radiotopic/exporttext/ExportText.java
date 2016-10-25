@@ -234,9 +234,9 @@ public class ExportText
 		for (ChronologyGraphDataElement element : chronologyGraphData)
 		{
 			writer.printf(
-				"<area shape='rect' coords='%s' href='%s'>",
+				"<area shape='rect' coords='%s' href='%s.html'>",
 				element.getCoords(),
-				element.name);
+				element.shortname);
 		}
 		writer.println("</map>");
 

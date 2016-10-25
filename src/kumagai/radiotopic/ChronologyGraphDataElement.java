@@ -7,6 +7,7 @@ package kumagai.radiotopic;
 public class ChronologyGraphDataElement
 {
 	public String name;
+	public String shortname;
 	public int id;
 	public int sortOrder;
 	int x;
@@ -17,6 +18,7 @@ public class ChronologyGraphDataElement
 	/**
 	 * 指定の値をメンバーに割り当てる。
 	 * @param name 番組名
+	 * @param shortname ファイル名
 	 * @param id 番組ID
 	 * @param sortOrder ソートオーダー
 	 * @param x X座標
@@ -24,10 +26,11 @@ public class ChronologyGraphDataElement
 	 * @param width 横幅
 	 * @param height 縦幅
 	 */
-	public ChronologyGraphDataElement(String name, int id, int sortOrder, int x,
-		int y, int width, int height)
+	public ChronologyGraphDataElement(String name, String shortname, int id,
+		int sortOrder, int x, int y, int width, int height)
 	{
 		this.name = name;
+		this.shortname = shortname;
 		this.id = id;
 		this.sortOrder = sortOrder;
 		this.x = x;

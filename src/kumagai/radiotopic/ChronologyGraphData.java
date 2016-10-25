@@ -100,6 +100,7 @@ public class ChronologyGraphData
 				add(
 					new ChronologyGraphDataElement(
 						program.name,
+						program.shortname,
 						program.id,
 						program.sortOrder,
 						(int)(start.diff(min).getDay() * scaleX),
