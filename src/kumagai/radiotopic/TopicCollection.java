@@ -197,7 +197,6 @@ public class TopicCollection
 	/**
 	 * 回コレクションを構築
 	 * @param connection DB接続オブジェクト
-	 * @param dayid 回ID
 	 */
 	public TopicCollection(Connection connection)
 		throws SQLException
