@@ -20,7 +20,7 @@ public class ExportText
 	 * @param args [0]=出力ディレクトリパス [1]=-n/-dn/-d
 	 */
 	public static void main(String[] args)
-		throws Exception
+		throws SQLException, ParseException, IOException
 	{
 		String argFlag = "-dn";
 
@@ -210,7 +210,7 @@ public class ExportText
 			FileNotFoundException
 	{
 		ChronologyGraphData chronologyGraphData =
-			new ChronologyGraphData(programCollection, 1200, 600);
+			new ChronologyGraphData(programCollection, 900, 600);
 
 		BufferedImage readImage = new ChronologyBitmap(chronologyGraphData);
 
@@ -237,8 +237,11 @@ public class ExportText
 				"<area shape='rect' coords='%s' href='%s.html'>",
 				element.getCoords(),
 				element.shortname);
+			writer.println();
 		}
 		writer.println("</map>");
+		writer.printf("%s<br>", new DateTime().toFullString());
+		writer.println();
 
 		writer.println("</body>");
 		writer.println("</html>");
