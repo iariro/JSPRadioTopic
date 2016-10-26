@@ -128,7 +128,6 @@ public class ExportText
 	static protected void outputProgramHtml(Program program,
 		DayCollection dayCollection, PrintWriter writer,
 		DateNoPrinter dateNoPrinter)
-		throws UnsupportedEncodingException, FileNotFoundException
 	{
 		writer.println("<html>");
 		writer.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />");
@@ -206,8 +205,7 @@ public class ExportText
 	 */
 	static protected void outputIndexHtml(String outputPath,
 		ProgramCollection programCollection)
-		throws ParseException, IOException, UnsupportedEncodingException,
-			FileNotFoundException
+		throws ParseException, IOException
 	{
 		ChronologyGraphData chronologyGraphData =
 			new ChronologyGraphData(programCollection, 900, 600);
