@@ -238,6 +238,7 @@ public class ExportText
 			writer.println();
 		}
 		writer.println("</map>");
+		writer.println("<br>");
 		writer.printf("%s<br>", new DateTime().toFullString());
 		writer.println();
 
