@@ -50,7 +50,7 @@ public class ChronologyBitmap
 			new ChronologyBitmap(
 				new ChronologyGraphData(programCollection, 800, 600));
 
-		ImageIO.write(readImage, "png", new File("Chronology.png"));
+		ImageIO.write(readImage, "png", new File("../Chronology.png"));
 	}
 
 	/**
@@ -64,6 +64,7 @@ public class ChronologyBitmap
 
 		Graphics2D graphics = createGraphics();
 
+		// 背景
 		graphics.setPaint(new Color(0xee, 0xee, 0xee));
 		graphics.fillRect(0, 0, chronologyGraphData.width, chronologyGraphData.height);
 		graphics.setRenderingHint(
@@ -98,7 +99,7 @@ public class ChronologyBitmap
 			graphics.drawRect(element.x, element.y, element.width, element.height);
 
 			graphics.setPaint(Color.black);
-			graphics.drawString(element.name, element.x + 5, element.y + chronologyGraphData.scaleY / 2 + 6);
+			graphics.drawString(element.name, element.x + 5, element.y + (int)chronologyGraphData.scaleY / 2 + 6);
 		}
 	}
 }

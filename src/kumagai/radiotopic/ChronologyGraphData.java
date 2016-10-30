@@ -15,8 +15,8 @@ public class ChronologyGraphData
 
 	public int width;
 	public int height;
-	public float scaleX;
-	public float scaleY;
+	public double scaleX;
+	public double scaleY;
 	public DateTime max = null;
 	public DateTime min = null;
 	public TimeSpan dayRange;
@@ -76,7 +76,7 @@ public class ChronologyGraphData
 
 		dayRange = max.diff(min);
 		scaleX = (float)width / (float)dayRange.getDay();
-		scaleY = (float)(height - headerHeight) / (float)programCollection.size();
+		scaleY = Math.floor((double)(height - headerHeight) / (double)programCollection.size());
 
 		for (int i=0 ; i<programCollection.size() ; i++)
 		{
