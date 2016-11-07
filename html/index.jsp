@@ -17,18 +17,23 @@
 		<div class=main>
 		<div class=day>
 
+			<table><tr>
+			<td>
+			<s:form action="chronologygraph" theme="simple">
+				<s:submit value="年表グラフ" />
+			</s:form>
+			</td>
+
+			<td>
 			<s:form action="recentupdatelist" theme="simple">
 				<input type="hidden" name="dayNum" value="3">
 				<s:submit value="最近聞いた回リスト" />
 			</s:form>
-
-			<s:form action="chronologygraph" theme="simple">
-				<s:submit value="年表グラフ" />
-			</s:form>
-
-			<h2>視聴途中</h2>
+			</td>
+			</tr></table>
 
 			<s:if test="%{tochuuDays.size()>0}">
+			<h2>視聴途中</h2>
 			<table>
 				<tr>
 					<th>番組名</th>
@@ -39,7 +44,25 @@
 					<tr>
 						<td><s:property value="programName" /></td>
 						<td><s:property value="date" /></td>
-						<td><s:property value="no" /></td>
+						<td align="right"><s:property value="no" /></td>
+					</tr>
+				</s:iterator>
+			</table>
+			</s:if>
+
+			<s:if test="%{nextListenDays.size()>0}">
+			<h2>視聴可能</h2>
+			<table>
+				<tr>
+					<th>番組名</th>
+					<th>日付</th>
+					<th>回</th>
+				</tr>
+				<s:iterator value="nextListenDays">
+					<tr>
+						<td><s:property value="programName" /></td>
+						<td><s:property value="date" /></td>
+						<td align="right"><s:property value="no" /></td>
 					</tr>
 				</s:iterator>
 			</table>

@@ -57,7 +57,8 @@ public class IndexAction
 							(connection, program.id, SortOrder.values()[program.sortOrder]);
 
 					Day nextListenDay =
-							DayCollection.getNextListenDay(dayCollection, program.age, today);
+						DayCollection.getNextListenDay
+							(program.name, dayCollection, program.age, today);
 
 					if (nextListenDay != null)
 					{

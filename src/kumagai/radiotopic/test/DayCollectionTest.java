@@ -17,9 +17,9 @@ public class DayCollectionTest
 	{
 		DayCollection dayCollection = new DayCollection();
 
-		dayCollection.add(new Day(1, DateTime.parseDateString("2015/01/01"), null, null));
-		dayCollection.add(new Day(2, DateTime.parseDateString("2015/02/01"), null, null));
-		dayCollection.add(new Day(3, DateTime.parseDateString("2015/03/01"), null, null));
+		dayCollection.add(new Day(null, 1, DateTime.parseDateString("2015/01/01"), null, null));
+		dayCollection.add(new Day(null, 2, DateTime.parseDateString("2015/02/01"), null, null));
+		dayCollection.add(new Day(null, 3, DateTime.parseDateString("2015/03/01"), null, null));
 
 		assertEquals(3, dayCollection.getOverDateCount("2014/12/31"));
 		assertEquals(2, dayCollection.getOverDateCount("2015/01/01"));
@@ -54,8 +54,8 @@ public class DayCollectionTest
 	{
 		DayCollection dayCollection = new DayCollection();
 
-		dayCollection.add(new Day(1, DateTime.parseDateString("2015/01/01"), null, DateTime.parseDateString("2015/01/01")));
-		dayCollection.add(new Day(2, DateTime.parseDateString("2015/02/01"), null, DateTime.parseDateString("2015/01/10")));
+		dayCollection.add(new Day(null, 1, DateTime.parseDateString("2015/01/01"), null, DateTime.parseDateString("2015/01/01")));
+		dayCollection.add(new Day(null, 2, DateTime.parseDateString("2015/02/01"), null, DateTime.parseDateString("2015/01/10")));
 
 		assertEquals(9, dayCollection.getUpdateRange());
 		assertEquals("2015/01/10", dayCollection.getLastUpdate().toString().substring(0, 10));
@@ -76,19 +76,19 @@ public class DayCollectionTest
 	{
 		DayCollection dayCollection = new DayCollection();
 
-		Day day = new Day(1, DateTime.parseDateString("2015/01/01"), null, null);
+		Day day = new Day(null, 1, DateTime.parseDateString("2015/01/01"), null, null);
 		day.topicCollection = new TopicCollection();
 		day.topicCollection.add(new Topic(0, 0, "休みボケ"));
 		day.topicCollection.add(new Topic(0, 0, "年末年始"));
 		day.topicCollection.add(new Topic(0, 0, "ぬーZAP再び"));
 		dayCollection.add(day);
-		day = new Day(2, DateTime.parseDateString("2015/02/01"), null, null);
+		day = new Day(null, 2, DateTime.parseDateString("2015/02/01"), null, null);
 		day.topicCollection = new TopicCollection();
 		day.topicCollection.add(new Topic(0, 0, "クリスマスガチプレゼント"));
 		day.topicCollection.add(new Topic(0, 0, "だがしかし"));
 		day.topicCollection.add(new Topic(0, 0, "くしゃみ"));
 		dayCollection.add(day);
-		day = new Day(3, DateTime.parseDateString("2015/03/01"), null, null);
+		day = new Day(null, 3, DateTime.parseDateString("2015/03/01"), null, null);
 		day.topicCollection = new TopicCollection();
 		day.topicCollection.add(new Topic(0, 0, "菓子持ち歩き"));
 		day.topicCollection.add(new Topic(0, 0, "断乳"));

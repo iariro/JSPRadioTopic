@@ -93,7 +93,7 @@ public class ListDayAction
 							{
 								for (int j=no2-1 ; j>no1 ; j--)
 								{
-									this.dayCollection.add(new Day(j, null, null, null));
+									this.dayCollection.add(new Day(null, j, null, null, null));
 								}
 							}
 

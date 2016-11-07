@@ -19,7 +19,7 @@ public class Day
 		formatDT.applyPattern("yyyy/MM/dd HH:mm:ss");
 	}
 
-	public final String programname;
+	public final String programName;
 	public final int id;
 	public final int programid;
 	public final DateTime date;
@@ -109,14 +109,15 @@ public class Day
 
 	/**
 	 * 指定の値をメンバーに割り当て
+	 * @param programName 番組名
 	 * @param no 回
 	 * @param date 日付
 	 * @param createdate 作成日付
 	 * @param updatedate 更新日付
 	 */
-	public Day(int no, DateTime date, DateTime createdate, DateTime updatedate)
+	public Day(String programName, int no, DateTime date, DateTime createdate, DateTime updatedate)
 	{
-		this.programname = null;
+		this.programName = programName;
 		this.id = -1;
 		this.programid = 0;
 		this.date = date;
@@ -149,12 +150,40 @@ public class Day
 	public Day(ResultSet results)
 		throws SQLException
 	{
-		this.programname = results.getString("name");
+		this.programName = results.getString("name");
 		this.id = results.getInt("id");
 		this.programid = results.getInt("programid");
-		this.date = new DateTime(results.getDate("date"));
-		this.createdate = new DateTime(results.getTimestamp("createdate"));
-		this.updatedate = new DateTime(results.getTimestamp("updatedate"));
+
+		Date date = results.getDate("date");
+		if (date != null)
+		{
+			this.date = new DateTime(date);
+		}
+		else
+		{
+			this.date = null;
+		}
+
+		Timestamp createdate = results.getTimestamp("createdate");
+		if (createdate != null)
+		{
+			this.createdate = new DateTime(createdate);
+		}
+		else
+		{
+			this.createdate = null;
+		}
+
+		Timestamp updatedate = results.getTimestamp("updatedate");
+		if (updatedate != null)
+		{
+			this.updatedate = new DateTime(updatedate);
+		}
+		else
+		{
+			this.updatedate = null;
+		}
+
 		this.no = results.getString("no");
 	}
 
@@ -171,13 +200,13 @@ public class Day
 			return
 				String.format(
 					"%s %d %d %s %s topic=%d %s",
-					programname,
+					programName,
 					id,
 					programid,
 					date,
 					no,
 					topicCollection.size(),
-					updatedate != null ? formatDT.format(updatedate) : null);
+					updatedate != null ? updatedate.toFullString() : null);
 		}
 		else
 		{
@@ -186,7 +215,7 @@ public class Day
 			return
 				String.format(
 					"%s %d %d %s %s %s",
-					programname,
+					programName,
 					id,
 					programid,
 					date,

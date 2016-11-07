@@ -24,42 +24,45 @@ public class DayCollection
 		Connection connection = RadioTopicDatabase.getConnection();
 
 		DayCollection dayCollection =
-			new DayCollection(connection, 1, SortOrder.NumberByText);
+			new DayCollection(connection, 29, SortOrder.NumberByNumeric);
 
 		for (Day day : dayCollection)
 		{
 			System.out.println(day);
 		}
 
+		Day nextListenDay = DayCollection.getNextListenDay("a", dayCollection, "2013/04/07-", new DateTime());
+		System.out.printf("%s %s %s\n", nextListenDay.programName, nextListenDay.getNo(), nextListenDay.date.toString());
+
 		connection.close();
 	}
-	
+
 	/**
 	 * 過去放送日から次回放送日を算出。終了していない番組に限る。
 	 * @param dayCollection 放送日コレクション
 	 * @param age 放送時期
 	 * @param today 今日の日付
-	 * @return　次回放送日
+	 * @return 次回放送日
 	 */
 	static public Day getNextListenDay
-		(DayCollection dayCollection, String age, DateTime today)
+		(String programName, DayCollection dayCollection, String age, DateTime today)
 	{
 		String [] ageDates = age.split("-");
-		
-		if (ageDates.length != 2 || ageDates[1].length() > 0)
+
+		if (ageDates.length >= 2)
 		{
-			// ageが不正または既に終了している番組
-			
+			// 既に終了している番組
+
 			return null;
 		}
 
 		if (dayCollection.size() < 2)
 		{
 			// ２件もない
-			
+
 			return null;
 		}
-			
+
 		DateTime day1 = new DateTime(dayCollection.get(0).date);
 		DateTime day2 = new DateTime(dayCollection.get(1).date);
 		TimeSpan timespan = day1.diff(day2);
@@ -69,8 +72,9 @@ public class DayCollection
 		{
 			// 予測放送日は過去の日
 
-			int nextNo = dayCollection.get(0).id + 1;
-			return new Day(nextNo, day0, null, null);
+			int nextNo = Integer.valueOf(dayCollection.get(0).getNo()) + 1;
+
+			return new Day(programName, nextNo, day0, null, null);
 		}
 		else
 		{

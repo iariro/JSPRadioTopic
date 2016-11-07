@@ -44,6 +44,7 @@ public class UpdateDateAndNoTableTest
 
 		dayCollection.add(
 			new Day(
+				null,
 				1,
 				null,
 				DateTime.parseDateString("2015/10/02"),
@@ -65,6 +66,7 @@ public class UpdateDateAndNoTableTest
 
 		dayCollection.add(
 			new Day(
+				null,
 				1,
 				null,
 				DateTime.parseDateString("2015/10/02"),
@@ -86,12 +88,14 @@ public class UpdateDateAndNoTableTest
 
 		dayCollection.add(
 			new Day(
+				null,
 				1,
 				null,
 				DateTime.parseDateString("2015/10/02"),
 				DateTime.parseDateString("2015/10/03")));
 		dayCollection.add(
 			new Day(
+				null,
 				2,
 				null,
 				DateTime.parseDateString("2015/10/03"),

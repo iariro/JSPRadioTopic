@@ -3,6 +3,7 @@ package kumagai.radiotopic;
 import java.sql.*;
 import java.util.*;
 import com.microsoft.sqlserver.jdbc.*;
+import ktool.datetime.*;
 
 /**
  * 番組データコレクション
@@ -24,9 +25,24 @@ public class ProgramCollection
 
 		ProgramCollection programCollection = new ProgramCollection(connection);
 
+		DateTime today = new DateTime();
 		for (Program program : programCollection)
 		{
 			System.out.println(program);
+			DayCollection dayCollection =
+				new DayCollection
+					(connection, program.id, SortOrder.values()[program.sortOrder]);
+
+			Day nextListenDay =
+				DayCollection.getNextListenDay
+					(program.name, dayCollection, program.age, today);
+
+			if (nextListenDay != null)
+			{
+				// 次回放送日表示あり
+
+				System.out.println(nextListenDay);
+			}
 		}
 
 		connection.close();
