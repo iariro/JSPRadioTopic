@@ -57,9 +57,9 @@ public class ExportText
 		for (Map.Entry<Program, DayCollection> entry
 			: programAndTopic.entrySet())
 		{
-			Timestamp lastUpdate = entry.getValue().getLastUpdate();
+			DateTime lastUpdate = entry.getValue().getLastUpdate();
 
-			if (today.diff(new DateTime(lastUpdate)).getDay() >= 10)
+			if (today.diff(lastUpdate).getDay() >= 10)
 			{
 				// 最終更新から10日経っている
 

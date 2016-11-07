@@ -22,10 +22,10 @@ public class Day
 	public final String programname;
 	public final int id;
 	public final int programid;
-	public final Date date;
+	public final DateTime date;
 	private final String no;
-	public final Timestamp createdate;
-	public final Timestamp updatedate;
+	public final DateTime createdate;
+	public final DateTime updatedate;
 	public TopicCollection topicCollection;
 
 	/**
@@ -38,7 +38,7 @@ public class Day
 		{
 			// 日付あり
 
-			return format.format(date);
+			return date.toString();
 		}
 		else
 		{
@@ -74,7 +74,7 @@ public class Day
 	 */
 	public String getCreateDateAsString()
 	{
-		return format.format(createdate);
+		return createdate.toString();
 	}
 
 	/**
@@ -83,7 +83,7 @@ public class Day
 	 */
 	public String getUpdateDateAsString()
 	{
-		return format.format(updatedate);
+		return updatedate.toString();
 	}
 
 	/**
@@ -114,7 +114,7 @@ public class Day
 	 * @param createdate 作成日付
 	 * @param updatedate 更新日付
 	 */
-	public Day(int no, Date date, Date createdate, Date updatedate)
+	public Day(int no, DateTime date, DateTime createdate, DateTime updatedate)
 	{
 		this.programname = null;
 		this.id = -1;
@@ -123,7 +123,7 @@ public class Day
 
 		if (createdate != null)
 		{
-			this.createdate = new Timestamp(createdate.getTime());
+			this.createdate = createdate;
 		}
 		else
 		{
@@ -132,7 +132,7 @@ public class Day
 
 		if (updatedate != null)
 		{
-			this.updatedate = new Timestamp(updatedate.getTime());
+			this.updatedate = updatedate;
 		}
 		else
 		{
@@ -152,9 +152,9 @@ public class Day
 		this.programname = results.getString("name");
 		this.id = results.getInt("id");
 		this.programid = results.getInt("programid");
-		this.date = results.getDate("date");
-		this.createdate = results.getTimestamp("createdate");
-		this.updatedate = results.getTimestamp("updatedate");
+		this.date = new DateTime(results.getDate("date"));
+		this.createdate = new DateTime(results.getTimestamp("createdate"));
+		this.updatedate = new DateTime(results.getTimestamp("updatedate"));
 		this.no = results.getString("no");
 	}
 

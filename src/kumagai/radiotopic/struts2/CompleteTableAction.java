@@ -11,6 +11,27 @@ import kumagai.radiotopic.*;
 /**
  * コンプリート表ページ表示アクション。
  * @author kumagai
+ *
+ * 以下のようなJSON文字列を生成する。この値はJSP上に展開され、JavaScript
+ * から利用される。
+ *
+ * ids
+ *		[
+ *			[
+ *				// 日付１分
+ *				[ 登録日ID, 登録日ID, ... ],
+ *				[ 更新日ID, 更新日ID, ... ]
+ *			],
+ *			[
+ *				// 日付２分
+ *				[ 登録日ID, 登録日ID, ... ],
+ *				[ 更新日ID, 更新日ID, ... ]
+ *			],
+ *		];
+ * dates
+ *		[ 日付１, 日付２, ... ]
+ *
+ * idsの配列はdatesの日付と対応する。
  */
 @Namespace("/radiotopic")
 @Results

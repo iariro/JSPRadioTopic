@@ -3,6 +3,7 @@ package kumagai.radiotopic;
 import java.sql.*;
 import java.util.*;
 import com.microsoft.sqlserver.jdbc.*;
+import ktool.datetime.*;
 
 /**
  * 回情報のコレクション
@@ -31,6 +32,52 @@ public class DayCollection
 		}
 
 		connection.close();
+	}
+	
+	/**
+	 * 過去放送日から次回放送日を算出。終了していない番組に限る。
+	 * @param dayCollection 放送日コレクション
+	 * @param age 放送時期
+	 * @param today 今日の日付
+	 * @return　次回放送日
+	 */
+	static public Day getNextListenDay
+		(DayCollection dayCollection, String age, DateTime today)
+	{
+		String [] ageDates = age.split("-");
+		
+		if (ageDates.length != 2 || ageDates[1].length() > 0)
+		{
+			// ageが不正または既に終了している番組
+			
+			return null;
+		}
+
+		if (dayCollection.size() < 2)
+		{
+			// ２件もない
+			
+			return null;
+		}
+			
+		DateTime day1 = new DateTime(dayCollection.get(0).date);
+		DateTime day2 = new DateTime(dayCollection.get(1).date);
+		TimeSpan timespan = day1.diff(day2);
+		DateTime day0 = day1.makeAdd(timespan);
+
+		if (day0.compareTo(today) < 0)
+		{
+			// 予測放送日は過去の日
+
+			int nextNo = dayCollection.get(0).id + 1;
+			return new Day(nextNo, day0, null, null);
+		}
+		else
+		{
+			// 予測放送日は過去の日ではない
+
+			return null;
+		}
 	}
 
 	/**
@@ -354,8 +401,8 @@ public class DayCollection
 	 */
 	public int getUpdateRange()
 	{
-		Timestamp min = null;
-		Timestamp max = null;
+		DateTime min = null;
+		DateTime max = null;
 
 		for (Day day : this)
 		{
@@ -383,9 +430,7 @@ public class DayCollection
 		{
 			// 最小値・最大値がある
 
-			long diff = max.getTime() - min.getTime();
-
-			return (int)(diff / (1000 * 86400));
+			return max.diff(min).getDay();
 		}
 		else
 		{
@@ -420,9 +465,9 @@ public class DayCollection
 	 * 最終更新日時を求める。
 	 * @return 最終更新日時
 	 */
-	public Timestamp getLastUpdate()
+	public DateTime getLastUpdate()
 	{
-		Timestamp last = null;
+		DateTime last = null;
 
 		for (Day day : this)
 		{

@@ -6,6 +6,7 @@ import javax.servlet.*;
 import com.microsoft.sqlserver.jdbc.*;
 import org.apache.struts2.*;
 import org.apache.struts2.convention.annotation.*;
+import ktool.datetime.*;
 import kumagai.radiotopic.*;
 
 /**
@@ -22,6 +23,7 @@ public class IndexAction
 {
 	public ProgramCollection programCollection;
 	public ArrayList<DayDigest> tochuuDays;
+	public ArrayList<Day> nextListenDays = new ArrayList<Day>();
 	public String message;
 
 	/**
@@ -46,6 +48,24 @@ public class IndexAction
 
 				programCollection = new ProgramCollection(connection);
 				tochuuDays = DayCollection.getTochuuTopic(connection);
+
+				DateTime today = new DateTime();
+				for (Program program : programCollection)
+				{
+					DayCollection dayCollection =
+						new DayCollection
+							(connection, program.id, SortOrder.values()[program.sortOrder]);
+
+					Day nextListenDay =
+							DayCollection.getNextListenDay(dayCollection, program.age, today);
+
+					if (nextListenDay != null)
+					{
+						// 次回放送日表示あり
+
+						nextListenDays.add(nextListenDay);
+					}
+				}
 
 				connection.close();
 
