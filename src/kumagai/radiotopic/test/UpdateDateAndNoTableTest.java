@@ -1,11 +1,12 @@
 package kumagai.radiotopic.test;
 
 import java.sql.*;
+import java.text.*;
 import com.microsoft.sqlserver.jdbc.*;
 import junit.framework.*;
+import ktool.datetime.*;
 import kumagai.radiotopic.*;
 import kumagai.radiotopic.struts2.*;
-
 
 public class UpdateDateAndNoTableTest
 	extends TestCase
@@ -37,6 +38,7 @@ public class UpdateDateAndNoTableTest
 	}
 
 	public void test1()
+		throws ParseException
 	{
 		DayCollection dayCollection = new DayCollection();
 
@@ -44,19 +46,20 @@ public class UpdateDateAndNoTableTest
 			new Day(
 				1,
 				null,
-				Date.valueOf("2015-10-02"),
-				Date.valueOf("2015-10-02")));
+				DateTime.parseDateString("2015/10/02"),
+				DateTime.parseDateString("2015/10/02")));
 
 		UpdateDateAndNoTable updateDateAndNoTable =
 			new UpdateDateAndNoTable(dayCollection, "2015/10/01");
 
 		assertEquals(
-			"[[{No:'1', Type:'update'}]]",
+			"[[[],[1]]]",
 			updateDateAndNoTable.getIdArrayString());
 		assertEquals("['2015/10/02']", updateDateAndNoTable.getDatesString());
 	}
 
 	public void test2()
+		throws ParseException
 	{
 		DayCollection dayCollection = new DayCollection();
 
@@ -64,19 +67,20 @@ public class UpdateDateAndNoTableTest
 			new Day(
 				1,
 				null,
-				Date.valueOf("2015-10-02"),
-				Date.valueOf("2015-10-03")));
+				DateTime.parseDateString("2015/10/02"),
+				DateTime.parseDateString("2015/10/03")));
 
 		UpdateDateAndNoTable updateDateAndNoTable =
 			new UpdateDateAndNoTable(dayCollection, "2015/10/01");
 
 		assertEquals(
-			"[[{No:'1', Type:'create'}],[{No:'1', Type:'update'}]]",
+			"[[[1],[]],[[],[1]]]",
 			updateDateAndNoTable.getIdArrayString());
 		assertEquals("['2015/10/02','2015/10/03']", updateDateAndNoTable.getDatesString());
 	}
 
 	public void test3()
+		throws ParseException
 	{
 		DayCollection dayCollection = new DayCollection();
 
@@ -84,20 +88,20 @@ public class UpdateDateAndNoTableTest
 			new Day(
 				1,
 				null,
-				Date.valueOf("2015-10-02"),
-				Date.valueOf("2015-10-03")));
+				DateTime.parseDateString("2015/10/02"),
+				DateTime.parseDateString("2015/10/03")));
 		dayCollection.add(
 			new Day(
 				2,
 				null,
-				Date.valueOf("2015-10-03"),
-				Date.valueOf("2015-10-04")));
+				DateTime.parseDateString("2015/10/03"),
+				DateTime.parseDateString("2015/10/04")));
 
 		UpdateDateAndNoTable updateDateAndNoTable =
 			new UpdateDateAndNoTable(dayCollection, "2015/10/01");
 
 		assertEquals(
-			"[[{No:'1', Type:'create'}],[{No:'1', Type:'update'},{No:'2', Type:'create'}],[{No:'2', Type:'update'}]]",
+			"[[[1],[]],[[2],[1]],[[],[2]]]",
 			updateDateAndNoTable.getIdArrayString());
 		assertEquals("['2015/10/02','2015/10/03','2015/10/04']", updateDateAndNoTable.getDatesString());
 	}
