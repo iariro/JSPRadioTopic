@@ -239,6 +239,14 @@ public class ExportText
 		}
 		writer.println("</map>");
 		writer.println("<br>");
+
+		for (ChronologyGraphDataElement element : chronologyGraphData)
+		{
+			writer.printf("<li><a href='%s.html'>%s</a>", element.shortname, element.shortname);
+			writer.println();
+		}
+		writer.println("<br>");
+
 		writer.printf("%s<br>", new DateTime().toFullString());
 		writer.println();
 
