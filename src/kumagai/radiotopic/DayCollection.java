@@ -63,6 +63,13 @@ public class DayCollection
 			return null;
 		}
 
+		if (dayCollection.get(0).date == null || dayCollection.get(1).date == null)
+		{
+			// 日付が揃ってない
+
+			return null;
+		}
+
 		DateTime day1 = new DateTime(dayCollection.get(0).date);
 		DateTime day2 = new DateTime(dayCollection.get(1).date);
 		TimeSpan timespan = day1.diff(day2);
