@@ -32,7 +32,7 @@ td.noColumn { width:50px; text-align:right; }
 					</tr>
 					<s:iterator>
 						<tr>
-							<td class="programNameColumn"><s:property value="programname" /></td>
+							<td class="programNameColumn"><s:property value="programName" /></td>
 							<td><s:property value="date" /></td>
 							<td class="noColumn"><s:property value="no" /></td>
 							<td><s:property value="updateDateTimeAsString" /></td>
