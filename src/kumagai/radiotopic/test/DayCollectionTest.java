@@ -97,4 +97,66 @@ public class DayCollectionTest
 
 		assertEquals("[['休みボケ','年末年始','ぬーZAP再び'],['クリスマスガチプレゼント','だがしかし','くしゃみ'],['菓子持ち歩き','断乳','乳草ドラマ']]", dayCollection.createJavaScriptArray());
 	}
+	
+	public void testGetNextListenDay1()
+		throws ParseException
+	{
+		DayCollection dayCollection = new DayCollection();
+
+		dayCollection.add(new Day(null, 3, DateTime.parseDateString("2015/01/15"), null, null));
+		dayCollection.add(new Day(null, 2, DateTime.parseDateString("2015/01/08"), null, null));
+		dayCollection.add(new Day(null, 1, DateTime.parseDateString("2015/01/01"), null, null));
+
+		Day next = dayCollection.getNextListenDay("A", "2015/01/01", DateTime.parseDateString("2015/2/1"));
+		assertEquals("4", next.getNo());
+		assertEquals("2015/01/22", next.date.toString());
+	}
+	
+	public void testGetNextListenDay2()
+		throws ParseException
+	{
+		DayCollection dayCollection = new DayCollection();
+
+		dayCollection.add(new Day(null, 3, DateTime.parseDateString("2015/01/15"), null, null));
+		dayCollection.add(new Day(null, 1, DateTime.parseDateString("2015/01/01"), null, null));
+
+		Day next = dayCollection.getNextListenDay("A", "2015/01/01", DateTime.parseDateString("2015/2/1"));
+		assertEquals("4", next.getNo());
+		assertEquals("2015/01/22", next.date.toString());
+	}
+	
+	public void testGetNextListenDay3()
+		throws ParseException
+	{
+		DayCollection dayCollection = new DayCollection();
+
+		dayCollection.add(new Day(null, 3, DateTime.parseDateString("2015/01/15"), null, null));
+
+		Day next = dayCollection.getNextListenDay("A", "2015/01/01", DateTime.parseDateString("2015/2/1"));
+		assertNull(next);
+	}
+	
+	public void testGetNextListenDay4()
+		throws ParseException
+	{
+		DayCollection dayCollection = new DayCollection();
+		Day next = dayCollection.getNextListenDay("A", "2015/01/01", DateTime.parseDateString("2015/2/1"));
+		assertNull(next);
+	}
+	
+	public void testGetNextListenDay5()
+		throws ParseException
+	{
+		DayCollection dayCollection = new DayCollection();
+		Day next = dayCollection.getNextListenDay("A", "", DateTime.parseDateString("2015/2/1"));
+		assertNull(next);
+	}
+	
+	public void testGetNextListenDay6()
+		throws ParseException
+	{
+		DayCollection dayCollection = new DayCollection();
+		Day next = dayCollection.getNextListenDay("A", null, DateTime.parseDateString("2015/2/1"));
+		assertNull(next);
+	}
 }
