@@ -31,64 +31,10 @@ public class DayCollection
 			System.out.println(day);
 		}
 
-		Day nextListenDay = DayCollection.getNextListenDay("a", dayCollection, "2013/04/07-", new DateTime());
+		Day nextListenDay = dayCollection.getNextListenDay("a", "2013/04/07-", new DateTime());
 		System.out.printf("%s %s %s\n", nextListenDay.programName, nextListenDay.getNo(), nextListenDay.date.toString());
 
 		connection.close();
-	}
-
-	/**
-	 * 過去放送日から次回放送日を算出。終了していない番組に限る。
-	 * @param dayCollection 放送日コレクション
-	 * @param age 放送時期
-	 * @param today 今日の日付
-	 * @return 次回放送日
-	 */
-	static public Day getNextListenDay
-		(String programName, DayCollection dayCollection, String age, DateTime today)
-	{
-		String [] ageDates = age.split("-");
-
-		if (ageDates.length >= 2)
-		{
-			// 既に終了している番組
-
-			return null;
-		}
-
-		if (dayCollection.size() < 2)
-		{
-			// ２件もない
-
-			return null;
-		}
-
-		if (dayCollection.get(0).date == null || dayCollection.get(1).date == null)
-		{
-			// 日付が揃ってない
-
-			return null;
-		}
-
-		DateTime day1 = new DateTime(dayCollection.get(0).date);
-		DateTime day2 = new DateTime(dayCollection.get(1).date);
-		TimeSpan timespan = day1.diff(day2);
-		DateTime day0 = day1.makeAdd(timespan);
-
-		if (day0.compareTo(today) < 0)
-		{
-			// 予測放送日は過去の日
-
-			int nextNo = Integer.valueOf(dayCollection.get(0).getNo()) + 1;
-
-			return new Day(programName, nextNo, day0, null, null);
-		}
-		else
-		{
-			// 予測放送日は過去の日ではない
-
-			return null;
-		}
 	}
 
 	/**
@@ -332,6 +278,78 @@ public class DayCollection
 		}
 
 		statement.close();
+	}
+
+	/**
+	 * 過去放送日から次回放送日を算出。終了していない番組に限る。
+	 * @param dayCollection 放送日コレクション
+	 * @param age 放送時期
+	 * @param today 今日の日付
+	 * @return 次回放送日
+	 */
+	public Day getNextListenDay(String programName, String age, DateTime today)
+	{
+		if (age == null)
+		{
+			// 放送時期の指定なし
+
+			return null;
+		}
+		
+		String [] ageDates = age.split("-");
+
+		if (ageDates.length >= 2)
+		{
+			// 既に終了している番組
+
+			return null;
+		}
+
+		if (size() < 2)
+		{
+			// ２件もない
+
+			return null;
+		}
+
+		if (get(0).date == null || get(1).date == null)
+		{
+			// 日付が揃ってない
+
+			return null;
+		}
+
+		DateTime day1 = new DateTime(get(0).date);
+		DateTime day2 = new DateTime(get(1).date);
+		TimeSpan timespan = day1.diff(day2);
+
+		try
+		{
+			int no1 = Integer.valueOf(get(0).getNo());
+			int no2 = Integer.valueOf(get(1).getNo());
+
+			timespan = new TimeSpan(timespan.getTotalMillisecond() / (no1 - no2));
+		}
+		catch (Exception exception)
+		{			
+		}
+
+		DateTime day0 = day1.makeAdd(timespan);
+
+		if (day0.compareTo(today) < 0)
+		{
+			// 予測放送日は過去の日
+
+			int nextNo = Integer.valueOf(get(0).getNo()) + 1;
+
+			return new Day(programName, nextNo, day0, null, null);
+		}
+		else
+		{
+			// 予測放送日は過去の日ではない
+
+			return null;
+		}
 	}
 
 	/**

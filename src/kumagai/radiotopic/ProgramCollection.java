@@ -34,8 +34,7 @@ public class ProgramCollection
 					(connection, program.id, SortOrder.values()[program.sortOrder]);
 
 			Day nextListenDay =
-				DayCollection.getNextListenDay
-					(program.name, dayCollection, program.age, today);
+				dayCollection.getNextListenDay(program.name, program.age, today);
 
 			if (nextListenDay != null)
 			{
