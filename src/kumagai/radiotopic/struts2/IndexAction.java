@@ -57,8 +57,7 @@ public class IndexAction
 							(connection, program.id, SortOrder.values()[program.sortOrder]);
 
 					Day nextListenDay =
-						DayCollection.getNextListenDay
-							(program.name, dayCollection, program.age, today);
+						dayCollection.getNextListenDay(program.name, program.age, today);
 
 					if (nextListenDay != null)
 					{
@@ -67,6 +66,15 @@ public class IndexAction
 						nextListenDays.add(nextListenDay);
 					}
 				}
+				
+				Collections.sort(nextListenDays,
+					new Comparator<Day>()
+					{
+						public int compare(Day day1, Day day2)
+						{
+							return day1.date.compareTo(day2.date);
+						}
+					});
 
 				connection.close();
 
