@@ -26,7 +26,7 @@
 
 			<td>
 			<s:form action="recentupdatelist" theme="simple">
-				<input type="hidden" name="dayNum" value="3">
+				<input type="hidden" name="dayNum" value="5">
 				<s:submit value="最近聞いた回リスト" />
 			</s:form>
 			</td>

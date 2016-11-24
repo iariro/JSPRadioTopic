@@ -1,7 +1,6 @@
 package kumagai.radiotopic;
 
 import java.sql.*;
-import java.text.*;
 import ktool.datetime.*;
 
 /**
@@ -10,15 +9,6 @@ import ktool.datetime.*;
  */
 public class Day
 {
-	static public final SimpleDateFormat format = new SimpleDateFormat();
-	static public final SimpleDateFormat formatDT = new SimpleDateFormat();
-
-	static
-	{
-		format.applyPattern("yyyy/MM/dd");
-		formatDT.applyPattern("yyyy/MM/dd HH:mm:ss");
-	}
-
 	public final String programName;
 	public final int id;
 	public final int programid;
@@ -92,7 +82,7 @@ public class Day
 	 */
 	public String getUpdateDateTimeAsString()
 	{
-		return formatDT.format(updatedate);
+		return updatedate.toFullString();
 	}
 
 	/**
@@ -220,7 +210,7 @@ public class Day
 					programid,
 					date,
 					no,
-					updatedate != null ? formatDT.format(updatedate) : null);
+					updatedate != null ? updatedate.toFullString() : null);
 		}
 	}
 }
