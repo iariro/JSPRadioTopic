@@ -83,7 +83,7 @@ public class ChronologyBitmap
 			{
 				int x = (int)(i * chronologyGraphData.scaleX);
 				graphics.drawLine(x, 0, x, chronologyGraphData.height);
-				graphics.drawString(String.format("%d年", day.getYear()), x + 4, 12);
+				graphics.drawString(String.format("%d年", day.getYear()), x + 4, 15);
 			}
 
 			i++;
