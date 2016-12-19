@@ -52,7 +52,12 @@ public class Day
 
 			no = this.no.trim();
 
-			no = StringTool.trimZero(no);
+			if (this.no.indexOf('.') < 0)
+			{
+				// 小数を含まない
+
+				no = StringTool.trimZero(no);
+			}
 		}
 
 		return no;
