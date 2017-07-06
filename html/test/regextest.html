@@ -1,0 +1,59 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<!--
+	localhost:8080/kumagai/radiotopic/test/regextest.html
+-->
+
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Sample Test File</title>
+<script language="JavaScript" type="text/javascript" src="../../../htdocs/jsunit/app/jsUnitCore.js"></script>
+<script language="JavaScript" type="text/javascript">
+function highlight(text, keyword)
+{
+	if (text.indexOf('<span class=\"highlight\">') >= 0 &&
+		text.indexOf('</span>') >= 0)
+	{
+		text = text.replace(new RegExp('<span class=\"highlight\">', 'g'), '');
+		text = text.replace(new RegExp('</span>', 'g'), '');
+		update = true;
+	}
+
+	if ((keyword.length > 0) && (text.indexOf(keyword) >= 0))
+	{
+		text = text.replace(new RegExp(keyword, 'g'), '<span class=\"highlight\">' + keyword + '</span>');
+		update = true;
+	}
+	info(update + ' ' + text);
+	return text;
+}
+
+function testAddRegex1()
+{
+	assertEquals("abc<span class=\"highlight\">def</span>ghi", highlight("abcdefghi", "def"));
+}
+
+function testAddRegex2()
+{
+	assertEquals("a<span class=\"highlight\">bcd</span>efghi", highlight("abc<span class=\"highlight\">def</span>ghi", "bcd"));
+}
+
+function testAddRegex3()
+{
+	assertEquals("a<span class=\"highlight\">&</span>b", highlight("a&b", "&"));
+}
+
+function testAddRegex4()
+{
+	assertEquals("a&b", highlight("a<span class=\"highlight\">&</span>b", ""));
+}
+</script>
+</head>
+
+<body>
+<h1>Sample Test File</h1>
+</body>
+
+</html>
