@@ -11,12 +11,16 @@ public class StringTool
 {
 	static private final Pattern dateSlash2 =
 		Pattern.compile("[\\(（]*([0-9]{2})/([0-9]*)/([0-9]*)[\\)）]*");
+	static private final Pattern dateDot0 =
+			Pattern.compile("([0-9]*)\\.([0-9]*)");
 	static private final Pattern dateDot2 =
 		Pattern.compile("[\\(（]*([0-9]{2})\\.([0-9]*)\\.([0-9]*)[\\)）]*");
 	static private final Pattern dateDot4 =
 		Pattern.compile("[\\（(]*([0-9]{4})\\.([0-9]*)\\.([0-9]*)[\\)）]*");
-	static private final Pattern dateJapanese =
+	static private final Pattern dateJapaneseYMD =
 		Pattern.compile("[\\（(]*([0-9]{4})年([0-9]*)月([0-9]*)日*[\\)）]*");
+	static private final Pattern dateJapaneseMD =
+			Pattern.compile("([0-9]*)月([0-9]*)日*");
 	static private final String outFormat =
 		"%04d/%02d/%02d";
 
@@ -43,7 +47,7 @@ public class StringTool
 					Integer.parseInt(matcher.group(3)));
 		}
 
-		matcher = dateJapanese.matcher(date);
+		matcher = dateJapaneseYMD.matcher(date);
 		if (matcher.matches())
 		{
 			// yyyy年mm月dd形式にマッチ
@@ -54,6 +58,32 @@ public class StringTool
 					Integer.parseInt(matcher.group(1)),
 					Integer.parseInt(matcher.group(2)),
 					Integer.parseInt(matcher.group(3)));
+		}
+
+		matcher = dateJapaneseMD.matcher(date);
+		if (matcher.matches())
+		{
+			// yyyy年mm月dd形式にマッチ
+
+			return
+				String.format(
+					outFormat,
+					new DateTime().getYear(),
+					Integer.parseInt(matcher.group(1)),
+					Integer.parseInt(matcher.group(2)));
+		}
+
+		matcher = dateDot0.matcher(date);
+		if (matcher.matches())
+		{
+			// yy.mm.dd形式にマッチ
+
+			return
+				String.format(
+					outFormat,
+					new DateTime().getYear(),
+					Integer.parseInt(matcher.group(1)),
+					Integer.parseInt(matcher.group(2)));
 		}
 
 		matcher = dateDot2.matcher(date);
