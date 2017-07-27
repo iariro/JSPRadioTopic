@@ -36,7 +36,8 @@ function searchKeyword(keywordControl)
 
 		if (text != text2)
 		{
-			table.rows[i].cells[2].innerHTML = text;
+			console.log(text2);
+			table.rows[i].cells[2].innerHTML = text2;
 		}
 	}
 }
