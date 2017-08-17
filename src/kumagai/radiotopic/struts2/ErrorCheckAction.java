@@ -35,6 +35,8 @@ public class ErrorCheckAction
 
 		if (url != null)
 		{
+			// URL定義あり
+
 			DriverManager.registerDriver(new SQLServerDriver());
 			try
 			{
@@ -51,19 +53,32 @@ public class ErrorCheckAction
 					{
 						if (pday != null)
 						{
-							if (day.date.compareTo(pday.date) <= 0)
+							// 比較する回あり
+
+							if (day != null && day.date != null && pday != null && pday.date != null)
 							{
-								invalidDates.add(
-									String.format(
-										"%sの%d:%sと%d:%sの前後関係が異常",
-										program.name,
-										day.getNo(),
-										day.getDate(),
-										pday.getNo(),
-										pday.getDate()));
+								// 日情報はそろっている
+
+								if (day.date.compareTo(pday.date) > 0)
+								{
+									// 新しいはずの日の方が古い
+
+									invalidDates.add(
+										String.format(
+											"%sの%s:%sと%s:%sの前後関係が異常",
+											program.name,
+											day.getNo(),
+											day.getDate(),
+											pday.getNo(),
+											pday.getDate()));
+								}
 							}
 						}
-						pday = day;
+
+						if (day.date != null)
+						{
+							pday = day;
+						}
 					}
 				}
 				return "success";
@@ -77,6 +92,8 @@ public class ErrorCheckAction
 		}
 		else
 		{
+			// URL定義なし
+
 			message =
 				"コンテキストパラメータ「RadioTopicSqlserverUrl」が未定義です";
 

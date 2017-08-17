@@ -19,7 +19,7 @@
 		<div class=day>
 
 			<s:iterator value="invalidDates">
-				<li><s:property value="date" />
+				<li><s:property />
 			</s:iterator>
 
 		</div>
