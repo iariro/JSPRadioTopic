@@ -157,8 +157,12 @@ public class ProgramCollection
 		}
 	}
 
+	/**
+	 * 空コレクションの構築
+	 */
 	public ProgramCollection()
 	{
+		// 何もしない
 	}
 
 	/**
