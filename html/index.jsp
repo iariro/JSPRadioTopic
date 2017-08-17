@@ -30,6 +30,12 @@
 				<s:submit value="最近聞いた回リスト" />
 			</s:form>
 			</td>
+
+			<td>
+			<s:form action="errorcheck" theme="simple">
+				<s:submit value="エラーチェック" />
+			</s:form>
+			</td>
 			</tr></table>
 
 			<s:if test="%{tochuuDays.size()>0}">
