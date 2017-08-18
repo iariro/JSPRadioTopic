@@ -13,7 +13,11 @@ import kumagai.radiotopic.*;
  * @author kumagai
  */
 @Namespace("/radiotopic")
-@Result(name="success", location="/radiotopic/errorcheck.jsp")
+@Results
+({
+	@Result(name="success", location="/radiotopic/errorcheck.jsp"),
+	@Result(name="error", location="/radiotopic/error.jsp")
+})
 public class ErrorCheckAction
 {
 	public String message;
@@ -123,7 +127,7 @@ public class ErrorCheckAction
 	public ArrayList<String> checkDateFast(Connection connection)
 		throws SQLException
 	{
-		String sql = "select program.name, day.id, programid, date, no, createdate, updatedate from day join program on program.id=day.programid where program.id=? order by programid, no desc";
+		String sql = "select program.name, day.id, programid, date, no, createdate, updatedate from day join program on program.id=day.programid order by programid, no desc";
 
 		PreparedStatement statement = connection.prepareStatement(sql);
 
