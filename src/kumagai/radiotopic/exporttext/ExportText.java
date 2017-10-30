@@ -1,14 +1,32 @@
 package kumagai.radiotopic.exporttext;
 
-import java.awt.image.*;
-import java.io.*;
-import java.sql.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.text.ParseException;
-import java.util.*;
-import javax.imageio.*;
-import com.microsoft.sqlserver.jdbc.*;
-import ktool.datetime.*;
-import kumagai.radiotopic.*;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.imageio.ImageIO;
+
+import com.microsoft.sqlserver.jdbc.SQLServerDriver;
+
+import ktool.datetime.DateTime;
+import kumagai.radiotopic.ChronologyBitmap;
+import kumagai.radiotopic.ChronologyGraphData;
+import kumagai.radiotopic.ChronologyGraphDataElement;
+import kumagai.radiotopic.Day;
+import kumagai.radiotopic.DayCollection;
+import kumagai.radiotopic.Program;
+import kumagai.radiotopic.ProgramCollection;
+import kumagai.radiotopic.RadioTopicDatabase;
+import kumagai.radiotopic.SortOrder;
 
 /**
  * トピックの内容をテキストにエクスポート
@@ -69,48 +87,56 @@ public class ExportText
 			File htmlFile =
 				new File(args[0], entry.getKey().shortname + ".html");
 
-			PrintWriter writer =
-				new PrintWriter(
-					new OutputStreamWriter(
-						new FileOutputStream(htmlFile), "utf-8"));
-
-			DateNoPrinter dateNoPrinter;
-
-			if (entry.getKey().exportformat != null)
+			PrintWriter writer = null;
+			try
 			{
-				// エクスポート形式指定あり
-
-				argFlag = entry.getKey().exportformat;
-
-				if (argFlag.equals("-dn"))
+				writer =
+					new PrintWriter(
+						new OutputStreamWriter(
+							new FileOutputStream(htmlFile), "utf-8"));
+	
+				DateNoPrinter dateNoPrinter;
+	
+				if (entry.getKey().exportformat != null)
 				{
-					dateNoPrinter =
-						new DateNoPrinter(writer, entry.getValue().getMaxNo());
-				}
-				else if (argFlag.equals("-d"))
-				{
-					dateNoPrinter = new DatePrinter(writer);
-				}
-				else if (argFlag.equals("-n"))
-				{
-					dateNoPrinter =
-						new NoPrinter(writer, entry.getValue().getMaxNo());
+					// エクスポート形式指定あり
+	
+					argFlag = entry.getKey().exportformat;
+	
+					if (argFlag.equals("-dn"))
+					{
+						dateNoPrinter =
+							new DateNoPrinter(writer, entry.getValue().getMaxNo());
+					}
+					else if (argFlag.equals("-d"))
+					{
+						dateNoPrinter = new DatePrinter(writer);
+					}
+					else if (argFlag.equals("-n"))
+					{
+						dateNoPrinter =
+							new NoPrinter(writer, entry.getValue().getMaxNo());
+					}
+					else
+					{
+						throw new IllegalArgumentException(argFlag);
+					}
 				}
 				else
 				{
-					throw new IllegalArgumentException(argFlag);
+					// エクスポート形式指定なし
+	
+					dateNoPrinter =
+						new DateNoPrinter(writer, entry.getValue().getMaxNo());
 				}
+	
+				outputProgramHtml
+					(entry.getKey(), entry.getValue(), writer, dateNoPrinter);
 			}
-			else
+			finally
 			{
-				// エクスポート形式指定なし
-
-				dateNoPrinter =
-					new DateNoPrinter(writer, entry.getValue().getMaxNo());
+				writer.close();
 			}
-
-			outputProgramHtml
-				(entry.getKey(), entry.getValue(), writer, dateNoPrinter);
 
 			System.out.printf("%s written.\n", htmlFile);
 		}
