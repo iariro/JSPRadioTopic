@@ -71,7 +71,7 @@ public class ErrorCheckAction
 	 * @param connection DB接続オブジェクト
 	 * @return チェック結果文字列
 	 */
-	protected ArrayList<String>  checkDateNormal(Connection connection)
+	static protected ArrayList<String> checkDateNormal(Connection connection)
 		throws SQLException
 	{
 		ArrayList<String> invalidDates = new ArrayList<String>();
@@ -124,16 +124,17 @@ public class ErrorCheckAction
 	 * @param connection DB接続オブジェクト
 	 * @return チェック結果文字列
 	 */
-	public ArrayList<String> checkDateFast(Connection connection)
+	static public ArrayList<String> checkDateFast(Connection connection)
 		throws SQLException
 	{
-		String sql = "select program.name, day.id, programid, date, no, createdate, updatedate from day join program on program.id=day.programid order by programid, no desc";
+		String sql = "select program.name, day.id, programid, date, no, createdate, updatedate from day join program on program.id=day.programid order by programid, convert(NUMERIC, no) desc";
 
 		PreparedStatement statement = connection.prepareStatement(sql);
 
 		ResultSet results = statement.executeQuery();
 
 		Day pday = null;
+		ArrayList<String> invalidDates = new ArrayList<String>();
 		while (results.next())
 		{
 			Day day = new Day(results);
@@ -173,7 +174,7 @@ public class ErrorCheckAction
 		results.close();
 		statement.close();
 
-		return null;
+		return invalidDates;
 	}
 
 }
