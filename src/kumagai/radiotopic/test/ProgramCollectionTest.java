@@ -1,4 +1,4 @@
-package kumagai.radiotopic.test;
+﻿package kumagai.radiotopic.test;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -22,7 +22,7 @@ public class ProgramCollectionTest
 		Connection connection = RadioTopicDatabase.getConnection();
 
 		ArrayList<SearchTopicResult> searchTopicResults =
-			ProgramCollection.searchAllProgram(connection, "髪", Date.valueOf("2017/11/01"));
+			ProgramCollection.searchAllProgram(connection, "髪", Date.valueOf("2017-11-01"));
 		for (SearchTopicResult searchTopicResult : searchTopicResults)
 		{
 			System.out.println(searchTopicResult);
