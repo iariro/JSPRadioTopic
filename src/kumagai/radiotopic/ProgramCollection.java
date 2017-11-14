@@ -1,9 +1,17 @@
 package kumagai.radiotopic;
 
-import java.sql.*;
-import java.util.*;
-import com.microsoft.sqlserver.jdbc.*;
-import ktool.datetime.*;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+import com.microsoft.sqlserver.jdbc.SQLServerDriver;
+
+import ktool.datetime.DateTime;
 
 /**
  * 番組データコレクション
@@ -155,6 +163,42 @@ public class ProgramCollection
 			results.close();
 			statement.close();
 		}
+	}
+
+	/**
+	 * 全番組対象にキーワード検索
+	 * @param connection DB接続オブジェクト
+	 * @param keyword 検索キーワード
+	 * @param startdate 検索開始日
+	 * @return 検索結果コレクション
+	 */
+	static public ArrayList<SearchTopicResult> searchAllProgram(Connection connection, String keyword, Date startdate)
+		throws SQLException
+	{
+		String sql = "select name,no,date,text,updatedate from topic join Day on day.id=Topic.dayid join Program on Program.id=day.programid where text like ? and updatedate>=?";
+
+		PreparedStatement statement = connection.prepareStatement(sql);
+
+		statement.setString(1, String.format("%%%s%%", keyword));
+		statement.setDate(2, startdate);
+
+		ResultSet results = statement.executeQuery();
+
+		ArrayList<SearchTopicResult> searchTopicResults = new ArrayList<>();
+		try
+		{
+			while (results.next())
+			{
+				searchTopicResults.add(new SearchTopicResult(results));
+			}
+		}
+		finally
+		{
+			results.close();
+			statement.close();
+		}
+
+		return searchTopicResults;
 	}
 
 	/**
