@@ -40,7 +40,7 @@ public class IndexAction
 	public ProgramCollection programCollection;
 	public ArrayList<DayDigest> tochuuDays;
 	public ArrayList<Day> nextListenDays = new ArrayList<Day>();
-	public String searchDate;
+	public String searchStartDate;
 	public String message;
 
 	/**
@@ -96,7 +96,8 @@ public class IndexAction
 
 				DateTime today2 = new DateTime();
 				today2.addDay(-10);
-				searchDate = today2.toString();
+				today2.setDay(1);
+				searchStartDate = today2.toString();
 
 				return "success";
 			}
