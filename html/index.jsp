@@ -41,10 +41,9 @@
 			<tr>
 			<td colspan='3'>
 			<s:form action="searchallprogram" theme="simple">
-				検索：
-				<input type="text" name="keyword" size="10">
-				<input type="text" name="startDate" value="<s:property value='searchStartDate' />" size="10">
 				<s:submit value="全番組検索" />
+				キーワード<input type="text" name="keyword" size="10">
+				開始日<input type="text" name="startDate" value="<s:property value='searchStartDate' />" size="10">
 			</s:form>
 			</td>
 			</tr></table>
