@@ -36,6 +36,14 @@
 				<s:submit value="エラーチェック" />
 			</s:form>
 			</td>
+
+			<td>
+			<s:form action="searchallprogram" theme="simple">
+				<input type="text" name="keyword">
+				<input type="text" name="startDate">
+				<s:submit value="全番組検索" />
+			</s:form>
+			</td>
 			</tr></table>
 
 			<s:if test="%{tochuuDays.size()>0}">

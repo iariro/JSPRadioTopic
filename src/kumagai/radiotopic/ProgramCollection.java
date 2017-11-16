@@ -1,7 +1,6 @@
 package kumagai.radiotopic;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -172,7 +171,7 @@ public class ProgramCollection
 	 * @param startdate 検索開始日
 	 * @return 検索結果コレクション
 	 */
-	static public ArrayList<SearchTopicResult> searchAllProgram(Connection connection, String keyword, Date startdate)
+	static public ArrayList<SearchTopicResult> searchAllProgram(Connection connection, String keyword, DateTime startdate)
 		throws SQLException
 	{
 		String sql = "select name,no,date,text,updatedate from topic join Day on day.id=Topic.dayid join Program on Program.id=day.programid where text like ? and updatedate>=?";
@@ -180,7 +179,7 @@ public class ProgramCollection
 		PreparedStatement statement = connection.prepareStatement(sql);
 
 		statement.setString(1, String.format("%%%s%%", keyword));
-		statement.setDate(2, startdate);
+		statement.setDate(2, new java.sql.Date(startdate.getDate().getTime()));
 
 		ResultSet results = statement.executeQuery();
 

@@ -1,13 +1,29 @@
 package kumagai.radiotopic.struts2;
 
-import java.sql.*;
-import java.util.*;
-import javax.servlet.*;
-import com.microsoft.sqlserver.jdbc.*;
-import org.apache.struts2.*;
-import org.apache.struts2.convention.annotation.*;
-import ktool.datetime.*;
-import kumagai.radiotopic.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
+import javax.servlet.ServletContext;
+
+import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.Namespace;
+import org.apache.struts2.convention.annotation.Result;
+import org.apache.struts2.convention.annotation.Results;
+
+import com.microsoft.sqlserver.jdbc.SQLServerDriver;
+
+import ktool.datetime.DateTime;
+import kumagai.radiotopic.Day;
+import kumagai.radiotopic.DayCollection;
+import kumagai.radiotopic.DayDigest;
+import kumagai.radiotopic.Program;
+import kumagai.radiotopic.ProgramCollection;
+import kumagai.radiotopic.SortOrder;
 
 /**
  * トップページ表示アクション。
@@ -24,6 +40,7 @@ public class IndexAction
 	public ProgramCollection programCollection;
 	public ArrayList<DayDigest> tochuuDays;
 	public ArrayList<Day> nextListenDays = new ArrayList<Day>();
+	public String searchDate;
 	public String message;
 
 	/**
@@ -42,9 +59,10 @@ public class IndexAction
 		{
 			DriverManager.registerDriver(new SQLServerDriver());
 
+			Connection connection = null;
 			try
 			{
-				Connection connection = DriverManager.getConnection(url);
+				connection = DriverManager.getConnection(url);
 
 				programCollection = new ProgramCollection(connection);
 				tochuuDays = DayCollection.getTochuuTopic(connection);
@@ -76,7 +94,9 @@ public class IndexAction
 						}
 					});
 
-				connection.close();
+				DateTime today2 = new DateTime();
+				today2.addDay(-10);
+				searchDate = today2.toString();
 
 				return "success";
 			}
@@ -85,6 +105,10 @@ public class IndexAction
 				message = exception.getMessage();
 
 				return "error";
+			}
+			finally
+			{
+				connection.close();
 			}
 		}
 		else
