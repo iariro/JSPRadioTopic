@@ -201,6 +201,64 @@ public class ProgramCollection
 	}
 
 	/**
+	 * 日付チェック。全件１DBアクセスで取得し速い。
+	 * @param connection DB接続オブジェクト
+	 * @return チェック結果文字列
+	 */
+	static public ArrayList<String> checkDateFast(Connection connection)
+		throws SQLException
+	{
+		String sql = "select program.name, day.id, programid, date, no, createdate, updatedate from day join program on program.id=day.programid order by programid, convert(NUMERIC, no) desc";
+
+		PreparedStatement statement = connection.prepareStatement(sql);
+
+		ResultSet results = statement.executeQuery();
+
+		Day pday = null;
+		ArrayList<String> invalidDates = new ArrayList<String>();
+		while (results.next())
+		{
+			Day day = new Day(results);
+			if (pday != null)
+			{
+				// 比較する回あり
+
+				if (day.programid != pday.programid)
+				{
+					// 違う番組
+
+					pday = null;
+				}
+
+				if (day != null && day.date != null && pday != null && pday.date != null)
+				{
+					// 日情報はそろっている
+
+					if (day.date.compareTo(pday.date) >= 0)
+					{
+						// 新しいはずの日の方が古い・または同じ日
+
+						invalidDates.add(
+							String.format(
+								"%sの%s:%sと%s:%sの前後関係が異常",
+								day.programName,
+								day.getNo(),
+								day.getDate(),
+								pday.getNo(),
+								pday.getDate()));
+					}
+				}
+			}
+			pday = day;
+		}
+
+		results.close();
+		statement.close();
+
+		return invalidDates;
+	}
+
+	/**
 	 * 空コレクションの構築
 	 */
 	public ProgramCollection()
