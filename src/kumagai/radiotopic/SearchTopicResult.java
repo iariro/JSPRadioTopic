@@ -2,12 +2,28 @@ package kumagai.radiotopic;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 
 /**
  * トピック検索結果１件
  */
 public class SearchTopicResult
 {
+	static private final SimpleDateFormat formatDate1;
+	static private final SimpleDateFormat formatDate2;
+
+	/**
+	 * 日付書式オブジェクトを構築。
+	 */
+	static
+	{
+		formatDate1 = new SimpleDateFormat();
+		formatDate2 = new SimpleDateFormat();
+
+		formatDate1.applyPattern("yyyy/MM/dd");
+		formatDate2.applyPattern("yyyy/MM/dd HH:mm:ss");
+	}
+
 	public final String name;
 	public final String no;
 	public final String date;
@@ -23,9 +39,9 @@ public class SearchTopicResult
 	{
 		name = results.getString("name");
 		no = results.getString("no");
-		date = results.getString("date");
+		date = formatDate1.format(results.getDate("date"));
 		text = results.getString("text");
-		updatedate = results.getString("updatedate");
+		updatedate = formatDate2.format(results.getDate("updatedate"));
 	}
 
 	/**
