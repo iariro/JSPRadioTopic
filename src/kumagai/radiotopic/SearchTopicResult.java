@@ -41,7 +41,7 @@ public class SearchTopicResult
 		no = results.getString("no");
 		date = formatDate1.format(results.getDate("date"));
 		text = results.getString("text");
-		updatedate = formatDate2.format(results.getDate("updatedate"));
+		updatedate = formatDate2.format(results.getTimestamp("updatedate"));
 	}
 
 	/**
