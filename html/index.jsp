@@ -36,12 +36,14 @@
 				<s:submit value="エラーチェック" />
 			</s:form>
 			</td>
+			</tr>
 
-			<td>
+			<tr>
+			<td colspan='3'>
 			<s:form action="searchallprogram" theme="simple">
-				<input type="text" name="keyword">
-				<input type="text" name="startDate">
 				<s:submit value="全番組検索" />
+				キーワード<input type="text" name="keyword" size="10">
+				開始日<input type="text" name="startDate" value="<s:property value='searchStartDate' />" size="10">
 			</s:form>
 			</td>
 			</tr></table>
