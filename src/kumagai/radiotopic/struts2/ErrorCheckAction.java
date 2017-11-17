@@ -34,7 +34,7 @@ public class ErrorCheckAction
 
 	/**
 	 * エラーチェックアクション。
-	 * @author kumagai
+	 * @return 処理結果
 	 */
 	@Action("errorcheck")
 	public String execute()

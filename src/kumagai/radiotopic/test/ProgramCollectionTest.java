@@ -1,4 +1,4 @@
-﻿package kumagai.radiotopic.test;
+package kumagai.radiotopic.test;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

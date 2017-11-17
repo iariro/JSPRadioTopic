@@ -31,7 +31,7 @@ public class SearchAllProgramAction
 
 	/**
 	 * 全番組対象キーワード検索アクション。
-	 * @author kumagai
+	 * @return 処理結果
 	 */
 	@Action("searchallprogram")
 	public String execute()

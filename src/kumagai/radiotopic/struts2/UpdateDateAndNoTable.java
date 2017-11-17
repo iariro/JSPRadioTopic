@@ -1,7 +1,11 @@
 package kumagai.radiotopic.struts2;
 
-import java.util.*;
-import kumagai.radiotopic.*;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
+
+import kumagai.radiotopic.CountAndMax;
+import kumagai.radiotopic.DayCollection;
 
 /**
  * CompleteTableAction用のDayデータの更新日付によるディクショナリー
@@ -241,6 +245,8 @@ public class UpdateDateAndNoTable
 
 	/**
 	 * 日ごとの更新件数をカウント。
+	 * @param dayCollection 回コレクション
+	 * @param back true=更新日の時点でのカウントを取る
 	 * @return 日ごとの更新件数コレクション
 	 */
 	public TreeMap<String, CountAndMax> getDateAndCount
