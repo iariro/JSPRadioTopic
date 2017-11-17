@@ -1,7 +1,9 @@
 package kumagai.radiotopic;
 
-import java.util.regex.*;
-import ktool.datetime.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import ktool.datetime.DateTime;
 
 /**
  * 文字列関連
@@ -76,7 +78,7 @@ public class StringTool
 		matcher = dateDot0.matcher(date);
 		if (matcher.matches())
 		{
-			// yy.mm.dd形式にマッチ
+			// mm.dd形式にマッチ
 
 			return
 				String.format(
@@ -91,10 +93,20 @@ public class StringTool
 		{
 			// yy.mm.dd形式にマッチ
 
+			int year = Integer.parseInt(matcher.group(1));
+			if (year >= 90)
+			{
+				year += 1900;
+			}
+			else
+			{
+				year += 2000;
+			}
+
 			return
 				String.format(
 					outFormat,
-					2000 + Integer.parseInt(matcher.group(1)),
+					year,
 					Integer.parseInt(matcher.group(2)),
 					Integer.parseInt(matcher.group(3)));
 		}
@@ -104,10 +116,20 @@ public class StringTool
 		{
 			// yy/mm/dd形式にマッチ
 
+			int year = Integer.parseInt(matcher.group(1));
+			if (year >= 90)
+			{
+				year += 1900;
+			}
+			else
+			{
+				year += 2000;
+			}
+
 			return
 				String.format(
 					outFormat,
-					2000 + Integer.parseInt(matcher.group(1)),
+					year,
 					Integer.parseInt(matcher.group(2)),
 					Integer.parseInt(matcher.group(3)));
 		}
