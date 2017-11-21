@@ -17,22 +17,18 @@
 		<available file="${TOMCAT_SITE_HOME}" />
 	</condition>
 
-	<target name="zip">
-		<zip
-			destfile="${PDA_HOME}/Temp/JSPRadioTopic.zip"
-			basedir=".."
-			includes="project/**"
-			excludes="project/bin/**"/>
-	</target>
-
 	<target name="codeguess">
 		<taskdef name="codeguess" classname="kumagai.codeguess.CodeGuessTask" classpath="${JAVAPROJECTCHECKER_LIB}" />
 		<codeguess targetfilepath="src/">
 			<exclude extension="java" code="UTF-8" />
 		</codeguess>
 		<codeguess targetfilepath="html/">
+			<exclude extension="js" code="UTF-8" />
 			<exclude extension="jsp" code="UTF-8" />
+			<exclude extension="html" code="UTF-8" />
 			<exclude extension="jpg" />
+			<exclude extension="gif" />
+			<exclude extension="png" />
 		</codeguess>
 	</target>
 
