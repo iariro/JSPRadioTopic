@@ -261,11 +261,17 @@ public class CompleteGraphDocument
 		int datex = 0;
 
 		// 間隔チェック
-		if (maxDate2.diff(minDate2).getDay() >= 365)
+		if (maxDate2.diff(minDate2).getDay() >= 365 * 2)
 		{
 			// １年を超える
 
-			xscaleLevel = XScaleLevel.Year;
+			xscaleLevel = XScaleLevel.SomeYear;
+		}
+		else if (maxDate2.diff(minDate2).getDay() >= 365)
+		{
+			// １年を超える
+
+			xscaleLevel = XScaleLevel.OneYear;
 		}
 		else
 		{
@@ -291,7 +297,9 @@ public class CompleteGraphDocument
 			}
 		}
 
-		if (xscaleLevel == XScaleLevel.SomeMonth || xscaleLevel == XScaleLevel.Year)
+		if (xscaleLevel == XScaleLevel.SomeMonth ||
+			xscaleLevel == XScaleLevel.OneYear ||
+			xscaleLevel == XScaleLevel.SomeYear)
 		{
 			// 間隔が狭い
 
@@ -301,9 +309,11 @@ public class CompleteGraphDocument
 			{
 				int diffDay = date.diff(minDate2).getDay();
 
-				if (diffDay == 0 || date.getDay() == 1)
+				if (diffDay == 0 || date.getDay() == 1 &&
+					(xscaleLevel != XScaleLevel.SomeYear ||
+					date.getMonth() % 2 == 1))
 				{
-					// 月はじめ
+					// X始点または月はじめ。ただし複数年の場合は２ヶ月置き。
 
 					element = createElement("line");
 					element.setAttribute(
@@ -338,20 +348,36 @@ public class CompleteGraphDocument
 							String.format("%02d/%02d", date.getMonth(), date.getDay());
 					}
 
+					if ((diffDay == 0) ||
+						(date.getMonth() == 1))
+					{
+						// 始点・１月
+
+						dateUpdown = true;
+					}
+					else if ((xscaleLevel == XScaleLevel.OneYear) ||
+						(xscaleLevel == XScaleLevel.SomeYear))
+					{
+						// 日を表示しない
+
+						dateUpdown = false;
+					}
+
 					element = createElement("text");
 					element.setAttribute(
 						"x",
 						String.valueOf(origin.x + xscale * diffDay));
 					element.setAttribute(
 						"y",
-						String.valueOf(origin.y + screen.height + 25 + 20));
+						String.valueOf(origin.y + screen.height + 25 + (dateUpdown ? 20 : 0)));
 					element.setAttribute("font-family", fontFamily);
 					element.setAttribute("text-anchor", "middle");
 					element.appendChild(createTextNode(dateText));
 					top.appendChild(element);
 				}
-				else if ((xscaleLevel != XScaleLevel.Year) &&
-					(date.getDay() == 11) || (date.getDay() == 21))
+				else if ((xscaleLevel != XScaleLevel.OneYear) &&
+					(xscaleLevel != XScaleLevel.SomeYear) &&
+					((date.getDay() == 11) || (date.getDay() == 21)))
 				{
 					// １年以内で１０日刻み
 

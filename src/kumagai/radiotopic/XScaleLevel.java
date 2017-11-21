@@ -8,5 +8,6 @@ public enum XScaleLevel
 {
 	OneMonth,
 	SomeMonth,
-	Year
+	OneYear,
+	SomeYear
 }
