@@ -1,14 +1,24 @@
 package kumagai.radiotopic;
 
-import java.awt.*;
-import java.io.*;
-import java.text.*;
-import java.util.*;
-import javax.xml.parsers.*;
-import javax.xml.transform.*;
-import org.w3c.dom.*;
-import ktool.datetime.*;
-import ktool.xml.*;
+import java.awt.Dimension;
+import java.awt.Point;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.text.ParseException;
+import java.util.Map;
+import java.util.TreeMap;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerFactoryConfigurationError;
+
+import org.w3c.dom.Element;
+
+import ktool.datetime.DateTime;
+import ktool.xml.KDocument;
 
 /**
  * コンプリートグラフドキュメント。
@@ -247,28 +257,41 @@ public class CompleteGraphDocument
 		element.setAttribute("stroke-width", "2");
 		top.appendChild(element);
 
-		boolean narrow = false;
+		XScaleLevel xscaleLevel;
 		int datex = 0;
 
 		// 間隔チェック
-		for (Map.Entry<String, CountAndMax> entry : dateAndCount.entrySet())
+		if (maxDate2.diff(minDate2).getDay() >= 365)
 		{
-			DateTime date = DateTime.parseDateString(entry.getKey());
+			// １年を超える
 
-			int diffDay = date.diff(minDate2).getDay();
+			xscaleLevel = XScaleLevel.Year;
+		}
+		else
+		{
+			// １年を超えない
 
-			if ((int)(origin.x + xscale * diffDay) - datex < 20)
+			xscaleLevel = XScaleLevel.OneMonth;
+
+			for (Map.Entry<String, CountAndMax> entry : dateAndCount.entrySet())
 			{
-				// 間隔が狭い
+				DateTime date = DateTime.parseDateString(entry.getKey());
 
-				narrow = true;
-				break;
+				int diffDay = date.diff(minDate2).getDay();
+
+				if ((int)(origin.x + xscale * diffDay) - datex < 20)
+				{
+					// 間隔が狭い
+
+					xscaleLevel = XScaleLevel.SomeMonth;
+					break;
+				}
+
+				datex = (int)(origin.x + xscale * diffDay);
 			}
-
-			datex = (int)(origin.x + xscale * diffDay);
 		}
 
-		if (narrow)
+		if (xscaleLevel == XScaleLevel.SomeMonth || xscaleLevel == XScaleLevel.Year)
 		{
 			// 間隔が狭い
 
@@ -327,9 +350,10 @@ public class CompleteGraphDocument
 					element.appendChild(createTextNode(dateText));
 					top.appendChild(element);
 				}
-				else if ((date.getDay() == 11) || (date.getDay() == 21))
+				else if ((xscaleLevel != XScaleLevel.Year) &&
+					(date.getDay() == 11) || (date.getDay() == 21))
 				{
-					// １０日刻み
+					// １年以内で１０日刻み
 
 					element = createElement("line");
 					element.setAttribute(
