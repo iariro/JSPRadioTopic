@@ -1,8 +1,12 @@
 package kumagai.radiotopic;
 
-import java.sql.*;
-import java.text.*;
-import ktool.datetime.*;
+import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
+import ktool.datetime.DateTime;
 
 /**
  * 番組情報
@@ -93,18 +97,21 @@ public class Program
 	public DateTime getStartDate()
 		throws ParseException
 	{
-		String [] ageField = age.split("-");
-
-		if (ageField.length >= 1)
+		if (age != null)
 		{
-			// 始点あり
+			// 放送機関あり
 
-			return DateTime.parseDateString(ageField[0]);
+			String [] ageField = age.split("-");
+
+			if (ageField.length >= 1)
+			{
+				// 始点あり
+
+				return DateTime.parseDateString(ageField[0]);
+			}
 		}
-		else
-		{
-			return null;
-		}
+
+		return null;
 	}
 
 	/**
@@ -114,17 +121,20 @@ public class Program
 	public DateTime getEndDate()
 		throws ParseException
 	{
-		String [] ageField = age.split("-");
-
-		if (ageField.length == 2)
+		if (age != null)
 		{
-			// 終点あり
+			// 放送機関あり
 
-			return DateTime.parseDateString(ageField[1]);
+			String [] ageField = age.split("-");
+
+			if (ageField.length == 2)
+			{
+				// 終点あり
+
+				return DateTime.parseDateString(ageField[1]);
+			}
 		}
-		else
-		{
-			return null;
-		}
+
+		return null;
 	}
 }
