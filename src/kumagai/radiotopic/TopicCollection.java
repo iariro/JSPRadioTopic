@@ -62,7 +62,7 @@ public class TopicCollection
 
 				newId = keys.getInt(1);
 
-				DayCollection.updateUpdateDate(connection, dayid);
+				DayAndTopicCollection.updateUpdateDate(connection, dayid);
 
 				return newId;
 			}
@@ -97,7 +97,7 @@ public class TopicCollection
 
 		statement.executeUpdate();
 
-		DayCollection.updateUpdateDate(connection, dayid);
+		DayAndTopicCollection.updateUpdateDate(connection, dayid);
 
 		statement.close();
 	}
@@ -120,7 +120,7 @@ public class TopicCollection
 
 		statement.executeUpdate();
 
-		DayCollection.updateUpdateDate(connection, dayid);
+		DayAndTopicCollection.updateUpdateDate(connection, dayid);
 
 		statement.close();
 	}

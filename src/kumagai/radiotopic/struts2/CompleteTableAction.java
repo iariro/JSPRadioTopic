@@ -50,8 +50,8 @@ public class CompleteTableAction
 
 		SortOrder sortOrder2 = SortOrder.values()[0];
 
-		DayCollection dayCollection =
-			new DayCollection(connection, 7, sortOrder2);
+		DayAndTopicCollection dayCollection =
+			new DayAndTopicCollection(connection, 7, sortOrder2);
 
 		connection.close();
 
@@ -106,8 +106,8 @@ public class CompleteTableAction
 
 				SortOrder sortOrder2 = SortOrder.values()[sortOrder];
 
-				DayCollection dayCollection =
-					new DayCollection(connection, programid, sortOrder2);
+				DayAndTopicCollection dayCollection =
+					new DayAndTopicCollection(connection, programid, sortOrder2);
 
 				connection.close();
 

@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import kumagai.radiotopic.CountAndMax;
-import kumagai.radiotopic.DayCollection;
+import kumagai.radiotopic.DayAndTopicCollection;
 
 /**
  * CompleteTableAction用のDayデータの更新日付によるディクショナリー
@@ -22,7 +22,7 @@ public class UpdateDateAndNoTable
 	 * @param originnDate 更新日付開始日
 	 */
 	public UpdateDateAndNoTable
-		(DayCollection dayCollection, String originnDate)
+		(DayAndTopicCollection dayCollection, String originnDate)
 	{
 		for (int i=0 ; i<dayCollection.size() ; i++)
 		{
@@ -250,7 +250,7 @@ public class UpdateDateAndNoTable
 	 * @return 日ごとの更新件数コレクション
 	 */
 	public TreeMap<String, CountAndMax> getDateAndCount
-		(DayCollection dayCollection, boolean back)
+		(DayAndTopicCollection dayCollection, boolean back)
 	{
 		int total = dayCollection.getMaxNo();
 

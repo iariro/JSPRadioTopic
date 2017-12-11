@@ -18,7 +18,7 @@ public class RecentUpdateListAction
 {
 	public int dayNum;
 
-	public ArrayList<ArrayList<Day>> recentUpdateDays;
+	public ArrayList<ArrayList<DayAndTopic>> recentUpdateDays;
 
 	/**
 	 * 最近聞いた回リスト表示アクション。
@@ -37,7 +37,7 @@ public class RecentUpdateListAction
 				(context.getInitParameter("RadioTopicSqlserverUrl"));
 
 		recentUpdateDays =
-			DayCollection.getRecentUpdateDays(connection, dayNum);
+			DayAndTopicCollection.getRecentUpdateDays(connection, dayNum);
 
 		connection.close();
 

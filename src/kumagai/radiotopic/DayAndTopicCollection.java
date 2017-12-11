@@ -9,8 +9,8 @@ import ktool.datetime.*;
  * 回情報のコレクション
  * @author kumagai
  */
-public class DayCollection
-	extends ArrayList<Day>
+public class DayAndTopicCollection
+	extends ArrayList<DayAndTopic>
 {
 	/**
 	 * テストプログラム
@@ -23,15 +23,15 @@ public class DayCollection
 
 		Connection connection = RadioTopicDatabase.getConnection();
 
-		DayCollection dayCollection =
-			new DayCollection(connection, 29, SortOrder.NumberByNumeric);
+		DayAndTopicCollection dayCollection =
+			new DayAndTopicCollection(connection, 29, SortOrder.NumberByNumeric);
 
-		for (Day day : dayCollection)
+		for (DayAndTopic day : dayCollection)
 		{
 			System.out.println(day);
 		}
 
-		Day nextListenDay = dayCollection.getNextListenDay("a", "2013/04/07-", new DateTime());
+		DayAndTopic nextListenDay = dayCollection.getNextListenDay("a", "2013/04/07-", new DateTime());
 		System.out.printf("%s %s %s\n", nextListenDay.programName, nextListenDay.getNo(), nextListenDay.date.toString());
 
 		connection.close();
@@ -183,7 +183,7 @@ public class DayCollection
 	 * @param connection DB接続オブジェクト
 	 * @param dayNum 取得する日数
 	 */
-	static public ArrayList<ArrayList<Day>> getRecentUpdateDays
+	static public ArrayList<ArrayList<DayAndTopic>> getRecentUpdateDays
 		(Connection connection, int dayNum)
 		throws SQLException
 	{
@@ -196,11 +196,11 @@ public class DayCollection
 
 		ResultSet results = statement.executeQuery();
 
-		ArrayList<ArrayList<Day>> daysCollection =
-			new ArrayList<ArrayList<Day>>();
+		ArrayList<ArrayList<DayAndTopic>> daysCollection =
+			new ArrayList<ArrayList<DayAndTopic>>();
 
 		int diffDay = -1;
-		ArrayList<Day> days = null;
+		ArrayList<DayAndTopic> days = null;
 
 		while (results.next())
 		{
@@ -210,11 +210,11 @@ public class DayCollection
 			{
 				// 日の変わり目
 
-				days = new ArrayList<Day>();
+				days = new ArrayList<DayAndTopic>();
 				daysCollection.add(days);
 			}
 
-			days.add(new Day(results));
+			days.add(new DayAndTopic(results));
 
 			diffDay = diffDay2;
 		}
@@ -228,7 +228,7 @@ public class DayCollection
 	/**
 	 * テスト用コンストラクタ
 	 */
-	public DayCollection()
+	public DayAndTopicCollection()
 	{
 		// 何もしない
 	}
@@ -239,7 +239,7 @@ public class DayCollection
 	 * @param programid 番組ID
 	 * @param sortOrder ソートオーダー
 	 */
-	public DayCollection
+	public DayAndTopicCollection
 		(Connection connection, int programid, SortOrder sortOrder)
 		throws SQLException
 	{
@@ -267,12 +267,12 @@ public class DayCollection
 
 		while (results.next())
 		{
-			add(new Day(results));
+			add(new DayAndTopic(results));
 		}
 
 		results.close();
 
-		for (Day day : this)
+		for (DayAndTopic day : this)
 		{
 			day.topicCollection = new TopicCollection(connection, day.id);
 		}
@@ -287,7 +287,7 @@ public class DayCollection
 	 * @param today 今日の日付
 	 * @return 次回放送日
 	 */
-	public Day getNextListenDay(String programName, String age, DateTime today)
+	public DayAndTopic getNextListenDay(String programName, String age, DateTime today)
 	{
 		if (age == null)
 		{
@@ -342,7 +342,7 @@ public class DayCollection
 
 			int nextNo = Integer.valueOf(get(0).getNo()) + 1;
 
-			return new Day(programName, nextNo, day0, null, null);
+			return new DayAndTopic(programName, nextNo, day0, null, null);
 		}
 		else
 		{
@@ -433,7 +433,7 @@ public class DayCollection
 		DateTime min = null;
 		DateTime max = null;
 
-		for (Day day : this)
+		for (DayAndTopic day : this)
 		{
 			if (day.updatedate != null)
 			{
@@ -477,7 +477,7 @@ public class DayCollection
 	{
 		int count = 0;
 
-		for (Day day : this)
+		for (DayAndTopic day : this)
 		{
 			if (day.updatedate != null)
 			{
@@ -498,7 +498,7 @@ public class DayCollection
 	{
 		DateTime last = null;
 
-		for (Day day : this)
+		for (DayAndTopic day : this)
 		{
 			if (day.updatedate != null)
 			{
@@ -534,7 +534,7 @@ public class DayCollection
 				topicsArray.append(",");
 			}
 
-			Day day = get(i);
+			DayAndTopic day = get(i);
 			topicsArray.append("[");
 			if (day.topicCollection != null)
 			{

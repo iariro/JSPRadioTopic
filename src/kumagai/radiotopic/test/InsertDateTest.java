@@ -13,7 +13,7 @@ public class InsertDateTest
 
 		Connection connection = RadioTopicDatabase.getConnection();
 
-		int newId = DayCollection.insertDay(connection, 1, "2015/08/08", "70");
+		int newId = DayAndTopicCollection.insertDay(connection, 1, "2015/08/08", "70");
 
 		System.out.println(newId);
 

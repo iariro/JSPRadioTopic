@@ -7,7 +7,7 @@ import ktool.datetime.*;
  * 回
  * @author kumagai
  */
-public class Day
+public class DayAndTopic
 {
 	public final String programName;
 	public final int id;
@@ -110,7 +110,7 @@ public class Day
 	 * @param createdate 作成日付
 	 * @param updatedate 更新日付
 	 */
-	public Day(String programName, int no, DateTime date, DateTime createdate, DateTime updatedate)
+	public DayAndTopic(String programName, int no, DateTime date, DateTime createdate, DateTime updatedate)
 	{
 		this.programName = programName;
 		this.id = -1;
@@ -142,7 +142,7 @@ public class Day
 	 * DayCollection構築時、DBレコードから値を取得しフィールドに割り当てる
 	 * @param results DBレコード
 	 */
-	public Day(ResultSet results)
+	public DayAndTopic(ResultSet results)
 		throws SQLException
 	{
 		this.programName = results.getString("name");

@@ -39,7 +39,7 @@ public class AddDayAction
 
 		date = StringTool.parseDate(date);
 
-		newid = DayCollection.insertDay(connection, programid, date, no);
+		newid = DayAndTopicCollection.insertDay(connection, programid, date, no);
 
 		return "success";
 	}

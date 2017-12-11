@@ -58,7 +58,7 @@ public class ImportText
 							// -nd
 
 							dayid =
-								DayCollection.insertDay(
+								DayAndTopicCollection.insertDay(
 									connection,
 									programId,
 									field1[1],
@@ -70,7 +70,7 @@ public class ImportText
 							// -d
 
 							dayid =
-								DayCollection.insertDay(
+								DayAndTopicCollection.insertDay(
 									connection,
 									programId,
 									field1[0],
@@ -81,7 +81,7 @@ public class ImportText
 							// -n
 
 							dayid =
-								DayCollection.insertDay(
+								DayAndTopicCollection.insertDay(
 									connection,
 									programId,
 									null,

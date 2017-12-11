@@ -33,8 +33,8 @@ public class LineCountStatGraphDocument
 
 		Connection connection = RadioTopicDatabase.getConnection();
 
-		DayCollection dayCollection =
-			new DayCollection(connection, 1, SortOrder.NumberByNumeric);
+		DayAndTopicCollection dayCollection =
+			new DayAndTopicCollection(connection, 1, SortOrder.NumberByNumeric);
 
 		LineCountAndRatioCollection lineCountAndRatioCollection =
 			new LineCountAndRatioCollection(dayCollection);

@@ -76,7 +76,7 @@ public class AddDayLump2Action
 				}
 
 				// Dayエントリ作成
-				int newDayId = DayCollection.insertDay(connection, programid, date, no);
+				int newDayId = DayAndTopicCollection.insertDay(connection, programid, date, no);
 
 				// トピックを登録
 				for (int i=index ; i<lines.length ; i++)

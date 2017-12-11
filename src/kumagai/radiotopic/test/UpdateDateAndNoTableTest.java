@@ -20,8 +20,8 @@ public class UpdateDateAndNoTableTest
 
 		SortOrder sortOrder2 = SortOrder.values()[0];
 
-		DayCollection dayCollection =
-			new DayCollection(connection, 1, sortOrder2);
+		DayAndTopicCollection dayCollection =
+			new DayAndTopicCollection(connection, 1, sortOrder2);
 
 		connection.close();
 
@@ -40,10 +40,10 @@ public class UpdateDateAndNoTableTest
 	public void test1()
 		throws ParseException
 	{
-		DayCollection dayCollection = new DayCollection();
+		DayAndTopicCollection dayCollection = new DayAndTopicCollection();
 
 		dayCollection.add(
-			new Day(
+			new DayAndTopic(
 				null,
 				1,
 				null,
@@ -62,10 +62,10 @@ public class UpdateDateAndNoTableTest
 	public void test2()
 		throws ParseException
 	{
-		DayCollection dayCollection = new DayCollection();
+		DayAndTopicCollection dayCollection = new DayAndTopicCollection();
 
 		dayCollection.add(
-			new Day(
+			new DayAndTopic(
 				null,
 				1,
 				null,
@@ -84,17 +84,17 @@ public class UpdateDateAndNoTableTest
 	public void test3()
 		throws ParseException
 	{
-		DayCollection dayCollection = new DayCollection();
+		DayAndTopicCollection dayCollection = new DayAndTopicCollection();
 
 		dayCollection.add(
-			new Day(
+			new DayAndTopic(
 				null,
 				1,
 				null,
 				DateTime.parseDateString("2015/10/02"),
 				DateTime.parseDateString("2015/10/03")));
 		dayCollection.add(
-			new Day(
+			new DayAndTopic(
 				null,
 				2,
 				null,

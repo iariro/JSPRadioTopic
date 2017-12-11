@@ -24,7 +24,7 @@ public class ListDayAction
 	public int sortOrder;
 
 	public String topicsArray;
-	public DayCollection dayCollection;
+	public DayAndTopicCollection dayCollection;
 	public int count;
 	public String message;
 
@@ -67,8 +67,8 @@ public class ListDayAction
 
 				SortOrder sortOrder2 = SortOrder.values()[sortOrder];
 
-				DayCollection dayCollection =
-					new DayCollection(connection, programid, sortOrder2);
+				DayAndTopicCollection dayCollection =
+					new DayAndTopicCollection(connection, programid, sortOrder2);
 				connection.close();
 
 				count = dayCollection.size();
@@ -77,7 +77,7 @@ public class ListDayAction
 				{
 					// 回の列を数字として扱う
 
-					this.dayCollection = new DayCollection();
+					this.dayCollection = new DayAndTopicCollection();
 
 					Integer no1 = null;
 					Integer no2 = null;
@@ -93,7 +93,7 @@ public class ListDayAction
 							{
 								for (int j=no2-1 ; j>no1 ; j--)
 								{
-									this.dayCollection.add(new Day(null, j, null, null, null));
+									this.dayCollection.add(new DayAndTopic(null, j, null, null, null));
 								}
 							}
 

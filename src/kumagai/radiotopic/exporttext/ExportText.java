@@ -21,8 +21,8 @@ import ktool.datetime.DateTime;
 import kumagai.radiotopic.ChronologyBitmap;
 import kumagai.radiotopic.ChronologyGraphData;
 import kumagai.radiotopic.ChronologyGraphDataElement;
-import kumagai.radiotopic.Day;
-import kumagai.radiotopic.DayCollection;
+import kumagai.radiotopic.DayAndTopic;
+import kumagai.radiotopic.DayAndTopicCollection;
 import kumagai.radiotopic.Program;
 import kumagai.radiotopic.ProgramCollection;
 import kumagai.radiotopic.RadioTopicDatabase;
@@ -55,15 +55,15 @@ public class ExportText
 
 		ProgramCollection programCollection = new ProgramCollection(connection);
 
-		HashMap<Program, DayCollection> programAndTopic =
-			new HashMap<Program, DayCollection>();
+		HashMap<Program, DayAndTopicCollection> programAndTopic =
+			new HashMap<Program, DayAndTopicCollection>();
 
 		for (Program program : programCollection)
 		{
 			SortOrder sortOrder = SortOrder.values()[program.sortOrder];
 
-			DayCollection dayCollection =
-				new DayCollection(connection, program.id, sortOrder);
+			DayAndTopicCollection dayCollection =
+				new DayAndTopicCollection(connection, program.id, sortOrder);
 
 			programAndTopic.put(program, dayCollection);
 		}
@@ -72,7 +72,7 @@ public class ExportText
 
 		DateTime today = new DateTime();
 
-		for (Map.Entry<Program, DayCollection> entry
+		for (Map.Entry<Program, DayAndTopicCollection> entry
 			: programAndTopic.entrySet())
 		{
 			DateTime lastUpdate = entry.getValue().getLastUpdate();
@@ -152,7 +152,7 @@ public class ExportText
 	 * @param dateNoPrinter ファイル出力オブジェクト
 	 */
 	static protected void outputProgramHtml(Program program,
-		DayCollection dayCollection, PrintWriter writer,
+		DayAndTopicCollection dayCollection, PrintWriter writer,
 		DateNoPrinter dateNoPrinter)
 	{
 		writer.println("<html>");
@@ -165,7 +165,7 @@ public class ExportText
 
 		int pno = -1;
 
-		for (Day day : dayCollection)
+		for (DayAndTopic day : dayCollection)
 		{
 			String date = day.getDate();
 

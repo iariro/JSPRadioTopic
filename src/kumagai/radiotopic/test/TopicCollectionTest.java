@@ -15,7 +15,7 @@ public class TopicCollectionTest
 
 		Connection connection = RadioTopicDatabase.getConnection();
 
-		ArrayList<DayDigest> days = DayCollection.getTochuuTopic(connection);
+		ArrayList<DayDigest> days = DayAndTopicCollection.getTochuuTopic(connection);
 
 		for (DayDigest day : days)
 		{

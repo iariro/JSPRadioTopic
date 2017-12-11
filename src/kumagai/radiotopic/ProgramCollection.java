@@ -36,11 +36,11 @@ public class ProgramCollection
 		for (Program program : programCollection)
 		{
 			System.out.println(program);
-			DayCollection dayCollection =
-				new DayCollection
+			DayAndTopicCollection dayCollection =
+				new DayAndTopicCollection
 					(connection, program.id, SortOrder.values()[program.sortOrder]);
 
-			Day nextListenDay =
+			DayAndTopic nextListenDay =
 				dayCollection.getNextListenDay(program.name, program.age, today);
 
 			if (nextListenDay != null)
@@ -214,11 +214,11 @@ public class ProgramCollection
 
 		ResultSet results = statement.executeQuery();
 
-		Day pday = null;
+		DayAndTopic pday = null;
 		ArrayList<String> invalidDates = new ArrayList<String>();
 		while (results.next())
 		{
-			Day day = new Day(results);
+			DayAndTopic day = new DayAndTopic(results);
 			if (pday != null)
 			{
 				// 比較する回あり

@@ -16,14 +16,14 @@ public class LineCountAndRatioCollection
 	 * １番組情報を受け、文字列長カウント積み上げグラフ用データを構築する。
 	 * @param dayCollection １番組情報
 	 */
-	public LineCountAndRatioCollection(DayCollection dayCollection)
+	public LineCountAndRatioCollection(DayAndTopicCollection dayCollection)
 	{
 		Integer maxLength = null;
 		Integer minLength = null;
 
 		HashMap<Integer, Integer> lengthStat = new HashMap<Integer, Integer>();
 
-		for (Day day : dayCollection)
+		for (DayAndTopic day : dayCollection)
 		{
 			int length = day.topicCollection.getLengthByHalfWidth();
 

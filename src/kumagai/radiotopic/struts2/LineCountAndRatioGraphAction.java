@@ -73,8 +73,8 @@ public class LineCountAndRatioGraphAction
 
 			SortOrder sortOrder2 = SortOrder.values()[sortOrder];
 
-			DayCollection dayCollection =
-				new DayCollection(connection, programid, sortOrder2);
+			DayAndTopicCollection dayCollection =
+				new DayAndTopicCollection(connection, programid, sortOrder2);
 
 			connection.close();
 

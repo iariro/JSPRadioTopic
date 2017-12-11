@@ -18,8 +18,8 @@ import org.apache.struts2.convention.annotation.Results;
 import com.microsoft.sqlserver.jdbc.SQLServerDriver;
 
 import ktool.datetime.DateTime;
-import kumagai.radiotopic.Day;
-import kumagai.radiotopic.DayCollection;
+import kumagai.radiotopic.DayAndTopic;
+import kumagai.radiotopic.DayAndTopicCollection;
 import kumagai.radiotopic.DayDigest;
 import kumagai.radiotopic.Program;
 import kumagai.radiotopic.ProgramCollection;
@@ -39,7 +39,7 @@ public class IndexAction
 {
 	public ProgramCollection programCollection;
 	public ArrayList<DayDigest> tochuuDays;
-	public ArrayList<Day> nextListenDays = new ArrayList<Day>();
+	public ArrayList<DayAndTopic> nextListenDays = new ArrayList<DayAndTopic>();
 	public String searchStartDate;
 	public String message;
 
@@ -65,16 +65,16 @@ public class IndexAction
 				connection = DriverManager.getConnection(url);
 
 				programCollection = new ProgramCollection(connection);
-				tochuuDays = DayCollection.getTochuuTopic(connection);
+				tochuuDays = DayAndTopicCollection.getTochuuTopic(connection);
 
 				DateTime today = new DateTime();
 				for (Program program : programCollection)
 				{
-					DayCollection dayCollection =
-						new DayCollection
+					DayAndTopicCollection dayCollection =
+						new DayAndTopicCollection
 							(connection, program.id, SortOrder.values()[program.sortOrder]);
 
-					Day nextListenDay =
+					DayAndTopic nextListenDay =
 						dayCollection.getNextListenDay(program.name, program.age, today);
 
 					if (nextListenDay != null)
@@ -86,9 +86,9 @@ public class IndexAction
 				}
 				
 				Collections.sort(nextListenDays,
-					new Comparator<Day>()
+					new Comparator<DayAndTopic>()
 					{
-						public int compare(Day day1, Day day2)
+						public int compare(DayAndTopic day1, DayAndTopic day2)
 						{
 							return day1.date.compareTo(day2.date);
 						}

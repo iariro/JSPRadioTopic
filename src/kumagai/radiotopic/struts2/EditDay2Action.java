@@ -60,7 +60,7 @@ public class EditDay2Action
 					date = null;
 				}
 
-				DayCollection.updateDay(connection, dayid, no, date);
+				DayAndTopicCollection.updateDay(connection, dayid, no, date);
 
 				connection.close();
 
