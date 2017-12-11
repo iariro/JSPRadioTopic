@@ -39,7 +39,7 @@ public class SearchTopicResult
 	{
 		name = results.getString("name");
 		no = results.getString("no");
-		date = formatDate1.format(results.getDate("date"));
+		date = results.getDate("date") != null ? formatDate1.format(results.getDate("date")) : null;
 		text = results.getString("text");
 		updatedate = formatDate2.format(results.getTimestamp("updatedate"));
 	}
