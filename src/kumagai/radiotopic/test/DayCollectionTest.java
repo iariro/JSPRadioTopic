@@ -1,13 +1,24 @@
 package kumagai.radiotopic.test;
 
-import java.sql.*;
+import java.sql.Connection;
 import java.sql.Date;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.text.ParseException;
-import java.util.*;
-import junit.framework.*;
-import com.microsoft.sqlserver.jdbc.*;
-import ktool.datetime.*;
-import kumagai.radiotopic.*;
+import java.util.ArrayList;
+
+import com.microsoft.sqlserver.jdbc.SQLServerDriver;
+
+import junit.framework.TestCase;
+import ktool.datetime.DateTime;
+import kumagai.radiotopic.Day;
+import kumagai.radiotopic.DayAndTopic;
+import kumagai.radiotopic.DayAndTopicCollection;
+import kumagai.radiotopic.DayCollection;
+import kumagai.radiotopic.RadioTopicDatabase;
+import kumagai.radiotopic.Topic;
+import kumagai.radiotopic.TopicCollection;
 
 public class DayCollectionTest
 	extends TestCase
@@ -15,11 +26,11 @@ public class DayCollectionTest
 	public void testGetCountAtDate()
 		throws ParseException
 	{
-		DayAndTopicCollection dayCollection = new DayAndTopicCollection();
+		DayCollection dayCollection = new DayCollection();
 
-		dayCollection.add(new DayAndTopic(null, 1, DateTime.parseDateString("2015/01/01"), null, null));
-		dayCollection.add(new DayAndTopic(null, 2, DateTime.parseDateString("2015/02/01"), null, null));
-		dayCollection.add(new DayAndTopic(null, 3, DateTime.parseDateString("2015/03/01"), null, null));
+		dayCollection.add(new Day(null, 0, 0, DateTime.parseDateString("2015/01/01"), "1", null, null));
+		dayCollection.add(new Day(null, 0, 0, DateTime.parseDateString("2015/02/01"), "2", null, null));
+		dayCollection.add(new Day(null, 0, 0, DateTime.parseDateString("2015/03/01"), "3", null, null));
 
 		assertEquals(3, dayCollection.getOverDateCount("2014/12/31"));
 		assertEquals(2, dayCollection.getOverDateCount("2015/01/01"));
@@ -35,12 +46,12 @@ public class DayCollectionTest
 
 		Connection connection = RadioTopicDatabase.getConnection();
 
-		ArrayList<ArrayList<DayAndTopic>> daysCollection =
-			DayAndTopicCollection.getRecentUpdateDays(connection, 3);
+		ArrayList<ArrayList<Day>> daysCollection =
+			DayCollection.getRecentUpdateDays(connection, 3);
 
-		for (ArrayList<DayAndTopic> days : daysCollection)
+		for (ArrayList<Day> days : daysCollection)
 		{
-			for (DayAndTopic day : days)
+			for (Day day : days)
 			{
 				System.out.println(day.getUpdateDateAsString());
 			}
@@ -52,10 +63,10 @@ public class DayCollectionTest
 	public void testGetUpdateRange()
 		throws ParseException
 	{
-		DayAndTopicCollection dayCollection = new DayAndTopicCollection();
+		DayCollection dayCollection = new DayCollection();
 
-		dayCollection.add(new DayAndTopic(null, 1, DateTime.parseDateString("2015/01/01"), null, DateTime.parseDateString("2015/01/01")));
-		dayCollection.add(new DayAndTopic(null, 2, DateTime.parseDateString("2015/02/01"), null, DateTime.parseDateString("2015/01/10")));
+		dayCollection.add(new Day(null, 0, 0, DateTime.parseDateString("2015/01/01"), "1", null, DateTime.parseDateString("2015/01/01")));
+		dayCollection.add(new Day(null, 0, 0, DateTime.parseDateString("2015/02/01"), "2", null, DateTime.parseDateString("2015/01/10")));
 
 		assertEquals(9, dayCollection.getUpdateRange());
 		assertEquals("2015/01/10", dayCollection.getLastUpdate().toString().substring(0, 10));
@@ -101,13 +112,13 @@ public class DayCollectionTest
 	public void testGetNextListenDay1()
 		throws ParseException
 	{
-		DayAndTopicCollection dayCollection = new DayAndTopicCollection();
+		DayCollection dayCollection = new DayCollection();
 
 		dayCollection.add(new DayAndTopic(null, 3, DateTime.parseDateString("2015/01/15"), null, null));
 		dayCollection.add(new DayAndTopic(null, 2, DateTime.parseDateString("2015/01/08"), null, null));
 		dayCollection.add(new DayAndTopic(null, 1, DateTime.parseDateString("2015/01/01"), null, null));
 
-		DayAndTopic next = dayCollection.getNextListenDay("A", "2015/01/01", DateTime.parseDateString("2015/2/1"));
+		Day next = dayCollection.getNextListenDay("A", "2015/01/01", DateTime.parseDateString("2015/2/1"));
 		assertEquals("4", next.getNo());
 		assertEquals("2015/01/22", next.date.toString());
 	}
@@ -115,12 +126,12 @@ public class DayCollectionTest
 	public void testGetNextListenDay2()
 		throws ParseException
 	{
-		DayAndTopicCollection dayCollection = new DayAndTopicCollection();
+		DayCollection dayCollection = new DayCollection();
 
 		dayCollection.add(new DayAndTopic(null, 3, DateTime.parseDateString("2015/01/15"), null, null));
 		dayCollection.add(new DayAndTopic(null, 1, DateTime.parseDateString("2015/01/01"), null, null));
 
-		DayAndTopic next = dayCollection.getNextListenDay("A", "2015/01/01", DateTime.parseDateString("2015/2/1"));
+		Day next = dayCollection.getNextListenDay("A", "2015/01/01", DateTime.parseDateString("2015/2/1"));
 		assertEquals("4", next.getNo());
 		assertEquals("2015/01/22", next.date.toString());
 	}
@@ -128,35 +139,35 @@ public class DayCollectionTest
 	public void testGetNextListenDay3()
 		throws ParseException
 	{
-		DayAndTopicCollection dayCollection = new DayAndTopicCollection();
+		DayCollection dayCollection = new DayCollection();
 
 		dayCollection.add(new DayAndTopic(null, 3, DateTime.parseDateString("2015/01/15"), null, null));
 
-		DayAndTopic next = dayCollection.getNextListenDay("A", "2015/01/01", DateTime.parseDateString("2015/2/1"));
+		Day next = dayCollection.getNextListenDay("A", "2015/01/01", DateTime.parseDateString("2015/2/1"));
 		assertNull(next);
 	}
 	
 	public void testGetNextListenDay4()
 		throws ParseException
 	{
-		DayAndTopicCollection dayCollection = new DayAndTopicCollection();
-		DayAndTopic next = dayCollection.getNextListenDay("A", "2015/01/01", DateTime.parseDateString("2015/2/1"));
+		DayCollection dayCollection = new DayCollection();
+		Day next = dayCollection.getNextListenDay("A", "2015/01/01", DateTime.parseDateString("2015/2/1"));
 		assertNull(next);
 	}
 	
 	public void testGetNextListenDay5()
 		throws ParseException
 	{
-		DayAndTopicCollection dayCollection = new DayAndTopicCollection();
-		DayAndTopic next = dayCollection.getNextListenDay("A", "", DateTime.parseDateString("2015/2/1"));
+		DayCollection dayCollection = new DayCollection();
+		Day next = dayCollection.getNextListenDay("A", "", DateTime.parseDateString("2015/2/1"));
 		assertNull(next);
 	}
 	
 	public void testGetNextListenDay6()
 		throws ParseException
 	{
-		DayAndTopicCollection dayCollection = new DayAndTopicCollection();
-		DayAndTopic next = dayCollection.getNextListenDay("A", null, DateTime.parseDateString("2015/2/1"));
+		DayCollection dayCollection = new DayCollection();
+		Day next = dayCollection.getNextListenDay("A", null, DateTime.parseDateString("2015/2/1"));
 		assertNull(next);
 	}
 }

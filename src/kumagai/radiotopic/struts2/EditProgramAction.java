@@ -1,12 +1,20 @@
 package kumagai.radiotopic.struts2;
 
-import java.sql.*;
-import javax.servlet.*;
-import com.microsoft.sqlserver.jdbc.*;
-import org.apache.struts2.*;
-import org.apache.struts2.convention.annotation.*;
-import ktool.datetime.*;
-import kumagai.radiotopic.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+import javax.servlet.ServletContext;
+
+import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.Namespace;
+import org.apache.struts2.convention.annotation.Result;
+
+import com.microsoft.sqlserver.jdbc.SQLServerDriver;
+
+import ktool.datetime.DateTime;
+import kumagai.radiotopic.DayCollection;
+import kumagai.radiotopic.SortOrder;
 
 /**
  * 番組情報編集ページ表示アクション。
@@ -49,8 +57,8 @@ public class EditProgramAction
 
 		SortOrder sortOrder2 = SortOrder.values()[sortOrder];
 
-		DayAndTopicCollection dayCollection =
-			new DayAndTopicCollection(connection, programid, sortOrder2);
+		DayCollection dayCollection =
+			new DayCollection(connection, programid, sortOrder2);
 		connection.close();
 
 		maxNo = dayCollection.getMaxNo();

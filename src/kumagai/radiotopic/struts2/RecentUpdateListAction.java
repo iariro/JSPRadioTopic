@@ -1,12 +1,20 @@
 package kumagai.radiotopic.struts2;
 
-import java.sql.*;
-import java.util.*;
-import javax.servlet.*;
-import com.microsoft.sqlserver.jdbc.*;
-import org.apache.struts2.*;
-import org.apache.struts2.convention.annotation.*;
-import kumagai.radiotopic.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.util.ArrayList;
+
+import javax.servlet.ServletContext;
+
+import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.Namespace;
+import org.apache.struts2.convention.annotation.Result;
+
+import com.microsoft.sqlserver.jdbc.SQLServerDriver;
+
+import kumagai.radiotopic.Day;
+import kumagai.radiotopic.DayCollection;
 
 /**
  * 最近聞いた回リスト表示アクション。
@@ -18,7 +26,7 @@ public class RecentUpdateListAction
 {
 	public int dayNum;
 
-	public ArrayList<ArrayList<DayAndTopic>> recentUpdateDays;
+	public ArrayList<ArrayList<Day>> recentUpdateDays;
 
 	/**
 	 * 最近聞いた回リスト表示アクション。
@@ -36,8 +44,7 @@ public class RecentUpdateListAction
 			DriverManager.getConnection
 				(context.getInitParameter("RadioTopicSqlserverUrl"));
 
-		recentUpdateDays =
-			DayAndTopicCollection.getRecentUpdateDays(connection, dayNum);
+		recentUpdateDays = DayCollection.getRecentUpdateDays(connection, dayNum);
 
 		connection.close();
 

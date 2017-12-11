@@ -1,8 +1,13 @@
 package kumagai.radiotopic.test;
 
-import java.sql.*;
-import kumagai.radiotopic.*;
-import com.microsoft.sqlserver.jdbc.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+import com.microsoft.sqlserver.jdbc.SQLServerDriver;
+
+import kumagai.radiotopic.DayCollection;
+import kumagai.radiotopic.RadioTopicDatabase;
 
 public class InsertDateTest
 {
@@ -13,7 +18,7 @@ public class InsertDateTest
 
 		Connection connection = RadioTopicDatabase.getConnection();
 
-		int newId = DayAndTopicCollection.insertDay(connection, 1, "2015/08/08", "70");
+		int newId = DayCollection.insertDay(connection, 1, "2015/08/08", "70");
 
 		System.out.println(newId);
 

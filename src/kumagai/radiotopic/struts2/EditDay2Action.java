@@ -1,11 +1,21 @@
 package kumagai.radiotopic.struts2;
 
-import java.sql.*;
-import javax.servlet.*;
-import com.microsoft.sqlserver.jdbc.*;
-import org.apache.struts2.*;
-import org.apache.struts2.convention.annotation.*;
-import kumagai.radiotopic.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+import javax.servlet.ServletContext;
+
+import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.Namespace;
+import org.apache.struts2.convention.annotation.Result;
+import org.apache.struts2.convention.annotation.Results;
+
+import com.microsoft.sqlserver.jdbc.SQLServerDriver;
+
+import kumagai.radiotopic.DayCollection;
+import kumagai.radiotopic.StringTool;
 
 /**
  * 日情報編集結果表示ページ表示アクション。
@@ -60,7 +70,7 @@ public class EditDay2Action
 					date = null;
 				}
 
-				DayAndTopicCollection.updateDay(connection, dayid, no, date);
+				DayCollection.updateDay(connection, dayid, no, date);
 
 				connection.close();
 

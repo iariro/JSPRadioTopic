@@ -1,11 +1,19 @@
 package kumagai.radiotopic.struts2;
 
-import java.sql.*;
-import javax.servlet.*;
-import com.microsoft.sqlserver.jdbc.*;
-import org.apache.struts2.*;
-import org.apache.struts2.convention.annotation.*;
-import kumagai.radiotopic.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+import javax.servlet.ServletContext;
+
+import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.Namespace;
+import org.apache.struts2.convention.annotation.Result;
+
+import com.microsoft.sqlserver.jdbc.SQLServerDriver;
+
+import kumagai.radiotopic.DayCollection;
+import kumagai.radiotopic.StringTool;
 
 /**
  * 日追加ページ表示アクション。
@@ -39,7 +47,7 @@ public class AddDayAction
 
 		date = StringTool.parseDate(date);
 
-		newid = DayAndTopicCollection.insertDay(connection, programid, date, no);
+		newid = DayCollection.insertDay(connection, programid, date, no);
 
 		return "success";
 	}

@@ -1,12 +1,23 @@
 package kumagai.radiotopic.struts2;
 
-import java.util.regex.*;
-import java.sql.*;
-import javax.servlet.*;
-import com.microsoft.sqlserver.jdbc.*;
-import org.apache.struts2.*;
-import org.apache.struts2.convention.annotation.*;
-import kumagai.radiotopic.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.servlet.ServletContext;
+
+import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.Namespace;
+import org.apache.struts2.convention.annotation.Result;
+import org.apache.struts2.convention.annotation.Results;
+
+import com.microsoft.sqlserver.jdbc.SQLServerDriver;
+
+import kumagai.radiotopic.DayCollection;
+import kumagai.radiotopic.StringTool;
+import kumagai.radiotopic.TopicCollection;
 
 /**
  * 一括日追加ページ結果表示アクション。
@@ -76,7 +87,7 @@ public class AddDayLump2Action
 				}
 
 				// Dayエントリ作成
-				int newDayId = DayAndTopicCollection.insertDay(connection, programid, date, no);
+				int newDayId = DayCollection.insertDay(connection, programid, date, no);
 
 				// トピックを登録
 				for (int i=index ; i<lines.length ; i++)

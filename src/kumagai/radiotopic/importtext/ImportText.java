@@ -1,9 +1,19 @@
 package kumagai.radiotopic.importtext;
 
-import java.io.*;
-import java.sql.*;
-import kumagai.radiotopic.*;
-import com.microsoft.sqlserver.jdbc.*;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+import com.microsoft.sqlserver.jdbc.SQLServerDriver;
+
+import kumagai.radiotopic.DayCollection;
+import kumagai.radiotopic.ProgramCollection;
+import kumagai.radiotopic.RadioTopicDatabase;
+import kumagai.radiotopic.TopicCollection;
 
 /**
  * テキストファイルのインポート
@@ -58,7 +68,7 @@ public class ImportText
 							// -nd
 
 							dayid =
-								DayAndTopicCollection.insertDay(
+								DayCollection.insertDay(
 									connection,
 									programId,
 									field1[1],
@@ -70,7 +80,7 @@ public class ImportText
 							// -d
 
 							dayid =
-								DayAndTopicCollection.insertDay(
+								DayCollection.insertDay(
 									connection,
 									programId,
 									field1[0],
@@ -81,7 +91,7 @@ public class ImportText
 							// -n
 
 							dayid =
-								DayAndTopicCollection.insertDay(
+								DayCollection.insertDay(
 									connection,
 									programId,
 									null,

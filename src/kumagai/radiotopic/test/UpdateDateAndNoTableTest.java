@@ -1,12 +1,19 @@
 package kumagai.radiotopic.test;
 
-import java.sql.*;
-import java.text.*;
-import com.microsoft.sqlserver.jdbc.*;
-import junit.framework.*;
-import ktool.datetime.*;
-import kumagai.radiotopic.*;
-import kumagai.radiotopic.struts2.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.text.ParseException;
+
+import com.microsoft.sqlserver.jdbc.SQLServerDriver;
+
+import junit.framework.TestCase;
+import ktool.datetime.DateTime;
+import kumagai.radiotopic.Day;
+import kumagai.radiotopic.DayCollection;
+import kumagai.radiotopic.RadioTopicDatabase;
+import kumagai.radiotopic.SortOrder;
+import kumagai.radiotopic.struts2.UpdateDateAndNoTable;
 
 public class UpdateDateAndNoTableTest
 	extends TestCase
@@ -20,8 +27,7 @@ public class UpdateDateAndNoTableTest
 
 		SortOrder sortOrder2 = SortOrder.values()[0];
 
-		DayAndTopicCollection dayCollection =
-			new DayAndTopicCollection(connection, 1, sortOrder2);
+		DayCollection dayCollection = new DayCollection(connection, 1, sortOrder2);
 
 		connection.close();
 
@@ -40,13 +46,15 @@ public class UpdateDateAndNoTableTest
 	public void test1()
 		throws ParseException
 	{
-		DayAndTopicCollection dayCollection = new DayAndTopicCollection();
+		DayCollection dayCollection = new DayCollection();
 
 		dayCollection.add(
-			new DayAndTopic(
+			new Day(
 				null,
-				1,
+				0,
+				0,
 				null,
+				"1",
 				DateTime.parseDateString("2015/10/02"),
 				DateTime.parseDateString("2015/10/02")));
 
@@ -62,13 +70,15 @@ public class UpdateDateAndNoTableTest
 	public void test2()
 		throws ParseException
 	{
-		DayAndTopicCollection dayCollection = new DayAndTopicCollection();
+		DayCollection dayCollection = new DayCollection();
 
 		dayCollection.add(
-			new DayAndTopic(
+			new Day(
 				null,
-				1,
+				0,
+				0,
 				null,
+				"1",
 				DateTime.parseDateString("2015/10/02"),
 				DateTime.parseDateString("2015/10/03")));
 
@@ -84,20 +94,24 @@ public class UpdateDateAndNoTableTest
 	public void test3()
 		throws ParseException
 	{
-		DayAndTopicCollection dayCollection = new DayAndTopicCollection();
+		DayCollection dayCollection = new DayCollection();
 
 		dayCollection.add(
-			new DayAndTopic(
+			new Day(
 				null,
-				1,
+				0,
+				0,
 				null,
+				"1",
 				DateTime.parseDateString("2015/10/02"),
 				DateTime.parseDateString("2015/10/03")));
 		dayCollection.add(
-			new DayAndTopic(
+			new Day(
 				null,
-				2,
+				0,
+				0,
 				null,
+				"2",
 				DateTime.parseDateString("2015/10/03"),
 				DateTime.parseDateString("2015/10/04")));
 

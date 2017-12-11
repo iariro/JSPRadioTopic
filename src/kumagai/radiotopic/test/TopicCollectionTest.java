@@ -1,10 +1,15 @@
 package kumagai.radiotopic.test;
 
-import java.sql.*;
-import java.util.*;
-import kumagai.radiotopic.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
-import com.microsoft.sqlserver.jdbc.*;
+import com.microsoft.sqlserver.jdbc.SQLServerDriver;
+
+import kumagai.radiotopic.DayCollection;
+import kumagai.radiotopic.DayDigest;
+import kumagai.radiotopic.RadioTopicDatabase;
 
 public class TopicCollectionTest
 {
@@ -15,7 +20,7 @@ public class TopicCollectionTest
 
 		Connection connection = RadioTopicDatabase.getConnection();
 
-		ArrayList<DayDigest> days = DayAndTopicCollection.getTochuuTopic(connection);
+		ArrayList<DayDigest> days = DayCollection.getTochuuTopic(connection);
 
 		for (DayDigest day : days)
 		{

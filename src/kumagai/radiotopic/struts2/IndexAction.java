@@ -19,7 +19,7 @@ import com.microsoft.sqlserver.jdbc.SQLServerDriver;
 
 import ktool.datetime.DateTime;
 import kumagai.radiotopic.DayAndTopic;
-import kumagai.radiotopic.DayAndTopicCollection;
+import kumagai.radiotopic.DayCollection;
 import kumagai.radiotopic.DayDigest;
 import kumagai.radiotopic.Program;
 import kumagai.radiotopic.ProgramCollection;
@@ -65,13 +65,13 @@ public class IndexAction
 				connection = DriverManager.getConnection(url);
 
 				programCollection = new ProgramCollection(connection);
-				tochuuDays = DayAndTopicCollection.getTochuuTopic(connection);
+				tochuuDays = DayCollection.getTochuuTopic(connection);
 
 				DateTime today = new DateTime();
 				for (Program program : programCollection)
 				{
-					DayAndTopicCollection dayCollection =
-						new DayAndTopicCollection
+					DayCollection dayCollection =
+						new DayCollection
 							(connection, program.id, SortOrder.values()[program.sortOrder]);
 
 					DayAndTopic nextListenDay =
@@ -84,7 +84,7 @@ public class IndexAction
 						nextListenDays.add(nextListenDay);
 					}
 				}
-				
+
 				Collections.sort(nextListenDays,
 					new Comparator<DayAndTopic>()
 					{

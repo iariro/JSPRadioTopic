@@ -1,17 +1,36 @@
 package kumagai.radiotopic.struts2;
 
-import java.io.*;
-import java.sql.*;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.StringWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.text.ParseException;
-import java.util.*;
-import javax.servlet.*;
+import java.util.TreeMap;
+
+import javax.servlet.ServletContext;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.*;
-import com.microsoft.sqlserver.jdbc.*;
-import org.apache.struts2.*;
-import org.apache.struts2.convention.annotation.*;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerFactoryConfigurationError;
+
+import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.Result;
-import kumagai.radiotopic.*;
+import org.apache.struts2.convention.annotation.Results;
+
+import com.microsoft.sqlserver.jdbc.SQLServerDriver;
+
+import kumagai.radiotopic.CompleteGraphDocument;
+import kumagai.radiotopic.CountAndMax;
+import kumagai.radiotopic.DayCollection;
+import kumagai.radiotopic.RadioTopicDatabase;
+import kumagai.radiotopic.SortOrder;
 
 /**
  * コンプリートグラフページ表示アクション。
@@ -136,8 +155,8 @@ public class CompleteGraphAction
 		{
 			SortOrder sortOrder2 = SortOrder.values()[sortOrder];
 
-			DayAndTopicCollection dayCollection =
-				new DayAndTopicCollection(connection, programid, sortOrder2);
+			DayCollection dayCollection =
+				new DayCollection(connection, programid, sortOrder2);
 
 			connection.close();
 

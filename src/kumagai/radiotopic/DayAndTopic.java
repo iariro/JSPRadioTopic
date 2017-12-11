@@ -1,106 +1,18 @@
 package kumagai.radiotopic;
 
-import java.sql.*;
-import ktool.datetime.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import ktool.datetime.DateTime;
 
 /**
  * 回
  * @author kumagai
  */
 public class DayAndTopic
+	extends Day
 {
-	public final String programName;
-	public final int id;
-	public final int programid;
-	public final DateTime date;
-	private final String no;
-	public final DateTime createdate;
-	public final DateTime updatedate;
 	public TopicCollection topicCollection;
-
-	/**
-	 * 日付を文字列で取得
-	 * @return 日付文字列
-	 */
-	public String getDate()
-	{
-		if (date != null)
-		{
-			// 日付あり
-
-			return date.toString();
-		}
-		else
-		{
-			// 日付なし
-
-			return null;
-		}
-	}
-
-	/**
-	 * 回数を、スペース・頭の０を削除し取得。
-	 * @return 回数
-	 */
-	public String getNo()
-	{
-		String no = null;
-
-		if (this.no != null)
-		{
-			// 回数指定あり。
-
-			no = this.no.trim();
-
-			if (this.no.indexOf('.') < 0)
-			{
-				// 小数を含まない
-
-				no = StringTool.trimZero(no);
-			}
-		}
-
-		return no;
-	}
-
-	/**
-	 * 作成日付を文字列形式で取得
-	 * @return 文字列形式の作成日付
-	 */
-	public String getCreateDateAsString()
-	{
-		return createdate.toString();
-	}
-
-	/**
-	 * 更新日付を文字列形式で取得
-	 * @return 文字列形式の更新日付
-	 */
-	public String getUpdateDateAsString()
-	{
-		return updatedate.toString();
-	}
-
-	/**
-	 * 更新日付を文字列形式で取得
-	 * @return 文字列形式の更新日付
-	 */
-	public String getUpdateDateTimeAsString()
-	{
-		return updatedate.toFullString();
-	}
-
-	/**
-	 * 新規更新分であるか判定
-	 * @return true=新規更新分である／false=新規更新分ではない
-	 */
-	public boolean isNewUpdate()
-	{
-		DateTime today = new DateTime();
-		TimeSpan diff = today.diff(new DateTime(updatedate));
-
-		return diff.getDay() <= 2;
-	}
 
 	/**
 	 * 指定の値をメンバーに割り当て
@@ -112,30 +24,7 @@ public class DayAndTopic
 	 */
 	public DayAndTopic(String programName, int no, DateTime date, DateTime createdate, DateTime updatedate)
 	{
-		this.programName = programName;
-		this.id = -1;
-		this.programid = 0;
-		this.date = date;
-
-		if (createdate != null)
-		{
-			this.createdate = createdate;
-		}
-		else
-		{
-			this.createdate = null;
-		}
-
-		if (updatedate != null)
-		{
-			this.updatedate = updatedate;
-		}
-		else
-		{
-			this.updatedate = null;
-		}
-
-		this.no = Integer.toString(no);
+		super(programName, -1, 0, date, Integer.toString(no), createdate, updatedate);
 	}
 
 	/**
@@ -145,41 +34,14 @@ public class DayAndTopic
 	public DayAndTopic(ResultSet results)
 		throws SQLException
 	{
-		this.programName = results.getString("name");
-		this.id = results.getInt("id");
-		this.programid = results.getInt("programid");
-
-		Date date = results.getDate("date");
-		if (date != null)
-		{
-			this.date = new DateTime(date);
-		}
-		else
-		{
-			this.date = null;
-		}
-
-		Timestamp createdate = results.getTimestamp("createdate");
-		if (createdate != null)
-		{
-			this.createdate = new DateTime(createdate);
-		}
-		else
-		{
-			this.createdate = null;
-		}
-
-		Timestamp updatedate = results.getTimestamp("updatedate");
-		if (updatedate != null)
-		{
-			this.updatedate = new DateTime(updatedate);
-		}
-		else
-		{
-			this.updatedate = null;
-		}
-
-		this.no = results.getString("no");
+		super(
+			results.getString("name"),
+			results.getInt("id"),
+			results.getInt("programid"),
+			results.getDate("date") != null ? new DateTime(results.getDate("date")) : null,
+			results.getString("no"),
+			results.getTimestamp("createdate") != null ? new DateTime(results.getTimestamp("createdate")) : null,
+			results.getTimestamp("updatedate") != null ? new DateTime(results.getTimestamp("updatedate")) : null);
 	}
 
 	/**

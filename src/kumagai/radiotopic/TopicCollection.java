@@ -1,8 +1,14 @@
 package kumagai.radiotopic;
 
-import java.sql.*;
-import java.util.*;
-import com.microsoft.sqlserver.jdbc.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+import com.microsoft.sqlserver.jdbc.SQLServerDriver;
 
 /**
  * トピック情報のコレクション
@@ -62,7 +68,7 @@ public class TopicCollection
 
 				newId = keys.getInt(1);
 
-				DayAndTopicCollection.updateUpdateDate(connection, dayid);
+				DayCollection.updateUpdateDate(connection, dayid);
 
 				return newId;
 			}
@@ -97,7 +103,7 @@ public class TopicCollection
 
 		statement.executeUpdate();
 
-		DayAndTopicCollection.updateUpdateDate(connection, dayid);
+		DayCollection.updateUpdateDate(connection, dayid);
 
 		statement.close();
 	}
@@ -120,7 +126,7 @@ public class TopicCollection
 
 		statement.executeUpdate();
 
-		DayAndTopicCollection.updateUpdateDate(connection, dayid);
+		DayCollection.updateUpdateDate(connection, dayid);
 
 		statement.close();
 	}

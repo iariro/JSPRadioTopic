@@ -1,12 +1,23 @@
 package kumagai.radiotopic.struts2;
 
-import java.sql.*;
-import java.util.*;
-import javax.servlet.*;
-import com.microsoft.sqlserver.jdbc.*;
-import org.apache.struts2.*;
-import org.apache.struts2.convention.annotation.*;
-import kumagai.radiotopic.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import javax.servlet.ServletContext;
+
+import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.Namespace;
+import org.apache.struts2.convention.annotation.Result;
+import org.apache.struts2.convention.annotation.Results;
+
+import com.microsoft.sqlserver.jdbc.SQLServerDriver;
+
+import kumagai.radiotopic.DayCollection;
+import kumagai.radiotopic.RadioTopicDatabase;
+import kumagai.radiotopic.SortOrder;
 
 /**
  * コンプリート表ページ表示アクション。
@@ -50,8 +61,7 @@ public class CompleteTableAction
 
 		SortOrder sortOrder2 = SortOrder.values()[0];
 
-		DayAndTopicCollection dayCollection =
-			new DayAndTopicCollection(connection, 7, sortOrder2);
+		DayCollection dayCollection = new DayCollection(connection, 7, sortOrder2);
 
 		connection.close();
 
@@ -106,8 +116,8 @@ public class CompleteTableAction
 
 				SortOrder sortOrder2 = SortOrder.values()[sortOrder];
 
-				DayAndTopicCollection dayCollection =
-					new DayAndTopicCollection(connection, programid, sortOrder2);
+				DayCollection dayCollection =
+					new DayCollection(connection, programid, sortOrder2);
 
 				connection.close();
 
