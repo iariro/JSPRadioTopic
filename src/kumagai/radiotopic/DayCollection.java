@@ -1,9 +1,17 @@
 package kumagai.radiotopic;
 
-import java.sql.*;
-import java.util.*;
-import com.microsoft.sqlserver.jdbc.*;
-import ktool.datetime.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+import com.microsoft.sqlserver.jdbc.SQLServerDriver;
+
+import ktool.datetime.DateTime;
+import ktool.datetime.TimeSpan;
 
 /**
  * 回情報のコレクション
@@ -271,12 +279,6 @@ public class DayCollection
 		}
 
 		results.close();
-
-		for (Day day : this)
-		{
-			day.topicCollection = new TopicCollection(connection, day.id);
-		}
-
 		statement.close();
 	}
 
@@ -295,7 +297,7 @@ public class DayCollection
 
 			return null;
 		}
-		
+
 		String [] ageDates = age.split("-");
 
 		if (ageDates.length >= 2)
@@ -331,7 +333,7 @@ public class DayCollection
 			timespan = new TimeSpan(timespan.getTotalMillisecond() / (no1 - no2));
 		}
 		catch (Exception exception)
-		{			
+		{
 		}
 
 		DateTime day0 = day1.makeAdd(timespan);
@@ -514,49 +516,5 @@ public class DayCollection
 		}
 
 		return last;
-	}
-
-	/**
-	 * 全トピック文字列を内容とするJavaScriptの文字列配列を生成。
-	 * @return JavaScriptの文字列配列
-	 */
-	public String createJavaScriptArray()
-	{
-		StringBuilder topicsArray = new StringBuilder();
-		topicsArray.append("[");
-
-		for (int i=0 ; i<size() ; i++)
-		{
-			if (i > 0)
-			{
-				// ２個目以降
-
-				topicsArray.append(",");
-			}
-
-			Day day = get(i);
-			topicsArray.append("[");
-			if (day.topicCollection != null)
-			{
-				for (int j=0 ; j<day.topicCollection.size() ; j++)
-				{
-					if (j > 0)
-					{
-						// ２個目以降
-
-						topicsArray.append(",");
-					}
-
-					String text = day.topicCollection.get(j).text;
-					text = text.replace("'", "\\'");
-					topicsArray.append("'" + text + "'");
-				}
-			}
-			topicsArray.append("]");
-		}
-
-		topicsArray.append("]");
-
-		return topicsArray.toString();
 	}
 }

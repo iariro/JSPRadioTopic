@@ -27,6 +27,7 @@ import kumagai.radiotopic.Program;
 import kumagai.radiotopic.ProgramCollection;
 import kumagai.radiotopic.RadioTopicDatabase;
 import kumagai.radiotopic.SortOrder;
+import kumagai.radiotopic.TopicCollection;
 
 /**
  * トピックの内容をテキストにエクスポート
@@ -94,15 +95,15 @@ public class ExportText
 					new PrintWriter(
 						new OutputStreamWriter(
 							new FileOutputStream(htmlFile), "utf-8"));
-	
+
 				DateNoPrinter dateNoPrinter;
-	
+
 				if (entry.getKey().exportformat != null)
 				{
 					// エクスポート形式指定あり
-	
+
 					argFlag = entry.getKey().exportformat;
-	
+
 					if (argFlag.equals("-dn"))
 					{
 						dateNoPrinter =
@@ -125,13 +126,13 @@ public class ExportText
 				else
 				{
 					// エクスポート形式指定なし
-	
+
 					dateNoPrinter =
 						new DateNoPrinter(writer, entry.getValue().getMaxNo());
 				}
-	
+
 				outputProgramHtml
-					(entry.getKey(), entry.getValue(), writer, dateNoPrinter);
+					(connection, entry.getKey(), entry.getValue(), writer, dateNoPrinter);
 			}
 			finally
 			{
@@ -146,14 +147,15 @@ public class ExportText
 
 	/**
 	 * 番組HTMLファイル出力
+	 * @param connection DB接続オブジェクト
 	 * @param program 番組情報
 	 * @param dayCollection 全日ごとの情報
 	 * @param writer ファイルオブジェクト
 	 * @param dateNoPrinter ファイル出力オブジェクト
 	 */
-	static protected void outputProgramHtml(Program program,
+	static protected void outputProgramHtml(Connection connection, Program program,
 		DayCollection dayCollection, PrintWriter writer,
-		DateNoPrinter dateNoPrinter)
+		DateNoPrinter dateNoPrinter) throws SQLException
 	{
 		writer.println("<html>");
 		writer.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />");
@@ -203,7 +205,8 @@ public class ExportText
 				dateNoPrinter.printDateNo(null, day.getNo());
 			}
 
-			for (int i=0 ; i<day.topicCollection.size() ; i++)
+			TopicCollection topicCollection = new TopicCollection(connection, day.id);
+			for (int i=0 ; i<topicCollection.size() ; i++)
 			{
 				if (i > 0)
 				{
@@ -212,7 +215,7 @@ public class ExportText
 					writer.print(" ");
 				}
 
-				writer.print(day.topicCollection.get(i).text);
+				writer.print(topicCollection.get(i).text);
 			}
 			writer.println();
 		}

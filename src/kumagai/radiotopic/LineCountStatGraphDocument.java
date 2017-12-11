@@ -1,14 +1,25 @@
 package kumagai.radiotopic;
 
-import java.awt.*;
-import java.io.*;
-import java.sql.*;
-import java.text.*;
-import javax.xml.transform.*;
-import javax.xml.parsers.*;
-import com.microsoft.sqlserver.jdbc.*;
-import org.w3c.dom.*;
-import ktool.xml.*;
+import java.awt.Dimension;
+import java.awt.Point;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.text.ParseException;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerFactoryConfigurationError;
+
+import org.w3c.dom.Element;
+
+import com.microsoft.sqlserver.jdbc.SQLServerDriver;
+
+import ktool.xml.KDocument;
 
 /**
  * 文字列長カウント積み上げグラフドキュメント
@@ -37,7 +48,7 @@ public class LineCountStatGraphDocument
 			new DayCollection(connection, 1, SortOrder.NumberByNumeric);
 
 		LineCountAndRatioCollection lineCountAndRatioCollection =
-			new LineCountAndRatioCollection(dayCollection);
+			new LineCountAndRatioCollection(connection, dayCollection);
 
 		LineCountStatGraphDocument lineCountStatGraphDocument =
 			new LineCountStatGraphDocument("あどりぶ", lineCountAndRatioCollection);

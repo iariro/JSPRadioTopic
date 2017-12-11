@@ -1,14 +1,28 @@
 package kumagai.radiotopic.struts2;
 
-import java.io.*;
-import java.sql.*;
-import javax.servlet.*;
-import javax.xml.transform.*;
-import com.microsoft.sqlserver.jdbc.*;
-import org.apache.struts2.*;
-import org.apache.struts2.convention.annotation.*;
+import java.io.StringWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+import javax.servlet.ServletContext;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerFactoryConfigurationError;
+
+import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.Result;
-import kumagai.radiotopic.*;
+import org.apache.struts2.convention.annotation.Results;
+
+import com.microsoft.sqlserver.jdbc.SQLServerDriver;
+
+import kumagai.radiotopic.DayCollection;
+import kumagai.radiotopic.LineCountAndRatioCollection;
+import kumagai.radiotopic.LineCountStatGraphDocument;
+import kumagai.radiotopic.SortOrder;
 
 /**
  * 文字列長カウント積み上げグラフ表示アクション。
@@ -76,10 +90,10 @@ public class LineCountAndRatioGraphAction
 			DayCollection dayCollection =
 				new DayCollection(connection, programid, sortOrder2);
 
-			connection.close();
-
 			LineCountAndRatioCollection lineCountAndRatioCollection =
-				new LineCountAndRatioCollection(dayCollection);
+				new LineCountAndRatioCollection(connection, dayCollection);
+
+			connection.close();
 
 			document =
 				new LineCountStatGraphDocument

@@ -1,7 +1,12 @@
 package kumagai.radiotopic;
 
-import java.sql.*;
-import ktool.datetime.*;
+import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+
+import ktool.datetime.DateTime;
+import ktool.datetime.TimeSpan;
 
 /**
  * 回
@@ -16,7 +21,6 @@ public class Day
 	private final String no;
 	public final DateTime createdate;
 	public final DateTime updatedate;
-	public TopicCollection topicCollection;
 
 	/**
 	 * 日付を文字列で取得
@@ -188,34 +192,14 @@ public class Day
 	@Override
 	public String toString()
 	{
-		if (topicCollection != null)
-		{
-			// トピックコレクションあり
-
-			return
-				String.format(
-					"%s %d %d %s %s topic=%d %s",
-					programName,
-					id,
-					programid,
-					date,
-					no,
-					topicCollection.size(),
-					updatedate != null ? updatedate.toFullString() : null);
-		}
-		else
-		{
-			// トピックコレクションなし
-
-			return
-				String.format(
-					"%s %d %d %s %s %s",
-					programName,
-					id,
-					programid,
-					date,
-					no,
-					updatedate != null ? updatedate.toFullString() : null);
-		}
+		return
+			String.format(
+				"%s %d %d %s %s %s",
+				programName,
+				id,
+				programid,
+				date,
+				no,
+				updatedate != null ? updatedate.toFullString() : null);
 	}
 }

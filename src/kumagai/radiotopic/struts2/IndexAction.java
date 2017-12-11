@@ -84,7 +84,7 @@ public class IndexAction
 						nextListenDays.add(nextListenDay);
 					}
 				}
-				
+
 				Collections.sort(nextListenDays,
 					new Comparator<Day>()
 					{

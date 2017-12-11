@@ -1,6 +1,9 @@
 package kumagai.radiotopic;
 
-import java.util.*;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * 文字列長カウント積み上げグラフ用データ
@@ -14,9 +17,11 @@ public class LineCountAndRatioCollection
 
 	/**
 	 * １番組情報を受け、文字列長カウント積み上げグラフ用データを構築する。
+	 * @param connection DB接続オブジェクト
 	 * @param dayCollection １番組情報
 	 */
-	public LineCountAndRatioCollection(DayCollection dayCollection)
+	public LineCountAndRatioCollection(Connection connection, DayCollection dayCollection)
+		throws SQLException
 	{
 		Integer maxLength = null;
 		Integer minLength = null;
@@ -25,7 +30,9 @@ public class LineCountAndRatioCollection
 
 		for (Day day : dayCollection)
 		{
-			int length = day.topicCollection.getLengthByHalfWidth();
+			TopicCollection topicCollection = new TopicCollection(connection, day.id);
+
+			int length = topicCollection.getLengthByHalfWidth();
 
 			if (lengthStat.containsKey(length))
 			{

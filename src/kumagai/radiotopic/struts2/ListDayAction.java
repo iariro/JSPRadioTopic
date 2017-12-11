@@ -1,11 +1,24 @@
 package kumagai.radiotopic.struts2;
 
-import java.sql.*;
-import javax.servlet.*;
-import com.microsoft.sqlserver.jdbc.*;
-import org.apache.struts2.*;
-import org.apache.struts2.convention.annotation.*;
-import kumagai.radiotopic.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import javax.servlet.ServletContext;
+
+import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.Namespace;
+import org.apache.struts2.convention.annotation.Result;
+import org.apache.struts2.convention.annotation.Results;
+
+import com.microsoft.sqlserver.jdbc.SQLServerDriver;
+
+import kumagai.radiotopic.Day;
+import kumagai.radiotopic.DayAndTopics;
+import kumagai.radiotopic.DayCollection;
+import kumagai.radiotopic.SortOrder;
 
 /**
  * 番組各回一覧ページ表示アクション。
@@ -24,7 +37,7 @@ public class ListDayAction
 	public int sortOrder;
 
 	public String topicsArray;
-	public DayCollection dayCollection;
+	public ArrayList<DayAndTopics> dayCollection;
 	public int count;
 	public String message;
 
@@ -69,15 +82,14 @@ public class ListDayAction
 
 				DayCollection dayCollection =
 					new DayCollection(connection, programid, sortOrder2);
-				connection.close();
 
 				count = dayCollection.size();
+
+				this.dayCollection = new ArrayList<>();
 
 				if (sortOrder2 == SortOrder.NumberByNumeric)
 				{
 					// 回の列を数字として扱う
-
-					this.dayCollection = new DayCollection();
 
 					Integer no1 = null;
 					Integer no2 = null;
@@ -93,17 +105,17 @@ public class ListDayAction
 							{
 								for (int j=no2-1 ; j>no1 ; j--)
 								{
-									this.dayCollection.add(new Day(null, j, null, null, null));
+									this.dayCollection.add(new DayAndTopics(null, new Day(null, j, null, null, null)));
 								}
 							}
 
-							this.dayCollection.add(dayCollection.get(i));
+							this.dayCollection.add(new DayAndTopics(connection, dayCollection.get(i)));
 
 							no2 = no1;
 						}
 						catch (NumberFormatException exception)
 						{
-							this.dayCollection.add(dayCollection.get(i));
+							this.dayCollection.add(new DayAndTopics(connection, dayCollection.get(i)));
 						}
 					}
 				}
@@ -111,10 +123,12 @@ public class ListDayAction
 				{
 					// 回の列を数字として扱う以外
 
-					this.dayCollection = dayCollection;
+					for (int i=0 ; i<dayCollection.size() ; i++)
+					{
+						this.dayCollection.add(new DayAndTopics(connection, dayCollection.get(i)));
+					}
 				}
-
-				topicsArray = this.dayCollection.createJavaScriptArray();
+				connection.close();
 
 				return "success";
 			}
