@@ -14,9 +14,6 @@
 		$(function() { $('#sorter').tablesorter({sortInitialOrder:"desc",headers:{4:{sorter:false},5:{sorter:false}}}); });
 		</script>
 		<script type="text/javascript" src="listday.js"></script>
-		<script type="text/javascript">
-		var topicsArray = <s:property value="topicsArray" />;
-		</script>
 		<link rel="stylesheet" type="text/css" href="jquery/style.css">
 	</head>
 
