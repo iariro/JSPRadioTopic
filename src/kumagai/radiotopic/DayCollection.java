@@ -273,7 +273,7 @@ public class DayCollection
 
 		while (results.next())
 		{
-			add(new DayAndTopic(results));
+			add(new Day(results));
 		}
 
 		results.close();
