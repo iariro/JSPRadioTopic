@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 
 import ktool.datetime.DateTime;
-import ktool.datetime.TimeSpan;
 
 /**
  * 回
@@ -83,27 +82,6 @@ public class Day
 	public String getUpdateDateAsString()
 	{
 		return updatedate.toString();
-	}
-
-	/**
-	 * 更新日付を文字列形式で取得
-	 * @return 文字列形式の更新日付
-	 */
-	public String getUpdateDateTimeAsString()
-	{
-		return updatedate.toFullString();
-	}
-
-	/**
-	 * 新規更新分であるか判定
-	 * @return true=新規更新分である／false=新規更新分ではない
-	 */
-	public boolean isNewUpdate()
-	{
-		DateTime today = new DateTime();
-		TimeSpan diff = today.diff(new DateTime(updatedate));
-
-		return diff.getDay() <= 2;
 	}
 
 	/**
