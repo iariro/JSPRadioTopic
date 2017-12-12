@@ -24,7 +24,7 @@
 				ファイル名：<input type="text" name="shortName"><br>
 				年代：<input type="text" name="age" value="<s:property value="age" />"><br>
 				最初期の入力日付に使用する日付：<input type="text" name="originUpdateDate" value="<s:property value="originUpdateDate" />"><br>
-				ソート順：<s:radio list="#{0:'回（文字）', 1:'回（数値）' , 2:'日付' }" name="sortOrder" value="sortOrder"></s:radio><br>
+				ソート順：<s:radio list="#{0:'回（文字）', 1:'回（数値）' , 2:'日付' }" name="sortOrder" value="1"></s:radio><br>
 				<s:submit value="番組追加" />
 			</s:form>
 
