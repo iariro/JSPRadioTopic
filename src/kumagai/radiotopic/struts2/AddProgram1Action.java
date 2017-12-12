@@ -20,7 +20,7 @@ public class AddProgram1Action
 	 * 番組追加アクション。
 	 * @return 処理結果
 	 */
-	@Action("addprogram2")
+	@Action("addprogram1")
 	public String execute()
 		throws Exception
 	{

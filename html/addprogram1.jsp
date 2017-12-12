@@ -19,6 +19,7 @@
 
 			<h2>番組追加</h2>
 
+			<br>
 			<s:form action="addprogram2" theme="simple">
 				番組名：<input type="text" name="name"><br>
 				ファイル名：<input type="text" name="shortName"><br>

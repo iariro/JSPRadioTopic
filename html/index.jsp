@@ -86,6 +86,7 @@
 
 			<h2>番組一覧</h2>
 
+			<br>
 			<s:form action="addprogram1" theme="simple">
 				<s:submit value="追加" />
 			</s:form>
