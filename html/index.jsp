@@ -86,6 +86,10 @@
 
 			<h2>番組一覧</h2>
 
+			<s:form action="addprogram1" theme="simple">
+				<s:submit value="追加" />
+			</s:form>
+
 			<table>
 				<tr>
 					<th>ID</th>
@@ -147,11 +151,6 @@
 				</tr>
 			</s:iterator>
 			</table>
-
-			<s:form action="addprogram" theme="simple">
-				番組名：<input type="text" name="name">
-				<s:submit value="追加" />
-			</s:form>
 
 		</div>
 		</div>

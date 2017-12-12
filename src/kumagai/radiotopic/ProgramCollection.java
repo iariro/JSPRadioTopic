@@ -62,16 +62,19 @@ public class ProgramCollection
 	 * @return 登録したレコードのID
 	 */
 	static public int insertProgram
-		(Connection connection, String name, int sortOrder)
+		(Connection connection, String name, String shortName, String age, int sortOrder, String originUpdateDate)
 		throws SQLException
 	{
 		PreparedStatement statement =
 			connection.prepareStatement(
-				"insert into program (name, sortorder) values (?, ?)",
+				"insert into program (name, shortname, age, sortOrder, originupdatedate) values (?, ?, ?, ?, ?)",
 				Statement.RETURN_GENERATED_KEYS);
 
 		statement.setString(1, name);
-		statement.setInt(2, sortOrder);
+		statement.setString(2, shortName);
+		statement.setString(3, age);
+		statement.setInt(4, sortOrder);
+		statement.setString(5, originUpdateDate);
 		statement.executeUpdate();
 
 		int newId;
