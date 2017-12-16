@@ -1,12 +1,24 @@
 package kumagai.radiotopic.struts2;
 
-import java.util.regex.*;
-import java.sql.*;
-import javax.servlet.*;
-import com.microsoft.sqlserver.jdbc.*;
-import org.apache.struts2.*;
-import org.apache.struts2.convention.annotation.*;
-import kumagai.radiotopic.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.servlet.ServletContext;
+
+import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.Namespace;
+import org.apache.struts2.convention.annotation.Result;
+import org.apache.struts2.convention.annotation.Results;
+
+import com.microsoft.sqlserver.jdbc.SQLServerDriver;
+
+import kumagai.radiotopic.DayCollection;
+import kumagai.radiotopic.SortOrder;
+import kumagai.radiotopic.StringTool;
+import kumagai.radiotopic.TopicCollection;
 
 /**
  * 一括日追加ページ結果表示アクション。
@@ -22,8 +34,10 @@ public class AddDayLump2Action
 {
 	static private final Pattern dateFormat =
 		Pattern.compile("[0-9]{4}/[0-9]{2}/[0-9]{2}");
+	static private final Pattern patternNo1 = Pattern.compile("第([0-9]*)回");
 
 	public int programName;
+	public int sortOrder;
 	public int programid;
 	public String date;
 	public String no;
@@ -54,6 +68,7 @@ public class AddDayLump2Action
 				String [] lines = topics.split("\r\n");
 				String date2 = StringTool.parseDate(lines[1]);
 				Matcher matcher = dateFormat.matcher(date2);
+				SortOrder sortOrder2 = SortOrder.values()[sortOrder];
 
 				int index = 0;
 
@@ -64,6 +79,17 @@ public class AddDayLump2Action
 					// １行目を回数・２行目を日付として扱う
 					no = lines[0];
 					date = date2;
+					if (sortOrder2 == SortOrder.NumberByNumeric)
+					{
+						// 回の列を数字として扱う
+
+						Matcher matcher2 = patternNo1.matcher(no);
+						if (matcher2.matches())
+						{
+							no = matcher2.group(1);
+						}
+						Integer.valueOf(no);
+					}
 
 					index = 2;
 				}

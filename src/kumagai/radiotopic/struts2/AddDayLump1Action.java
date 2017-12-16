@@ -1,6 +1,8 @@
 package kumagai.radiotopic.struts2;
 
-import org.apache.struts2.convention.annotation.*;
+import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.Namespace;
+import org.apache.struts2.convention.annotation.Result;
 
 /**
  * 一括日追加ページ表示アクション。
@@ -12,6 +14,7 @@ public class AddDayLump1Action
 {
 	public int programName;
 	public int programid;
+	public int sortOrder;
 
 	public String date;
 	public String no;
