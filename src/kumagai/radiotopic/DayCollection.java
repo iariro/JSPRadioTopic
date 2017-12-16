@@ -331,25 +331,24 @@ public class DayCollection
 			int no2 = Integer.valueOf(get(1).getNo());
 
 			timespan = new TimeSpan(timespan.getTotalMillisecond() / (no1 - no2));
+
+			DateTime day0 = day1.makeAdd(timespan);
+	
+			if (day0.compareTo(today) < 0)
+			{
+				// 予測放送日は過去の日
+
+				return new Day(programName, no1 + 1, day0, null, null);
+			}
+			else
+			{
+				// 予測放送日は過去の日ではない
+
+				return null;
+			}
 		}
 		catch (Exception exception)
 		{
-		}
-
-		DateTime day0 = day1.makeAdd(timespan);
-
-		if (day0.compareTo(today) < 0)
-		{
-			// 予測放送日は過去の日
-
-			int nextNo = Integer.valueOf(get(0).getNo()) + 1;
-
-			return new Day(programName, nextNo, day0, null, null);
-		}
-		else
-		{
-			// 予測放送日は過去の日ではない
-
 			return null;
 		}
 	}
