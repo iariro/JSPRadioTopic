@@ -69,8 +69,6 @@ public class ExportText
 			programAndTopic.put(program, dayCollection);
 		}
 
-		connection.close();
-
 		DateTime today = new DateTime();
 
 		for (Map.Entry<Program, DayCollection> entry
@@ -141,6 +139,8 @@ public class ExportText
 
 			System.out.printf("%s written.\n", htmlFile);
 		}
+
+		connection.close();
 
 		outputIndexHtml(args[0], programCollection);
 	}
