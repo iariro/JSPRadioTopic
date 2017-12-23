@@ -34,7 +34,7 @@ public class AddDayLump2Action
 {
 	static private final Pattern dateFormat =
 		Pattern.compile("[0-9]{4}/[0-9]{2}/[0-9]{2}");
-	static private final Pattern patternNo1 = Pattern.compile("第([0-9]*)回");
+	static private final Pattern patternNo1 = Pattern.compile("第([0-9]*)回.*");
 
 	public int programName;
 	public int sortOrder;
