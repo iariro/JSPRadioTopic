@@ -18,9 +18,14 @@
 		<div class=main>
 		<div class=day>
 
-			<s:iterator value="invalidDates">
-				<li><s:property />
-			</s:iterator>
+			<s:if test="%{invalidDates.size() > 0}">
+				<s:iterator value="invalidDates">
+					<li><s:property />
+				</s:iterator>
+			</s:if>
+			<s:else>
+				エラーなし
+			</s:else>
 
 		</div>
 		</div>
