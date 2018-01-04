@@ -54,6 +54,7 @@
 					<th>内容</th>
 					<th style='width:40px; text-align:left;'>長さ</th>
 					<th>操作</th>
+					<th>操作</th>
 					<th></th>
 				</tr>
 			</thead>
@@ -78,10 +79,17 @@
 							<s:submit value="編集" />
 						</s:form>
 					</td>
+					<td>
+						<s:form action="imagelist" theme="simple">
+							<input type="hidden" name="dayid" value="<s:property value="id" />">
+							<s:submit value="画像" />
+						</s:form>
+					</td>
 				</s:if>
 				<s:else>
 					<td><div style="color:red;"><s:property value="date" /></div></td>
 					<td align="right"><div style="color:red;"><s:property value="no" /></div></td>
+					<td></td>
 					<td></td>
 					<td></td>
 					<td></td>

@@ -1,5 +1,8 @@
 package kumagai.radiotopic;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -7,6 +10,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
 
 import com.microsoft.sqlserver.jdbc.SQLServerDriver;
 
@@ -234,6 +239,159 @@ public class DayCollection
 	}
 
 	/**
+	 * 動画部分を切り出してファイル保存。
+	 * @param sourceFile 対象ファイル
+	 * @param destFile 保存ファイル
+	 * @return true=成功／false=失敗
+	 */
+	static public boolean trimNiconicoImage(File sourceFile, File destFile)
+		throws IOException
+	{
+		BufferedImage sourceImage = ImageIO.read(sourceFile);
+		Integer x1 = 66;
+		Integer x2 = 200;
+		Integer y1 = null;
+		Integer y2 = null;
+
+		for (int y=600 ; y<sourceImage.getHeight() ; y++)
+		{
+			int rgb = sourceImage.getRGB(70, y);
+			if ((((rgb & 0xf00000) <= 0xa00000) && ((rgb & 0xf00000) >= 0x600000)) &&
+				(((rgb & 0xf000) <= 0x3000) && ((rgb & 0xf000) >= 0x2000)) &&
+				((rgb & 0xf0) == 0x00))
+			{
+				// 再生ボタンの色
+
+				y1 = y;
+				break;
+			}
+		}
+
+		if (y1 == null)
+		{
+			// 見つからなかった
+
+			return false;
+		}
+
+		for (int y=sourceImage.getHeight()-1 ; y>y1 ; y--)
+		{
+			int rgb = sourceImage.getRGB(70, y);
+			if ((((rgb & 0xf00000) <= 0xa00000) && ((rgb & 0xf00000) >= 0x600000)) &&
+				(((rgb & 0xf000) <= 0x3000) && ((rgb & 0xf000) >= 0x2000)) &&
+				((rgb & 0xf0) == 0x00))
+			{
+				// 再生ボタンの色
+
+				y2 = y;
+				break;
+			}
+		}
+
+		if (!((x2 - x1 == 134) && (y2 - y1 == 33)))
+		{
+			// 再生ボタンのサイズは正しい
+
+			return false;
+		}
+
+		int width = sourceImage.getWidth();
+		int height = sourceImage.getHeight();
+		int width2 = 966 - 66;
+		int height2 = 679 - 196;
+
+		BufferedImage resizeImage =
+			new BufferedImage(width2, height2, BufferedImage.TYPE_INT_RGB);
+		java.awt.Image resizeImage2 =
+			sourceImage.getScaledInstance
+				(width, height, java.awt.Image.SCALE_AREA_AVERAGING);
+		resizeImage.getGraphics().drawImage
+			(resizeImage2, -x1+1, -(196 + y1 - 689), width, height, null);
+		ImageIO.write(resizeImage, "jpg", destFile);
+
+		return true;
+	}
+
+	/**
+	 * 画像登録
+	 * @param connection DB接続オブジェクト
+	 * @param dayid 日ID
+	 * @param filename ファイル名
+	 * @return 発番ID
+	 */
+	static public int insertImage(Connection connection, int dayid, String filename)
+		throws SQLException
+	{
+		PreparedStatement statement =
+			connection.prepareStatement(
+				"insert into Image (dayid, filename) values (?, ?)",
+				Statement.RETURN_GENERATED_KEYS);
+
+		statement.setInt(1, dayid);
+		statement.setString(2, filename);
+		statement.executeUpdate();
+
+		int newId;
+
+		ResultSet keys = statement.getGeneratedKeys();
+		try
+		{
+			if (keys.next())
+			{
+				// 成功
+
+				newId = keys.getInt(1);
+
+				return newId;
+			}
+			else
+			{
+				// 失敗
+
+				throw new SQLException();
+			}
+		}
+		finally
+		{
+			keys.close();
+			statement.close();
+		}
+	}
+
+	/**
+	 * １日分の画像情報を取得
+	 * @param connection DB接続オブジェクト
+	 * @param dayid 日ID
+	 * @return １日分の画像情報
+	 */
+	static public ArrayList<String> getDayImages(Connection connection, int dayid)
+		throws SQLException
+	{
+		String sql = "select filename from image where dayid=?";
+
+		PreparedStatement statement = connection.prepareStatement(sql);
+		statement.setInt(1, dayid);
+		ResultSet results = statement.executeQuery();
+
+		try
+		{
+			ArrayList<String> images = new ArrayList<String>();
+
+			while (results.next())
+			{
+				images.add(results.getString("filename"));
+			}
+
+			return images;
+		}
+		finally
+		{
+			results.close();
+			statement.close();
+		}
+	}
+
+	/**
 	 * テスト用コンストラクタ
 	 */
 	public DayCollection()
@@ -333,7 +491,7 @@ public class DayCollection
 			timespan = new TimeSpan(timespan.getTotalMillisecond() / (no1 - no2));
 
 			DateTime day0 = day1.makeAdd(timespan);
-	
+
 			if (day0.compareTo(today) < 0)
 			{
 				// 予測放送日は過去の日
