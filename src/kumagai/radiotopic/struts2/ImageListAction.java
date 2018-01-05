@@ -30,9 +30,11 @@ import kumagai.radiotopic.Image;
 public class ImageListAction
 {
 	public int dayid;
+	public String programName;
+	public String no;
 
 	public ArrayList<Image> images;
-	public String exception;
+	public String message;
 
 	/**
 	 * 画像表示アクション。
@@ -61,12 +63,12 @@ public class ImageListAction
 			{
 				// 必要なパラメータの定義がない
 
-				exception = "必要なパラメータの定義がない";
+				message = "必要なパラメータの定義がない";
 			}
 		}
 		catch (Exception exception)
 		{
-			this.exception = exception.toString();
+			message = exception.toString();
 		}
 
 		return "error";

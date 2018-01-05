@@ -82,6 +82,8 @@
 					<td>
 						<s:form action="imagelist" theme="simple">
 							<input type="hidden" name="dayid" value="<s:property value="id" />">
+							<input type="hidden" name="programName" value="<s:property value="programName" />">
+							<input type="hidden" name="no" value="<s:property value="no" />">
 							<s:submit value="画像" />
 						</s:form>
 					</td>

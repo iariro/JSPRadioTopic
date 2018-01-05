@@ -16,6 +16,8 @@
 		<div class=main>
 		<div class=day>
 
+			<h1><s:property value="programName" /> - <s:property value="no" /></h1>
+
 			<s:form action="uploadimage" method="post" enctype="multipart/form-data" theme="simple">
 				<input type="file" name="uploadfile" multiple="multiple" size="75" />
 				<input type="hidden" name="dayid" value="<s:property value='dayid' />">
