@@ -11,7 +11,7 @@
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
 		<script src="jquery/jquery.tablesorter.min.js"></script>
 		<script>
-		$(function() { $('#sorter').tablesorter({sortInitialOrder:"desc",headers:{4:{sorter:false},5:{sorter:false}}}); });
+		$(function() { $('#sorter').tablesorter({sortInitialOrder:"desc",headers:{4:{sorter:false},5:{sorter:false},6:{sorter:false}}}); });
 		</script>
 		<script type="text/javascript" src="listday.js"></script>
 		<link rel="stylesheet" type="text/css" href="jquery/style.css">

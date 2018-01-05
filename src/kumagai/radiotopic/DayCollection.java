@@ -242,9 +242,10 @@ public class DayCollection
 	 * 動画部分を切り出してファイル保存。
 	 * @param sourceFile 対象ファイル
 	 * @param destFile 保存ファイル
+	 * @param contentType 画像フォーマット
 	 * @return true=成功／false=失敗
 	 */
-	static public boolean trimNiconicoImage(File sourceFile, File destFile)
+	static public boolean trimNiconicoImage(File sourceFile, File destFile, String contentType)
 		throws IOException
 	{
 		BufferedImage sourceImage = ImageIO.read(sourceFile);
@@ -307,9 +308,25 @@ public class DayCollection
 				(width, height, java.awt.Image.SCALE_AREA_AVERAGING);
 		resizeImage.getGraphics().drawImage
 			(resizeImage2, -x1+1, -(196 + y1 - 689), width, height, null);
-		ImageIO.write(resizeImage, "jpg", destFile);
+		ImageIO.write(resizeImage, contentType, destFile);
 
 		return true;
+	}
+
+	/**
+	 * 画像レコード削除
+	 * @param connection DB接続オブジェクト
+	 * @param imageId 画像ID
+	 */
+	static public void deleteImage(Connection connection, int imageId)
+		throws SQLException
+	{
+		PreparedStatement statement =
+			connection.prepareStatement("delete image where id=?");
+
+		statement.setInt(1, imageId);
+
+		statement.executeUpdate();
 	}
 
 	/**
@@ -364,10 +381,10 @@ public class DayCollection
 	 * @param dayid 日ID
 	 * @return １日分の画像情報
 	 */
-	static public ArrayList<String> getDayImages(Connection connection, int dayid)
+	static public ArrayList<Image> getDayImages(Connection connection, int dayid)
 		throws SQLException
 	{
-		String sql = "select filename from image where dayid=?";
+		String sql = "select id, filename from image where dayid=?";
 
 		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setInt(1, dayid);
@@ -375,11 +392,11 @@ public class DayCollection
 
 		try
 		{
-			ArrayList<String> images = new ArrayList<String>();
+			ArrayList<Image> images = new ArrayList<>();
 
 			while (results.next())
 			{
-				images.add(results.getString("filename"));
+				images.add(new Image(results));
 			}
 
 			return images;

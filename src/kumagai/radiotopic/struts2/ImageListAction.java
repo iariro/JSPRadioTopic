@@ -15,6 +15,7 @@ import org.apache.struts2.convention.annotation.Results;
 import com.microsoft.sqlserver.jdbc.SQLServerDriver;
 
 import kumagai.radiotopic.DayCollection;
+import kumagai.radiotopic.Image;
 
 /**
  * 画像表示アクション。
@@ -30,9 +31,8 @@ public class ImageListAction
 {
 	public int dayid;
 
+	public ArrayList<Image> images;
 	public String exception;
-
-	public ArrayList<String> images;
 
 	/**
 	 * 画像表示アクション。

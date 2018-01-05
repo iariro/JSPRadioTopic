@@ -14,15 +14,19 @@ public class UploadImageActionTest
 	{
 		assertTrue(DayCollection.trimNiconicoImage(
 			new File("testdata/ノルカソルカ22.png"),
-			new File("testdata/ノルカソルカ22 - コピー.png")));
+			new File("testdata/ノルカソルカ22 - コピー.png"),
+			"png"));
 		assertTrue(DayCollection.trimNiconicoImage(
 			new File("testdata/ノルカソルカ30.png"),
-			new File("testdata/ノルカソルカ30 - コピー.png")));
+			new File("testdata/ノルカソルカ30 - コピー.png"),
+			"png"));
 		assertTrue(DayCollection.trimNiconicoImage(
 			new File("testdata/ノルカソルカ34.png"),
-			new File("testdata/ノルカソルカ34 - コピー.png")));
+			new File("testdata/ノルカソルカ34 - コピー.png"),
+			"png"));
 		assertTrue(DayCollection.trimNiconicoImage(
 			new File("testdata/ノルカソルカ83.png"),
-			new File("testdata/ノルカソルカ83 - コピー.png")));
+			new File("testdata/ノルカソルカ83 - コピー.png"),
+			"png"));
 	}
 }
