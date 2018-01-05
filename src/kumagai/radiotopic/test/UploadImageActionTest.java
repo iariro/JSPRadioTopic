@@ -29,4 +29,40 @@ public class UploadImageActionTest
 			new File("testdata/ノルカソルカ83 - コピー.png"),
 			"png"));
 	}
+
+	public void testTrimNiconicoImage21()
+		throws IOException
+	{
+		assertTrue(DayCollection.trimBorderImage(
+			new File("testdata/巽悠衣子の下も向いて歩こう＼(^o^)／40.png"),
+			new File("testdata/巽悠衣子の下も向いて歩こう＼(^o^)／40-2.png"),
+			"png"));
+	}
+
+	public void testTrimNiconicoImage22()
+		throws IOException
+	{
+		assertTrue(DayCollection.trimBorderImage(
+			new File("testdata/佐倉としたい大西072-1.png"),
+			new File("testdata/佐倉としたい大西072-1-2.png"),
+			"png"));
+	}
+
+	public void testTrimNiconicoImage23()
+		throws IOException
+	{
+		assertTrue(DayCollection.trimBorderImage(
+			new File("testdata/佳村はるかのひみつきち103.png"),
+			new File("testdata/佳村はるかのひみつきち103-2.png"),
+			"png"));
+	}
+
+	public void testTrimNiconicoImage24()
+		throws IOException
+	{
+		assertTrue(DayCollection.trimBorderImage(
+			new File("testdata/巽悠衣子の下も向いて歩こう＼(^o^)／27-5.png"),
+			new File("testdata/巽悠衣子の下も向いて歩こう＼(^o^)／27-5-2.png"),
+			"png"));
+	}
 }

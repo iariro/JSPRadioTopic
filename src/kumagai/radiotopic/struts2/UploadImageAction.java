@@ -62,6 +62,8 @@ public class UploadImageAction
 					File file = uploadfile[i];
 					String [] contentType =uploadfileContentType[i].split("/");
 					if (DayCollection.trimNiconicoImage
+						(file, new File(imageFolder, uploadfileFileName[i]), contentType[1]) ||
+						DayCollection.trimBorderImage
 						(file, new File(imageFolder, uploadfileFileName[i]), contentType[1]))
 					{
 						// トリミング成功
