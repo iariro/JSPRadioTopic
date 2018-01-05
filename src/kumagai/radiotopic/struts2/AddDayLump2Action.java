@@ -98,8 +98,8 @@ public class AddDayLump2Action
 					// ２行目が日付としてパースされなかった＝トピックのみの内容と判断
 
 					Integer.valueOf(no);
-					date = StringTool.parseDate(date);
 				}
+				date = StringTool.parseDate(date);
 
 				// Dayエントリ作成
 				int newDayId = DayCollection.insertDay(connection, programid, date, no);
