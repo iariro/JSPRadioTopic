@@ -10,6 +10,7 @@ import java.sql.SQLException;
 public class Image
 {
 	public final int id;
+	public final String no;
 	public final String filename;
 
 	/**
@@ -20,6 +21,7 @@ public class Image
 		throws SQLException
 	{
 		this.id = results.getInt("id");
+		this.no = results.getString("no");
 		this.filename = results.getString("filename");
 	}
 }

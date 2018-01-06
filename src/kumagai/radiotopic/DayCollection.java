@@ -202,7 +202,7 @@ public class DayCollection
 		throws SQLException
 	{
 		String sql =
-			"select program.name, day.id, day.programid, day.date, day.createdate, day.updatedate, day.no, datediff(day, day.updatedate, getdate()) as diffday from day join program on program.id=day.programid where datediff(day, day.updatedate, getdate()) <= ? order by day.updatedate desc";
+			"select program.name, day.id, day.programid, day.date, day.createdate, day.updatedate, day.no, datediff(day, day.updatedate, getdate()) as diffday,(select COUNT(*) from image where dayid=Day.id) as imagenum from day join program on program.id=day.programid where datediff(day, day.updatedate, getdate()) <= ? order by day.updatedate desc";
 
 		PreparedStatement statement = connection.prepareStatement(sql);
 
@@ -576,10 +576,43 @@ public class DayCollection
 	static public ArrayList<Image> getDayImages(Connection connection, int dayid)
 		throws SQLException
 	{
-		String sql = "select id, filename from image where dayid=?";
+		String sql = "select image.id, no, filename from image join Day on Day.id=image.dayid where dayid=?";
 
 		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setInt(1, dayid);
+		ResultSet results = statement.executeQuery();
+
+		try
+		{
+			ArrayList<Image> images = new ArrayList<>();
+
+			while (results.next())
+			{
+				images.add(new Image(results));
+			}
+
+			return images;
+		}
+		finally
+		{
+			results.close();
+			statement.close();
+		}
+	}
+
+	/**
+	 * １番組分の画像情報を取得
+	 * @param connection DB接続オブジェクト
+	 * @param programid 日ID
+	 * @return １日分の画像情報
+	 */
+	static public ArrayList<Image> getProgramImages(Connection connection, int programid)
+		throws SQLException
+	{
+		String sql = "select image.id, no, filename from image join day on Day.id=image.dayid where programid=?";
+
+		PreparedStatement statement = connection.prepareStatement(sql);
+		statement.setInt(1, programid);
 		ResultSet results = statement.executeQuery();
 
 		try
@@ -619,7 +652,7 @@ public class DayCollection
 		throws SQLException
 	{
 		String sql =
-			"select program.name, day.id, programid, date, no, createdate, updatedate from day join program on program.id=day.programid where program.id=? ";
+			"select program.name, day.id, programid, date, no, createdate, updatedate,(select COUNT(*) from image where dayid=Day.id) as imagenum from day join program on program.id=day.programid where program.id=? ";
 
 		if (sortOrder == SortOrder.NumberByNumeric)
 		{

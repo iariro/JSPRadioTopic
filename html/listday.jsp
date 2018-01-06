@@ -11,7 +11,7 @@
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
 		<script src="jquery/jquery.tablesorter.min.js"></script>
 		<script>
-		$(function() { $('#sorter').tablesorter({sortInitialOrder:"desc",headers:{4:{sorter:false},5:{sorter:false},6:{sorter:false}}}); });
+		$(function() { $('#sorter').tablesorter({sortInitialOrder:"desc",headers:{4:{sorter:false},5:{sorter:false},6:{sorter:false},7:{sorter:false}}}); });
 		</script>
 		<script type="text/javascript" src="listday.js"></script>
 		<link rel="stylesheet" type="text/css" href="jquery/style.css">
@@ -32,6 +32,12 @@
 				<input type="hidden" name="programName" value="<s:property value="programName" />">
 				<input type="hidden" name="sortOrder" value="<s:property value="sortOrder" />">
 				<s:submit value="日追加（内容含め一括）" />
+			</s:form>
+
+			<s:form action="imagelist" theme="simple">
+				<input type="hidden" name="programid" value="<s:property value="programid" />">
+				<input type="hidden" name="programName" value="<s:property value="programName" />">
+				<s:submit value="画像一覧" />
 			</s:form>
 
 			<table>
@@ -55,6 +61,7 @@
 					<th style='width:40px; text-align:left;'>長さ</th>
 					<th>操作</th>
 					<th>操作</th>
+					<th>画像</th>
 					<th></th>
 				</tr>
 			</thead>
@@ -87,10 +94,12 @@
 							<s:submit value="画像" />
 						</s:form>
 					</td>
+					<td align="right"><s:property value="imagenum" /></td>
 				</s:if>
 				<s:else>
 					<td><div style="color:red;"><s:property value="date" /></div></td>
 					<td align="right"><div style="color:red;"><s:property value="no" /></div></td>
+					<td></td>
 					<td></td>
 					<td></td>
 					<td></td>

@@ -24,12 +24,14 @@ import kumagai.radiotopic.Image;
 @Namespace("/radiotopic")
 @Results
 ({
-	@Result(name="success", location="/radiotopic/imagelist.jsp"),
+	@Result(name="dayimagelist", location="/radiotopic/dayimagelist.jsp"),
+	@Result(name="programimagelist", location="/radiotopic/programimagelist.jsp"),
 	@Result(name="error", location="/radiotopic/error.jsp")
 })
 public class ImageListAction
 {
-	public int dayid;
+	public Integer dayid;
+	public Integer programid;
 	public String programName;
 	public String no;
 
@@ -49,15 +51,29 @@ public class ImageListAction
 			ServletContext context = ServletActionContext.getServletContext();
 			String dbUrl = context.getInitParameter("RadioTopicSqlserverUrl");
 
-			if (dbUrl != null)
+			if (dbUrl != null && (programid != null || dayid != null))
 			{
 				// 必要なパラメータの定義がある
 
 				DriverManager.registerDriver(new SQLServerDriver());
 				Connection connection = DriverManager.getConnection(dbUrl);
-				images = DayCollection.getDayImages(connection, dayid);
 
-				return "success";
+				if (programid != null)
+				{
+					// 番組指定
+
+					images = DayCollection.getProgramImages(connection, programid);
+
+					return "programimagelist";
+				}
+				else if (dayid != null)
+				{
+					// 日指定
+
+					images = DayCollection.getDayImages(connection, dayid);
+
+					return "dayimagelist";
+				}
 			}
 			else
 			{

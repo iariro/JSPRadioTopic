@@ -18,6 +18,7 @@ public class DayAndTopics
 	private final String no;
 	public final DateTime createdate;
 	public final DateTime updatedate;
+	public final int imagenum;
 	public TopicCollection topicCollection;
 
 	/**
@@ -35,6 +36,7 @@ public class DayAndTopics
 		this.no = day.getNo();
 		this.createdate = day.createdate;
 		this.updatedate = day.updatedate;
+		this.imagenum = day.imagenum;
 
 		if (connection != null)
 		{

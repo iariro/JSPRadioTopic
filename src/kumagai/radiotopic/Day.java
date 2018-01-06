@@ -20,6 +20,7 @@ public class Day
 	private final String no;
 	public final DateTime createdate;
 	public final DateTime updatedate;
+	public final int imagenum;
 
 	/**
 	 * 日付を文字列で取得
@@ -118,6 +119,7 @@ public class Day
 		}
 
 		this.no = Integer.toString(no);
+		this.imagenum = 0;
 	}
 
 	/**
@@ -162,6 +164,7 @@ public class Day
 		}
 
 		this.no = results.getString("no");
+		this.imagenum = results.getInt("imagenum");
 	}
 
 	/**
