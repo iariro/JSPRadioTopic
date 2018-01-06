@@ -9,6 +9,11 @@
 		<param-value>jdbc:sqlserver://localhost:2144;DatabaseName=RadioTopic;User=sa;Password=p@ssw0rd;</param-value>
 	</context-param>
 
+	<context-param>
+		<param-name>RadioTopicImageFolder</param-name>
+		<param-value>C:\Users\kumagai\Pictures\RadioTopic</param-value>
+	</context-param>
+
 	-->
 
 	<property file="../../../../../build.properties" />
