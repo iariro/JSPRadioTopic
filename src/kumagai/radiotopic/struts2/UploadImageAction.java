@@ -16,6 +16,7 @@ import org.apache.struts2.convention.annotation.Results;
 import com.microsoft.sqlserver.jdbc.SQLServerDriver;
 
 import kumagai.radiotopic.DayCollection;
+import kumagai.radiotopic.ImageTrimming;
 
 /**
  * 画像登録アクション。
@@ -61,9 +62,9 @@ public class UploadImageAction
 				{
 					File file = uploadfile[i];
 					String [] contentType =uploadfileContentType[i].split("/");
-					if (DayCollection.trimNiconicoImage
+					if (ImageTrimming.trimNiconicoImage
 						(file, new File(imageFolder, uploadfileFileName[i]), contentType[1]) ||
-						DayCollection.trimBorderImage
+						ImageTrimming.trimBorderImage
 						(file, new File(imageFolder, uploadfileFileName[i]), contentType[1]))
 					{
 						// トリミング成功
