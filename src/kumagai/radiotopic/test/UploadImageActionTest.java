@@ -29,6 +29,14 @@ public class UploadImageActionTest
 			new File("testdata/ノルカソルカ83.png"),
 			new File("testdata/ノルカソルカ83-2.png"),
 			"png"));
+		assertTrue(DayCollection.trimNiconicoImage(
+			new File("testdata/ふたりはシンパシー11-2.png"),
+			new File("testdata/ふたりはシンパシー11-2-2.png"),
+			"png"));
+		assertTrue(DayCollection.trimNiconicoImage(
+			new File("testdata/ふたりはシンパシー17-1.png"),
+			new File("testdata/ふたりはシンパシー17-1-2.png"),
+			"png"));
 	}
 
 	public void testTrimNiconicoImage21()

@@ -255,7 +255,7 @@ public class DayCollection
 		Integer y1 = null;
 		Integer y2 = null;
 
-		for (int y=600 ; y<sourceImage.getHeight() ; y++)
+		for (int y=500 ; y<sourceImage.getHeight() ; y++)
 		{
 			int rgb = sourceImage.getRGB(70, y);
 			if ((((rgb & 0xf00000) <= 0xa00000) && ((rgb & 0xf00000) >= 0x600000)) &&
@@ -290,11 +290,16 @@ public class DayCollection
 			}
 		}
 
-		if (!((x2 - x1 == 134) && (y2 - y1 == 33)))
+		if (!((x2 - x1 == 134) && ((y2 - y1 == 21) || (y2 - y1 == 33))))
 		{
 			// 再生ボタンのサイズは正しい
 
 			return false;
+		}
+
+		if (y2 - y1 == 21)
+		{
+			y1 -= 12;
 		}
 
 		int width = sourceImage.getWidth();
