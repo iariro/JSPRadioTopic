@@ -72,6 +72,10 @@ public class UploadImageAction
 							(connection, dayid, uploadfileFileName[i]);
 						uploadedFiles.add(uploadfileFileName[i]);
 					}
+					else
+					{
+						return "error";
+					}
 				}
 
 				return "success";

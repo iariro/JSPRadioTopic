@@ -17,6 +17,7 @@ import com.microsoft.sqlserver.jdbc.SQLServerDriver;
 
 import ktool.datetime.DateTime;
 import ktool.datetime.TimeSpan;
+import kumagai.radiotopic.struts2.TrimImageException;
 
 /**
  * 回情報のコレクション
@@ -321,7 +322,7 @@ public class DayCollection
 	 * @return true=成功／false=失敗
 	 */
 	static public boolean trimBorderImage(File sourceFile, File destFile, String contentType)
-		throws IOException
+		throws TrimImageException, IOException
 	{
 		BufferedImage sourceImage = ImageIO.read(sourceFile);
 		Integer x1 = null;
@@ -438,7 +439,7 @@ public class DayCollection
 		{
 			// 見つからなかった
 
-			return false;
+			throw new TrimImageException(String.format("境界が見つからなかった %d,%d-%d,%d", x1, y1, x2, y2));
 		}
 
 		int width = sourceImage.getWidth();
@@ -447,8 +448,10 @@ public class DayCollection
 		int height2 = y2 - y1;
 
 		if ((width2 == 1024 && height2 == 360) ||	// niconico
+			  (width2 == 808 && height2 == 455) ||	// ニコ生
 			  (width2 == 816 && height2 == 455) ||	// ニコ生
 			  (width2 == 854 && height2 == 480) ||	// YouTube
+			  (width2 == 855 && height2 == 480) ||	// YouTube
 			  (width2 == 664 && height2 == 374))	// bilibili
 		{
 			// 対応するいずれかのサイズである
@@ -460,8 +463,18 @@ public class DayCollection
 				x2 -= (1024 - 640);
 				width2 = x2 - x1;
 			}
+			else if (width2 == 808 && height2 == 455)
+			{
+				// ニコ生用
 
-			if (width2 == 816 && height2 == 455)
+				x1 -= 21;
+				x2 += 21;
+				y1 -= 16;
+				y2 += 16;
+				width2 = x2 - x1;
+				height2 = y2 - y1;
+			}
+			else if (width2 == 816 && height2 == 455)
 			{
 				// ニコ生用
 
@@ -477,8 +490,7 @@ public class DayCollection
 		{
 			// いずれの動画サイズでもない
 
-			System.out.printf("%dx%d\n", width2, height2);
-			return false;
+			throw new TrimImageException(String.format("認知されないサイズ %d,%d-%d,%d=%d,%d", x1, y1, x2, y2, width2, height2));
 		}
 
 		BufferedImage resizeImage =
