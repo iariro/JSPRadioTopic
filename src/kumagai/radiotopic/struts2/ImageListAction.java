@@ -16,6 +16,7 @@ import com.microsoft.sqlserver.jdbc.SQLServerDriver;
 
 import kumagai.radiotopic.DayCollection;
 import kumagai.radiotopic.Image;
+import kumagai.radiotopic.SortOrder;
 
 /**
  * 画像表示アクション。
@@ -33,6 +34,7 @@ public class ImageListAction
 	public Integer dayid;
 	public Integer programid;
 	public String programName;
+	public int sortOrder;
 	public String no;
 
 	public ArrayList<Image> images;
@@ -62,7 +64,8 @@ public class ImageListAction
 				{
 					// 番組指定
 
-					images = DayCollection.getProgramImages(connection, programid);
+					SortOrder sortOrder2 = SortOrder.values()[sortOrder];
+					images = DayCollection.getProgramImages(connection, programid, sortOrder2);
 
 					return "programimagelist";
 				}

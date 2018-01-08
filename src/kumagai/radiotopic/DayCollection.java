@@ -332,12 +332,26 @@ public class DayCollection
 	 * １番組分の画像情報を取得
 	 * @param connection DB接続オブジェクト
 	 * @param programid 日ID
+	 * @param sortOrder ソートオーダー
 	 * @return １日分の画像情報
 	 */
-	static public ArrayList<Image> getProgramImages(Connection connection, int programid)
+	static public ArrayList<Image> getProgramImages(Connection connection, int programid, SortOrder sortOrder)
 		throws SQLException
 	{
 		String sql = "select image.id, no, filename from image join day on Day.id=image.dayid where programid=?";
+
+		if (sortOrder == SortOrder.NumberByNumeric)
+		{
+			// 数値回数でソート
+
+			sql += " order by cast(no as float) desc";
+		}
+		else
+		{
+			// 文字回数でソート
+
+			sql += " order by no desc";
+		}
 
 		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setInt(1, programid);

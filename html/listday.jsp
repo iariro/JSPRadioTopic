@@ -37,6 +37,7 @@
 			<s:form action="imagelist" theme="simple">
 				<input type="hidden" name="programid" value="<s:property value="programid" />">
 				<input type="hidden" name="programName" value="<s:property value="programName" />">
+				<input type="hidden" name="sortOrder" value="<s:property value="sortOrder" />">
 				<s:submit value="画像一覧" />
 			</s:form>
 
