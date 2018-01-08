@@ -16,7 +16,8 @@
 		<div class=main>
 		<div class=day>
 
-			<h1><s:property value="programName" /></h1>
+			<h2><s:property value="programName" /></h2>
+			<br>
 
 			<s:iterator value="images">
 				<img src="/kumagai/image?folder=RadioTopicImageFolder&filename=<s:property value='filename' />"><br>
