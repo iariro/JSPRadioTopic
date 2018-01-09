@@ -283,4 +283,120 @@ public class ImageTrimming
 
 		return true;
 	}
+
+	/**
+	 * 動画左側の境界を見つける
+	 * @param image 対象画像
+	 * @param divStart 二分探索ステップ開始値
+	 * @param startX 検索開始位置
+	 * @return 境界X座標
+	 */
+	static public Integer findLeftBorderline(BufferedImage image, int divStart, int startX)
+	{
+		int x1 = divStart;
+		for (int step=divStart/2 ; step>=1 ; step/=2)
+		{
+			int totalCount = 0;
+			int eqCount = 0;
+			for (int y=0 ; y<image.getHeight() ; y+=20)
+			{
+				int rgb1 = (image.getRGB(0, y) & 0xf0f0f0);
+				int rgb2 = (image.getRGB(x1, y) & 0xf0f0f0);
+				if (rgb1 == rgb2)
+				{
+					eqCount++;
+				}
+				totalCount++;
+			}
+
+			if (((eqCount * 100) / totalCount) < 20)
+			{
+				// 変化している
+
+				if (step == 1)
+				{
+					return x1;
+				}
+				x1 -= step;
+			}
+			else
+			{
+				// 変化していない
+
+				x1 += step;
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * 動画右側の境界を見つける
+	 * @param image 対象画像
+	 * @param divStart 二分探索ステップ開始値
+	 * @param startX 検索開始位置
+	 * @return 境界X座標
+	 */
+	static public Integer fildRightBorderline(BufferedImage image, int divStart, int startX)
+	{
+		int x2 = image.getWidth() / 2;
+		for (int step=divStart/2 ; step>=1 ; step/=2)
+		{
+			int totalCount = 0;
+			int eqCount = 0;
+			for (int y=0 ; y<image.getHeight() ; y+=20)
+			{
+				int rgb1 = (image.getRGB(0, y) & 0xf0f0f0);
+				int rgb2 = (image.getRGB(x2, y) & 0xf0f0f0);
+				if (rgb1 == rgb2)
+				{
+					eqCount++;
+				}
+				totalCount++;
+			}
+
+			if (((eqCount * 100) / totalCount) < 80)
+			{
+				// 変化している
+
+				if (step == 1)
+				{
+					return x2;
+				}
+				x2 += step;
+			}
+			else
+			{
+				// 変化していない
+
+				x2 -= step;
+			}
+
+			if (step < 64 && step > 32)
+			{
+				// １ドットに向けて絞り込めるよう丸め処理
+
+				step = 32;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * 境界切り出し
+	 * @param sourceFile 対象画像ファイル
+	 * @return 境界
+	 * @throws IOException
+	 */
+	static public MovieRectangle findMovieOutline(File sourceFile)
+		throws IOException
+	{
+		BufferedImage sourceImage = ImageIO.read(sourceFile);
+		MovieRectangle outline = new MovieRectangle();
+
+		outline.x1 = findLeftBorderline(sourceImage, 64, 0);
+		outline.x2 = fildRightBorderline(sourceImage, sourceImage.getWidth() / 2, sourceImage.getWidth() / 2);
+
+		return outline;
+	}
 }
