@@ -76,10 +76,26 @@ public class ImageTrimming
 			y1 -= 12;
 		}
 
+		MovieRectangle outline = new MovieRectangle(x1, x2, y1, y2);
+		cutImage(sourceImage, outline, destFile, contentType);
+
+		return true;
+	}
+
+	/**
+	 * 画像の一部を別ファイル化
+	 * @param sourceImage 対象イメージ
+	 * @param outline 切り出し座標
+	 * @param destFile 保存ファイル
+	 * @param contentType 画像フォーマット
+	 */
+	static public void cutImage(BufferedImage sourceImage, MovieRectangle outline, File destFile, String contentType)
+		throws IOException
+	{
 		int width = sourceImage.getWidth();
 		int height = sourceImage.getHeight();
-		int width2 = 966 - 66;
-		int height2 = 679 - 196;
+		int width2 = outline.x2 - outline.x1;
+		int height2 = outline.y2 - outline.y1;
 
 		BufferedImage resizeImage =
 			new BufferedImage(width2, height2, BufferedImage.TYPE_INT_RGB);
@@ -87,10 +103,8 @@ public class ImageTrimming
 			sourceImage.getScaledInstance
 				(width, height, java.awt.Image.SCALE_AREA_AVERAGING);
 		resizeImage.getGraphics().drawImage
-			(resizeImage2, -x1+1, -(196 + y1 - 689), width, height, null);
+			(resizeImage2, -outline.x1, -outline.y1, width, height, null);
 		ImageIO.write(resizeImage, contentType, destFile);
-
-		return true;
 	}
 
 	/**
@@ -304,26 +318,80 @@ public class ImageTrimming
 				int rgb2 = (image.getRGB(x1, y) & 0xf0f0f0);
 				if (rgb1 == rgb2)
 				{
+					// 近い色
+
 					eqCount++;
 				}
 				totalCount++;
 			}
 
-			if (((eqCount * 100) / totalCount) < 20)
+			if (((eqCount * 100) / totalCount) < 25)
 			{
 				// 変化している
 
-				if (step == 1)
-				{
-					return x1;
-				}
+				//System.out.printf("%d-%d %d\n", x1, step, (eqCount * 100) / totalCount);
 				x1 -= step;
 			}
 			else
 			{
 				// 変化していない
 
+				//System.out.printf("%d+%d %d\n", x1, step, (eqCount * 100) / totalCount);
 				x1 += step;
+			}
+			if (step == 1)
+			{
+				return x1;
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * 動画上側の境界を見つける
+	 * @param image 対象画像
+	 * @param divStart 二分探索ステップ開始値
+	 * @param startY 検索開始位置
+	 * @return 境界Y座標
+	 */
+	static public Integer findTopBorderline(BufferedImage image, int divStart, int startY)
+	{
+		int y1 = divStart;
+		for (int step=divStart/2 ; step>=1 ; step/=2)
+		{
+			int totalCount = 0;
+			int eqCount = 0;
+			for (int x=0 ; x<image.getWidth() ; x+=20)
+			{
+				int rgb1 = (image.getRGB(x, 0) & 0xf0f0f0);
+				int rgb2 = (image.getRGB(x, y1) & 0xf0f0f0);
+				if (rgb1 == rgb2)
+				{
+					// 近い色
+
+					eqCount++;
+				}
+				totalCount++;
+			}
+
+			if (((eqCount * 100) / totalCount) < 25)
+			{
+				// 変化している
+
+				//System.out.printf("%d-%d %d\n", x1, step, (eqCount * 100) / totalCount);
+				y1 -= step;
+			}
+			else
+			{
+				// 変化していない
+
+				//System.out.printf("%d+%d %d\n", x1, step, (eqCount * 100) / totalCount);
+				y1 += step;
+			}
+			if (step == 1)
+			{
+				return y1;
 			}
 		}
 
@@ -350,19 +418,17 @@ public class ImageTrimming
 				int rgb2 = (image.getRGB(x2, y) & 0xf0f0f0);
 				if (rgb1 == rgb2)
 				{
+					// 近い色
+
 					eqCount++;
 				}
 				totalCount++;
 			}
 
-			if (((eqCount * 100) / totalCount) < 80)
+			if (((eqCount * 100) / totalCount) < 75)
 			{
 				// 変化している
 
-				if (step == 1)
-				{
-					return x2;
-				}
 				x2 += step;
 			}
 			else
@@ -370,6 +436,68 @@ public class ImageTrimming
 				// 変化していない
 
 				x2 -= step;
+			}
+
+			if (step == 1)
+			{
+				return x2;
+			}
+
+			if (step < 64 && step > 32)
+			{
+				// １ドットに向けて絞り込めるよう丸め処理
+
+				step = 32;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * 動画下側の境界を見つける
+	 * @param image 対象画像
+	 * @param divStart 二分探索ステップ開始値
+	 * @param startY 検索開始位置
+	 * @return 境界Y座標
+	 */
+	static public Integer fildBottomBorderline(BufferedImage image, int divStart, int startY)
+	{
+		int bottom = image.getHeight() - 1;
+		int y2 = image.getHeight() / 2;
+
+		for (int step=divStart/2 ; step>=1 ; step/=2)
+		{
+			int totalCount = 0;
+			int eqCount = 0;
+			for (int x=0 ; x<image.getWidth() ; x+=20)
+			{
+				int rgb1 = (image.getRGB(x, bottom) & 0xf0f0f0);
+				int rgb2 = (image.getRGB(x, y2) & 0xf0f0f0);
+				if (rgb1 == rgb2)
+				{
+					// 近い色
+
+					eqCount++;
+				}
+				totalCount++;
+			}
+
+			if (((eqCount * 100) / totalCount) < 75)
+			{
+				// 変化している
+
+				y2 += step;
+			}
+			else
+			{
+				// 変化していない
+
+				y2 -= step;
+			}
+
+			if (step == 1)
+			{
+				return y2;
 			}
 
 			if (step < 64 && step > 32)
@@ -392,10 +520,12 @@ public class ImageTrimming
 		throws IOException
 	{
 		BufferedImage sourceImage = ImageIO.read(sourceFile);
-		MovieRectangle outline = new MovieRectangle();
-
-		outline.x1 = findLeftBorderline(sourceImage, 64, 0);
-		outline.x2 = fildRightBorderline(sourceImage, sourceImage.getWidth() / 2, sourceImage.getWidth() / 2);
+		MovieRectangle outline =
+			new MovieRectangle(
+				findLeftBorderline(sourceImage, 256, 0),
+				findTopBorderline(sourceImage, 64, 0),
+				fildRightBorderline(sourceImage, sourceImage.getWidth() / 2, sourceImage.getWidth() / 2),
+				fildBottomBorderline(sourceImage, sourceImage.getHeight() / 2, sourceImage.getHeight() / 2));
 
 		return outline;
 	}
