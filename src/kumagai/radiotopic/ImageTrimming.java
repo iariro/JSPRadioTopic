@@ -351,54 +351,50 @@ public class ImageTrimming
 	}
 
 	/**
-	 * 動画上側の境界を見つける
-	 * @param image 対象画像
-	 * @param divStart 二分探索ステップ開始値
-	 * @param startY 検索開始位置
-	 * @return 境界Y座標
+	 * 背景色を持つ水平線を探しY座標を求める
+	 * @param image 対象イメージ
+	 * @return 背景色を持つ水平線のY座標
 	 */
-	static public Integer findTopBorderline(BufferedImage image, int divStart, int startY)
+	static public Integer findTopBorderline(BufferedImage image)
 	{
-		boolean find = false;
-		int y1 = startY;
-		for (int step=divStart/2 ; step>=1 ; step/=2)
+		int centerX = image.getWidth() / 2 + 3;
+		int centerY = image.getHeight() / 2;
+		for (int y=centerY ; y>=30 ; y--)
 		{
-			int totalCount = 0;
+			int count = 0;
 			int eqCount = 0;
-			for (int x=0 ; x<image.getWidth() ; x+=20)
+			for (int x=1 ; x<image.getWidth()/2-3 ; x++)
 			{
-				int rgb1 = (image.getRGB(x, startY) & 0xf0f0f0);
-				int rgb2 = (image.getRGB(x, y1) & 0xf0f0f0);
+				int rgb1 = image.getRGB(centerX, y) & 0xf0f0f0;
+				int rgb2 = image.getRGB(centerX + x, y) & 0xf0f0f0;
+				int rgb3 = image.getRGB(centerX - x, y) & 0xf0f0f0;
+
 				if (rgb1 == rgb2)
 				{
-					// 近い色
-
 					eqCount++;
 				}
-				totalCount++;
+				count++;
+				if (rgb1 == rgb3)
+				{
+					eqCount++;
+				}
+				count++;
+
+				if (eqCount <= 2 && count >= 20)
+				{
+					// 背景色の可能性はない
+
+					break;
+				}
 			}
 
-			if (((eqCount * 100) / totalCount) < eqThresh)
+			if ((eqCount * 100 / count) > 95)
 			{
-				// 変化している
+				// 背景色と思われる
 
-				//System.out.printf("%d-%d %d\n", y1, step, (eqCount * 100) / totalCount);
-				y1 -= step;
-				find = true;
-			}
-			else
-			{
-				// 変化していない
-
-				//System.out.printf("%d+%d %d\n", y1, step, (eqCount * 100) / totalCount);
-				y1 += step;
-			}
-			if (find && step == 1)
-			{
-				return y1;
+				return y;
 			}
 		}
-
 		return null;
 	}
 
@@ -409,110 +405,85 @@ public class ImageTrimming
 	 * @param startX 検索開始位置
 	 * @return 境界X座標
 	 */
-	static public Integer fildRightBorderline(BufferedImage image, int divStart, int startX)
+	static public Integer findRightBorderline(BufferedImage image, int leftX, int topY, int bottomY)
 	{
-		int x2 = startX;
-		for (int step=divStart/2 ; step>=1 ; step/=2)
+		for (int x=image.getWidth() / 2 ; x<image.getWidth() ; x++)
 		{
-			int totalCount = 0;
+			int count = 0;
 			int eqCount = 0;
-			for (int y=0 ; y<image.getHeight() ; y+=20)
+			for (int y=topY ; y<=bottomY ; y++)
 			{
-				int rgb1 = (image.getRGB(0, y) & 0xf0f0f0);
-				int rgb2 = (image.getRGB(x2, y) & 0xf0f0f0);
+				int rgb1 = image.getRGB(leftX, y) & 0xf0f0f0;
+				int rgb2 = image.getRGB(x, y) & 0xf0f0f0;
 				if (rgb1 == rgb2)
 				{
 					// 近い色
 
 					eqCount++;
 				}
-				totalCount++;
+				count++;
+
+				if (eqCount <= 2 && count >= 20)
+				{
+					// 背景色の可能性はない
+
+					break;
+				}
 			}
 
-			if (((eqCount * 100) / totalCount) < (100 - eqThresh))
+			if (((eqCount * 100) / count) > 90)
 			{
-				// 変化している
+				// ほぼ一色
 
-				//System.out.printf("%d+%d %d\n", x2, step, (eqCount * 100) / totalCount);
-				x2 += step;
-			}
-			else
-			{
-				// 変化していない
-
-				//System.out.printf("%d-%d %d\n", x2, step, (eqCount * 100) / totalCount);
-				x2 -= step;
-			}
-
-			if (step == 1)
-			{
-				return x2;
-			}
-
-			if (step < 64 && step > 32)
-			{
-				// １ドットに向けて絞り込めるよう丸め処理
-
-				step = 32;
+				return x;
 			}
 		}
 		return null;
 	}
 
 	/**
-	 * 動画下側の境界を見つける
-	 * @param image 対象画像
-	 * @param divStart 二分探索ステップ開始値
-	 * @param startY 検索開始位置
-	 * @return 境界Y座標
+	 * 背景色を持つ水平線を探しY座標を求める
+	 * @param image 対象イメージ
+	 * @return 背景色を持つ水平線のY座標
 	 */
-	static public Integer fildBottomBorderline(BufferedImage image, int divStart, int startY)
+	static public Integer findBottomBorderline(BufferedImage image)
 	{
-		int bottom = image.getHeight() - 1;
-		int y2 = startY;
-
-		for (int step=divStart/2 ; step>=1 ; step/=2)
+		int centerX = image.getWidth() / 2 + 3;
+		int centerY = image.getHeight() / 2;
+		for (int y=centerY ; y<image.getHeight() ; y++)
 		{
-			int totalCount = 0;
+			int count = 0;
 			int eqCount = 0;
-			for (int x=0 ; x<image.getWidth() ; x+=20)
+			for (int x=1 ; x<image.getWidth()/2-3 ; x++)
 			{
-				int rgb1 = (image.getRGB(x, bottom) & 0xf0f0f0);
-				int rgb2 = (image.getRGB(x, y2) & 0xf0f0f0);
+				int rgb1 = image.getRGB(centerX, y) & 0xf0f0f0;
+				int rgb2 = image.getRGB(centerX + x, y) & 0xf0f0f0;
+				int rgb3 = image.getRGB(centerX - x, y) & 0xf0f0f0;
+
 				if (rgb1 == rgb2)
 				{
-					// 近い色
-
 					eqCount++;
 				}
-				totalCount++;
+				count++;
+				if (rgb1 == rgb3)
+				{
+					eqCount++;
+				}
+				count++;
+
+				if (eqCount <= 2 && count >= 20)
+				{
+					// 背景色の可能性はない
+
+					break;
+				}
 			}
 
-			if (((eqCount * 100) / totalCount) < (100 - eqThresh))
+			if ((eqCount * 100 / count) > 95)
 			{
-				// 変化している
+				// 背景色と思われる
 
-				//System.out.printf("%d+%d %d\n", y2, step, (eqCount * 100) / totalCount);
-				y2 += step;
-			}
-			else
-			{
-				// 変化していない
-
-				//System.out.printf("%d-%d %d\n", y2, step, (eqCount * 100) / totalCount);
-				y2 -= step;
-			}
-
-			if (step == 1)
-			{
-				return y2;
-			}
-
-			if (step < 64 && step > 32)
-			{
-				// １ドットに向けて絞り込めるよう丸め処理
-
-				step = 32;
+				return y;
 			}
 		}
 		return null;
@@ -528,16 +499,23 @@ public class ImageTrimming
 		throws IOException
 	{
 		BufferedImage sourceImage = ImageIO.read(sourceFile);
-		Integer top1 = findTopBorderline(sourceImage, 128, 0);
-		Integer top2 = findTopBorderline(sourceImage, 256, 60);
-		System.out.printf("%d %d\n", top1, top2);
-		MovieRectangle outline =
-			new MovieRectangle(
-				findLeftBorderline(sourceImage, 256, 0),
-				top2,
-				fildRightBorderline(sourceImage, sourceImage.getHeight() * 6 / 10, sourceImage.getWidth() * 4 / 10),
-				fildBottomBorderline(sourceImage, sourceImage.getHeight() / 2, sourceImage.getHeight() / 2));
+		Integer rightX = findLeftBorderline(sourceImage, 256, 0);
+		Integer topY = findTopBorderline(sourceImage);
+		Integer bottomY = findBottomBorderline(sourceImage);
+		if (rightX != null && topY != null && bottomY != null)
+		{
+			MovieRectangle outline =
+				new MovieRectangle(
+					rightX,
+					topY,
+					findRightBorderline(sourceImage, 0, topY, bottomY),
+					bottomY);
 
-		return outline;
+			return outline;
+		}
+		else
+		{
+			return new MovieRectangle(rightX, topY, null, bottomY);
+		}
 	}
 }
