@@ -298,6 +298,8 @@ public class ImageTrimming
 		return true;
 	}
 
+	static final int eqThresh = 40;
+
 	/**
 	 * 動画左側の境界を見つける
 	 * @param image 対象画像
@@ -307,14 +309,14 @@ public class ImageTrimming
 	 */
 	static public Integer findLeftBorderline(BufferedImage image, int divStart, int startX)
 	{
-		int x1 = divStart;
+		int x1 = startX;
 		for (int step=divStart/2 ; step>=1 ; step/=2)
 		{
 			int totalCount = 0;
 			int eqCount = 0;
 			for (int y=0 ; y<image.getHeight() ; y+=20)
 			{
-				int rgb1 = (image.getRGB(0, y) & 0xf0f0f0);
+				int rgb1 = (image.getRGB(startX, y) & 0xf0f0f0);
 				int rgb2 = (image.getRGB(x1, y) & 0xf0f0f0);
 				if (rgb1 == rgb2)
 				{
@@ -325,7 +327,7 @@ public class ImageTrimming
 				totalCount++;
 			}
 
-			if (((eqCount * 100) / totalCount) < 25)
+			if (((eqCount * 100) / totalCount) < eqThresh)
 			{
 				// 変化している
 
@@ -357,14 +359,15 @@ public class ImageTrimming
 	 */
 	static public Integer findTopBorderline(BufferedImage image, int divStart, int startY)
 	{
-		int y1 = divStart;
+		boolean find = false;
+		int y1 = startY;
 		for (int step=divStart/2 ; step>=1 ; step/=2)
 		{
 			int totalCount = 0;
 			int eqCount = 0;
 			for (int x=0 ; x<image.getWidth() ; x+=20)
 			{
-				int rgb1 = (image.getRGB(x, 0) & 0xf0f0f0);
+				int rgb1 = (image.getRGB(x, startY) & 0xf0f0f0);
 				int rgb2 = (image.getRGB(x, y1) & 0xf0f0f0);
 				if (rgb1 == rgb2)
 				{
@@ -375,21 +378,22 @@ public class ImageTrimming
 				totalCount++;
 			}
 
-			if (((eqCount * 100) / totalCount) < 25)
+			if (((eqCount * 100) / totalCount) < eqThresh)
 			{
 				// 変化している
 
-				//System.out.printf("%d-%d %d\n", x1, step, (eqCount * 100) / totalCount);
+				//System.out.printf("%d-%d %d\n", y1, step, (eqCount * 100) / totalCount);
 				y1 -= step;
+				find = true;
 			}
 			else
 			{
 				// 変化していない
 
-				//System.out.printf("%d+%d %d\n", x1, step, (eqCount * 100) / totalCount);
+				//System.out.printf("%d+%d %d\n", y1, step, (eqCount * 100) / totalCount);
 				y1 += step;
 			}
-			if (step == 1)
+			if (find && step == 1)
 			{
 				return y1;
 			}
@@ -407,7 +411,7 @@ public class ImageTrimming
 	 */
 	static public Integer fildRightBorderline(BufferedImage image, int divStart, int startX)
 	{
-		int x2 = image.getWidth() / 2;
+		int x2 = startX;
 		for (int step=divStart/2 ; step>=1 ; step/=2)
 		{
 			int totalCount = 0;
@@ -425,16 +429,18 @@ public class ImageTrimming
 				totalCount++;
 			}
 
-			if (((eqCount * 100) / totalCount) < 75)
+			if (((eqCount * 100) / totalCount) < (100 - eqThresh))
 			{
 				// 変化している
 
+				//System.out.printf("%d+%d %d\n", x2, step, (eqCount * 100) / totalCount);
 				x2 += step;
 			}
 			else
 			{
 				// 変化していない
 
+				//System.out.printf("%d-%d %d\n", x2, step, (eqCount * 100) / totalCount);
 				x2 -= step;
 			}
 
@@ -463,7 +469,7 @@ public class ImageTrimming
 	static public Integer fildBottomBorderline(BufferedImage image, int divStart, int startY)
 	{
 		int bottom = image.getHeight() - 1;
-		int y2 = image.getHeight() / 2;
+		int y2 = startY;
 
 		for (int step=divStart/2 ; step>=1 ; step/=2)
 		{
@@ -482,16 +488,18 @@ public class ImageTrimming
 				totalCount++;
 			}
 
-			if (((eqCount * 100) / totalCount) < 75)
+			if (((eqCount * 100) / totalCount) < (100 - eqThresh))
 			{
 				// 変化している
 
+				//System.out.printf("%d+%d %d\n", y2, step, (eqCount * 100) / totalCount);
 				y2 += step;
 			}
 			else
 			{
 				// 変化していない
 
+				//System.out.printf("%d-%d %d\n", y2, step, (eqCount * 100) / totalCount);
 				y2 -= step;
 			}
 
@@ -520,11 +528,14 @@ public class ImageTrimming
 		throws IOException
 	{
 		BufferedImage sourceImage = ImageIO.read(sourceFile);
+		Integer top1 = findTopBorderline(sourceImage, 128, 0);
+		Integer top2 = findTopBorderline(sourceImage, 256, 60);
+		System.out.printf("%d %d\n", top1, top2);
 		MovieRectangle outline =
 			new MovieRectangle(
 				findLeftBorderline(sourceImage, 256, 0),
-				findTopBorderline(sourceImage, 64, 0),
-				fildRightBorderline(sourceImage, sourceImage.getWidth() / 2, sourceImage.getWidth() / 2),
+				top2,
+				fildRightBorderline(sourceImage, sourceImage.getHeight() * 6 / 10, sourceImage.getWidth() * 4 / 10),
 				fildBottomBorderline(sourceImage, sourceImage.getHeight() / 2, sourceImage.getHeight() / 2));
 
 		return outline;

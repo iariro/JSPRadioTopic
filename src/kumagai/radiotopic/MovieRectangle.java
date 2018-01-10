@@ -24,4 +24,13 @@ public class MovieRectangle
 		this.x2 = x2;
 		this.y2 = y2;
 	}
+
+	/**
+	 * いずれかnullであるか判定
+	 * @return true=いずれかnullである
+	 */
+	public boolean isAnyNull()
+	{
+		return x1 == null || y1 == null || x2 == null || y2 == null;
+	}
 }

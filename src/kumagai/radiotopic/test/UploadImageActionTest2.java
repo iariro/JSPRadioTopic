@@ -41,15 +41,22 @@ public class UploadImageActionTest2
 			File destFile = new File(String.format("testdata/%s-2.png", file));
 			MovieRectangle outline = ImageTrimming.findMovieOutline(sourceFile);
 
-			System.out.printf("%s = %d %d %d %d\n", file, outline.x1, outline.y1, outline.x2, outline.y2);
-			assertNotNull(outline.x1);
-			assertNotNull(outline.y1);
-			assertNotNull(outline.x2);
-			assertNotNull(outline.y2);
+			//assertNotNull(outline.x1);
+			//assertNotNull(outline.y1);
+			//assertNotNull(outline.x2);
+			//assertNotNull(outline.y2);
 
-			BufferedImage sourceImage = ImageIO.read(sourceFile);
+			if (!outline.isAnyNull())
+			{
+				System.out.printf("%s = %d,%d-%d,%d %dx%d\n", file, outline.x1, outline.y1, outline.x2, outline.y2, outline.x2 - outline.x1, outline.y2 - outline.y1);
+				BufferedImage sourceImage = ImageIO.read(sourceFile);
 
-			ImageTrimming.cutImage(sourceImage, outline, destFile, "png");
+				ImageTrimming.cutImage(sourceImage, outline, destFile, "png");
+			}
+			else
+			{
+				System.out.printf("%s = %d,%d-%d,%d\n", file, outline.x1, outline.y1, outline.x2, outline.y2);
+			}
 		}
 	}
 }
