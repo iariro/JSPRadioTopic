@@ -13,50 +13,78 @@ import kumagai.radiotopic.MovieRectangle;
 public class UploadImageActionTest2
 	extends TestCase
 {
-	public void testNiconico()
+	public void testNiconico1() throws IOException
+	{
+		trimAndSave("futapathy11-2");
+	}
+	public void testNiconico2() throws IOException
+	{
+		trimAndSave("futapathy17-1");
+	}
+	public void testNiconico3() throws IOException
+	{
+		trimAndSave("nolsol22");
+	}
+	public void testNiconico4() throws IOException
+	{
+		trimAndSave("nolsol30");
+	}
+	public void testNiconico5() throws IOException
+	{
+		trimAndSave("nolsol34");
+	}
+	public void testNiconico6() throws IOException
+	{
+		trimAndSave("nolsol83");
+	}
+	public void testNiconico7() throws IOException
+	{
+		trimAndSave("adlib124");
+	}
+	public void testNiconicoOld1() throws IOException
+	{
+		trimAndSave("toshitai072-1");
+	}
+	public void testNiconama1() throws IOException
+	{
+		trimAndSave("shitamuki27-1");
+	}
+	public void testNiconama2() throws IOException
+	{
+		trimAndSave("shitamuki40");
+	}
+	public void testBilibili() throws IOException
+	{
+		trimAndSave("himitsukichi103");
+	}
+	public void testYoutube1() throws IOException
+	{
+		trimAndSave("shitamuki27-3");
+	}
+	public void testYoutube2() throws IOException
+	{
+		trimAndSave("shitamuki27-5");
+	}
+
+	void trimAndSave(String file)
 		throws IOException
 	{
-		String [] files =
+		File sourceFile = new File(String.format("testdata/%s.png", file));
+		File destFile = new File(String.format("testdata/%s-2.png", file));
+		MovieRectangle outline = ImageTrimming.findMovieOutline(sourceFile);
+
+		System.out.printf("%s = %d,%d-%d,%d ", file, outline.x1, outline.y1, outline.x2, outline.y2);
+		if (!outline.isAnyNull())
 		{
-			// ニコニコ
-			"futapathy11-2", "futapathy17-1",
-			"nolsol22", "nolsol30", "nolsol34", "nolsol83", "adlib124",
-
-			// ニコ生
-			"shitamuki27-1", "shitamuki40",
-
-			// ニコニコ
-			"toshitai072-1",
-
-			// bilibili
-			"himitsukichi103",
-
-			// YouTube
-			"shitamuki27-3", "shitamuki27-5"
-		};
-
-		for (String file : files)
-		{
-			File sourceFile = new File(String.format("testdata/%s.png", file));
-			File destFile = new File(String.format("testdata/%s-2.png", file));
-			MovieRectangle outline = ImageTrimming.findMovieOutline(sourceFile);
-
-			//assertNotNull(outline.x1);
-			//assertNotNull(outline.y1);
-			//assertNotNull(outline.x2);
-			//assertNotNull(outline.y2);
-
-			if (!outline.isAnyNull())
-			{
-				System.out.printf("%s = %d,%d-%d,%d %dx%d\n", file, outline.x1, outline.y1, outline.x2, outline.y2, outline.x2 - outline.x1, outline.y2 - outline.y1);
-				BufferedImage sourceImage = ImageIO.read(sourceFile);
-
-				ImageTrimming.cutImage(sourceImage, outline, destFile, "png");
-			}
-			else
-			{
-				System.out.printf("%s = %d,%d-%d,%d\n", file, outline.x1, outline.y1, outline.x2, outline.y2);
-			}
+			System.out.printf("%dx%d", outline.x2 - outline.x1, outline.y2 - outline.y1);
+			BufferedImage sourceImage = ImageIO.read(sourceFile);
+			ImageTrimming.cutImage(sourceImage, outline, destFile, "png");
 		}
+		System.out.println();
+
+		assertNotNull(outline.x1);
+		assertNotNull(outline.y1);
+		assertNotNull(outline.x2);
+		assertNotNull(outline.y2);
 	}
 }
