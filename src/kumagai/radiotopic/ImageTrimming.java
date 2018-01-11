@@ -253,20 +253,26 @@ public class ImageTrimming
 			{
 				// ニコニコ旧形式
 
+				outline.x1 -= 1;
+				outline.x2 += 1;
 				outline.y1 += 44;
-				outline.y2 -= 80;
+				outline.y2 -= 77;
 			}
 			else if (width == 685)
 			{
 				// bilibili
 
-				outline.y1 += 52;
+				outline.x1 += 3;
+				outline.y1 += 51;
 			}
 			else if (width == 854)
 			{
 				// Youtube
 
-				// 何もしない
+				outline.x1 -= 1;
+				outline.x2 += 1;
+				outline.y1 += 1;
+				outline.y2 += 1;
 			}
 			else if (width == 899)
 			{
@@ -274,14 +280,16 @@ public class ImageTrimming
 
 				outline.x2 += 1;
 				outline.y1 += outline.getHeight() - (599 - 40);
-				outline.y2 -= 77;
+				outline.y2 -= 75;
 			}
 			else if (width == 960)
 			{
 				// ニコ生
 
+				outline.x1 -= 1;
+				outline.x2 += 1;
 				outline.y1 += 58;
-				outline.y2 -= 38;
+				outline.y2 -= 37;
 			}
 
 			return outline;
