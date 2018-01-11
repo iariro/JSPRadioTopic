@@ -20,7 +20,7 @@ public class UploadImageActionTest2
 		{
 			// ニコニコ
 			"futapathy11-2", "futapathy17-1",
-			"nolsol22", "nolsol30", "nolsol34", "nolsol83",
+			"nolsol22", "nolsol30", "nolsol34", "nolsol83", "adlib124",
 
 			// ニコ生
 			"shitamuki27-1", "shitamuki40",
