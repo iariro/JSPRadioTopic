@@ -71,13 +71,13 @@ public class UploadImageActionTest2
 	{
 		File sourceFile = new File(String.format("testdata/%s.png", file));
 		File destFile = new File(String.format("testdata/%s-2.png", file));
-		MovieRectangle outline = ImageTrimming.findMovieOutline(sourceFile);
+		BufferedImage sourceImage = ImageIO.read(sourceFile);
+		MovieRectangle outline = ImageTrimming.findMovieOutline(sourceImage);
 
 		System.out.printf("%s = %d,%d-%d,%d ", file, outline.x1, outline.y1, outline.x2, outline.y2);
 		if (!outline.isAnyNull())
 		{
 			System.out.printf("%dx%d", outline.x2 - outline.x1, outline.y2 - outline.y1);
-			BufferedImage sourceImage = ImageIO.read(sourceFile);
 			ImageTrimming.cutImage(sourceImage, outline, destFile, "png");
 		}
 		System.out.println();

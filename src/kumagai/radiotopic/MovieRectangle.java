@@ -65,4 +65,13 @@ public class MovieRectangle
 			return null;
 		}
 	}
+
+	/**
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString()
+	{
+		return String.format("%d,%d-%d,%d", x1, y1, x2, y2);
+	}
 }

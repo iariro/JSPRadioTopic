@@ -1,10 +1,12 @@
 package kumagai.radiotopic.struts2;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
 import javax.servlet.ServletContext;
 
 import org.apache.struts2.ServletActionContext;
@@ -17,6 +19,7 @@ import com.microsoft.sqlserver.jdbc.SQLServerDriver;
 
 import kumagai.radiotopic.DayCollection;
 import kumagai.radiotopic.ImageTrimming;
+import kumagai.radiotopic.MovieRectangle;
 
 /**
  * 画像登録アクション。
@@ -62,19 +65,22 @@ public class UploadImageAction
 				{
 					File file = uploadfile[i];
 					String [] contentType =uploadfileContentType[i].split("/");
-					if (ImageTrimming.trimNiconicoImage
-						(file, new File(imageFolder, uploadfileFileName[i]), contentType[1]) ||
-						ImageTrimming.trimBorderImage
-						(file, new File(imageFolder, uploadfileFileName[i]), contentType[1]))
+					File destFile = new File(imageFolder, uploadfileFileName[i]);
+					BufferedImage sourceImage = ImageIO.read(file);
+					MovieRectangle outline = ImageTrimming.findMovieOutline(sourceImage);
+					if (!outline.isAnyNull())
 					{
-						// トリミング成功
+						// 境界検出成功
 
-						DayCollection.insertImage
-							(connection, dayid, uploadfileFileName[i]);
+						ImageTrimming.cutImage(sourceImage, outline, destFile, contentType[1]);
+						DayCollection.insertImage(connection, dayid, uploadfileFileName[i]);
 						uploadedFiles.add(uploadfileFileName[i]);
 					}
 					else
 					{
+						// 境界検出失敗
+
+						message = String.format("境界検出失敗 %s", outline.toString());
 						return "error";
 					}
 				}
