@@ -33,4 +33,36 @@ public class MovieRectangle
 	{
 		return x1 == null || y1 == null || x2 == null || y2 == null;
 	}
+
+	/**
+	 * 幅を求める
+	 * @return 幅
+	 */
+	public Integer getWidth()
+	{
+		if (x1 != null && x2 != null)
+		{
+			return x2 - x1;
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	/**
+	 * 高さを求める
+	 * @return 高さ
+	 */
+	public Integer getHeight()
+	{
+		if (y1 != null && y2 != null)
+		{
+			return y2 - y1;
+		}
+		else
+		{
+			return null;
+		}
+	}
 }

@@ -502,8 +502,11 @@ public class ImageTrimming
 		Integer rightX = findLeftBorderline(sourceImage, 256, 0);
 		Integer topY = findTopBorderline(sourceImage);
 		Integer bottomY = findBottomBorderline(sourceImage);
+
 		if (rightX != null && topY != null && bottomY != null)
 		{
+			// 上下左右の境界が得られた
+
 			MovieRectangle outline =
 				new MovieRectangle(
 					rightX,
@@ -511,10 +514,48 @@ public class ImageTrimming
 					findRightBorderline(sourceImage, 0, topY, bottomY),
 					bottomY);
 
+			int width = outline.getWidth();
+			if (width == 636 || width == 640)
+			{
+				// ニコニコ旧形式
+
+				outline.y1 += 44;
+				outline.y2 -= 80;
+			}
+			else if (width == 685)
+			{
+				// bilibili
+
+				outline.y1 += 52;
+			}
+			else if (width == 854)
+			{
+				// Youtube
+
+				// 何もしない
+			}
+			else if (width == 899)
+			{
+				// ニコニコ新形式
+
+				outline.x2 += 1;
+				outline.y1 += outline.getHeight() - (599 - 40);
+				outline.y2 -= 77;
+			}
+			else if (width == 960)
+			{
+				// ニコ生
+
+				outline.y1 += 58;
+				outline.y2 -= 38;
+			}
+
 			return outline;
 		}
 		else
 		{
+			// 上下左右の境界が得られなかった
+
 			return new MovieRectangle(rightX, topY, null, bottomY);
 		}
 	}
