@@ -286,8 +286,8 @@ public class ImageTrimming
 			{
 				// ニコ生
 
-				outline.x1 -= 1;
-				outline.x2 += 1;
+				outline.x1 += 56;
+				outline.x2 -= 56;
 				outline.y1 += 58;
 				outline.y2 -= 37;
 			}
