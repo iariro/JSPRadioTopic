@@ -63,7 +63,7 @@ public class ImageTrimming
 				totalCount++;
 			}
 
-			if (((eqCount * 100) / totalCount) < 40)
+			if (((eqCount * 100) / totalCount) < 50)
 			{
 				// 変化している
 
@@ -184,13 +184,13 @@ public class ImageTrimming
 	 */
 	static public Integer findBottomBorderline(BufferedImage image)
 	{
-		int centerX = image.getWidth() / 2 + 3;
+		int centerX = image.getWidth() / 3 + 3;
 		int centerY = image.getHeight() / 2;
 		for (int y=centerY ; y<image.getHeight() ; y++)
 		{
 			int count = 0;
 			int eqCount = 0;
-			for (int x=1 ; x<image.getWidth()/2-3 ; x++)
+			for (int x=1 ; x<image.getWidth()/3 ; x++)
 			{
 				int rgb1 = image.getRGB(centerX, y) & 0xf0f0f0;
 				int rgb2 = image.getRGB(centerX + x, y) & 0xf0f0f0;
@@ -290,6 +290,12 @@ public class ImageTrimming
 				outline.x2 -= 56;
 				outline.y1 += 58;
 				outline.y2 -= 37;
+			}
+			else if (width == 1280)
+			{
+				// Youtube - シリーズ
+
+				outline.x2 -= (1280 - 852);
 			}
 
 			return outline;

@@ -13,6 +13,7 @@ import kumagai.radiotopic.MovieRectangle;
 public class UploadImageActionTest2
 	extends TestCase
 {
+	// niconico new
 	public void testNiconico1() throws IOException
 	{
 		trimAndSave("futapathy11-2");
@@ -37,6 +38,8 @@ public class UploadImageActionTest2
 	{
 		trimAndSave("nolsol83");
 	}
+
+	// niconico old
 	public void testNiconico7() throws IOException
 	{
 		trimAndSave("adlib124");
@@ -45,6 +48,8 @@ public class UploadImageActionTest2
 	{
 		trimAndSave("toshitai072-1");
 	}
+
+	// nico生
 	public void testNiconama1() throws IOException
 	{
 		trimAndSave("shitamuki27-1");
@@ -53,10 +58,14 @@ public class UploadImageActionTest2
 	{
 		trimAndSave("shitamuki40");
 	}
+
+	// bilibili
 	public void testBilibili() throws IOException
 	{
 		trimAndSave("himitsukichi103");
 	}
+
+	// YouTube
 	public void testYoutube1() throws IOException
 	{
 		trimAndSave("shitamuki27-3");
@@ -64,6 +73,14 @@ public class UploadImageActionTest2
 	public void testYoutube2() throws IOException
 	{
 		trimAndSave("shitamuki27-5");
+	}
+	public void testYoutube3() throws IOException
+	{
+		trimAndSave("nolsol102");
+	}
+	public void testYoutube4() throws IOException
+	{
+		trimAndSave("nolsol237");
 	}
 
 	void trimAndSave(String file)
