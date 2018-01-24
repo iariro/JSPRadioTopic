@@ -13,6 +13,8 @@ public class StringTool
 {
 	static private final Pattern dateSlash2 =
 		Pattern.compile("[\\(（]*([0-9]{2})/([0-9]*)/([0-9]*)[\\)）]*");
+	static private final Pattern dateSlash4 =
+			Pattern.compile("[\\(（]*([0-9]{4})/([0-9]*)/([0-9]*)[\\)）]*");
 	static private final Pattern dateDot0 =
 			Pattern.compile("([0-9]*)\\.([0-9]*)");
 	static private final Pattern dateDot2 =
@@ -40,6 +42,19 @@ public class StringTool
 		if (matcher.matches())
 		{
 			// yyyy.mm.dd形式にマッチ
+
+			return
+				String.format(
+					outFormat,
+					Integer.parseInt(matcher.group(1)),
+					Integer.parseInt(matcher.group(2)),
+					Integer.parseInt(matcher.group(3)));
+		}
+
+		matcher = dateSlash4.matcher(date);
+		if (matcher.matches())
+		{
+			// yyyy/mm/dd形式にマッチ
 
 			return
 				String.format(
