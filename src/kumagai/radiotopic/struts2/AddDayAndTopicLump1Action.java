@@ -5,7 +5,7 @@ import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.Result;
 
 /**
- * 一括日追加ページ表示アクション。
+ * 一括日・トピック追加ページ表示アクション。
  * @author kumagai
  */
 @Namespace("/radiotopic")
@@ -17,7 +17,7 @@ public class AddDayAndTopicLump1Action
 	public int sortOrder;
 
 	/**
-	 * 一括日追加ページ表示アクション。
+	 * 一括日・トピック追加ページ表示アクション。
 	 * @return 処理結果
 	 */
 	@Action("adddayandtopiclump1")
