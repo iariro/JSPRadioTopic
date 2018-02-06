@@ -13,7 +13,6 @@ import org.apache.struts2.convention.annotation.Result;
 import com.microsoft.sqlserver.jdbc.SQLServerDriver;
 
 import kumagai.radiotopic.DayCollection;
-import kumagai.radiotopic.StringTool;
 import kumagai.radiotopic.TopicCollection;
 
 /**
@@ -56,18 +55,17 @@ public class AddDayAndTopicLump2Action
 				// トピックを登録
 				for (int i=0 ; i<lines.length ; i++)
 				{
-					String date2 = StringTool.parseDate(lines[1]);
+					String [] fields = lines[i].split(" ");
 
 					// １行目を回数・２行目を日付として扱う
-					String no = lines[0];
-					String date = date2;
-
-					date = StringTool.parseDate(date);
+					String no = fields[0];
 
 					// Dayエントリ作成
-					int newDayId = DayCollection.insertDay(connection, programid, date, no);
-
-					TopicCollection.insertTopic(connection, newDayId, lines[i]);
+					int newDayId = DayCollection.insertDay(connection, programid, null, no);
+					for(int j=1 ; j<fields.length ; j++)
+					{
+						TopicCollection.insertTopic(connection, newDayId, fields[j]);
+					}
 				}
 
 				connection.close();
