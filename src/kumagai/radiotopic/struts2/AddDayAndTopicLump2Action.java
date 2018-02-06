@@ -28,6 +28,7 @@ public class AddDayAndTopicLump2Action
 	public int sortOrder;
 	public String topics;
 
+	public String nos = new String();
 	public String message;
 
 	/**
@@ -57,11 +58,17 @@ public class AddDayAndTopicLump2Action
 				{
 					String [] fields = lines[i].split(" ");
 
-					// １行目を回数・２行目を日付として扱う
 					String no = fields[0];
+					if (nos.length() > 0)
+					{
+						nos += ", ";
+					}
+					nos += no;
 
 					// Dayエントリ作成
 					int newDayId = DayCollection.insertDay(connection, programid, null, no);
+
+					// トピック追加
 					for(int j=1 ; j<fields.length ; j++)
 					{
 						TopicCollection.insertTopic(connection, newDayId, fields[j]);
