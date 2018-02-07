@@ -34,6 +34,12 @@
 				<s:submit value="日追加（内容含め一括）" />
 			</s:form>
 
+			<s:form action="adddayandtopiclump1" theme="simple">
+				<input type="hidden" name="programid" value="<s:property value="programid" />">
+				<input type="hidden" name="programName" value="<s:property value="programName" />">
+				<s:submit value="複数日追加" />
+			</s:form>
+
 			<s:form action="imagelist" theme="simple">
 				<input type="hidden" name="programid" value="<s:property value="programid" />">
 				<input type="hidden" name="programName" value="<s:property value="programName" />">
