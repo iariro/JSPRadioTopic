@@ -17,8 +17,8 @@
 		<div class=main>
 		<div class=day>
 
-			dayid=<s:property value="programName" /><br>
-			newid=<s:property value="no" /><br>
+			<s:property value="programName" /><br>
+			第<s:property value="nos" />回を登録しました<br>
 
 		</div>
 		</div>
