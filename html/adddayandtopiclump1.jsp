@@ -21,7 +21,7 @@
 
 		<s:form action="adddayandtopiclump2" theme="simple">
 			<input type="hidden" name="programid" value="<s:property value="programid" />">
-			<input type="hidden" name="programName" value="<s:property value="name" />">
+			<input type="hidden" name="programName" value="<s:property value="programName" />">
 			<s:textarea name="topics"/><br>
 			<s:submit value="日と内容一括追加" />
 		</s:form>
