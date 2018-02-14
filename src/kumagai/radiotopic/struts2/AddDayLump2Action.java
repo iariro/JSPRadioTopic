@@ -77,8 +77,8 @@ public class AddDayLump2Action
 					// ２行目が日付としてパースされた
 
 					// １行目を回数・２行目を日付として扱う
-					no = lines[0];
-					date = date2;
+					no = lines[0].trim();
+					date = date2.trim();
 					if (sortOrder2 == SortOrder.NumberByNumeric)
 					{
 						// 回の列を数字として扱う
