@@ -27,25 +27,33 @@
 			<h2><s:property value="programName" /></h2>
 
 			<br>
+			<table><tr>
+			<td>
 			<s:form action="adddaylump1" theme="simple">
 				<input type="hidden" name="programid" value="<s:property value="programid" />">
 				<input type="hidden" name="programName" value="<s:property value="programName" />">
 				<input type="hidden" name="sortOrder" value="<s:property value="sortOrder" />">
 				<s:submit value="日追加（内容含め一括）" />
 			</s:form>
+			</td>
 
+			<td>
 			<s:form action="adddayandtopiclump1" theme="simple">
 				<input type="hidden" name="programid" value="<s:property value="programid" />">
 				<input type="hidden" name="programName" value="<s:property value="programName" />">
 				<s:submit value="複数日追加" />
 			</s:form>
+			</td>
 
+			<td>
 			<s:form action="imagelist" theme="simple">
 				<input type="hidden" name="programid" value="<s:property value="programid" />">
 				<input type="hidden" name="programName" value="<s:property value="programName" />">
 				<input type="hidden" name="sortOrder" value="<s:property value="sortOrder" />">
 				<s:submit value="画像一覧" />
 			</s:form>
+			</td>
+			</tr></table>
 
 			<table>
 			<tr>
