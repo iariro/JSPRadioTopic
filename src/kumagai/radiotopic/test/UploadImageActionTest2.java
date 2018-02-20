@@ -38,9 +38,13 @@ public class UploadImageActionTest2
 	{
 		trimAndSave("nolsol83");
 	}
+	public void testNiconico7() throws IOException
+	{
+		trimAndSave("delicate123");
+	}
 
 	// niconico old
-	public void testNiconico7() throws IOException
+	public void testNiconicoold1() throws IOException
 	{
 		trimAndSave("adlib124");
 	}

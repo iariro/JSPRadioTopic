@@ -248,7 +248,9 @@ public class ImageTrimming
 					findRightBorderline(image, 0, topY, bottomY),
 					bottomY);
 
+			//System.out.printf("\t%d,%d-%d,%d\n", outline.x1, outline.y1, outline.x2, outline.y2);
 			int width = outline.getWidth();
+			int height = outline.getHeight();
 			if (width == 636 || width == 640)
 			{
 				// ニコニコ旧形式
@@ -257,6 +259,13 @@ public class ImageTrimming
 				outline.x2 += 1;
 				outline.y1 += 44;
 				outline.y2 -= 77;
+			}
+			else if (width == 672 && height == 503)
+			{
+				// ニコニコ新形式
+
+				outline.y1 += 44;
+				outline.y2 -= 75;
 			}
 			else if (width == 685)
 			{
