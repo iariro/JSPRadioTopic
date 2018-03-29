@@ -211,7 +211,7 @@ public class ProgramCollection
 	static public ArrayList<String> checkDateFast(Connection connection)
 		throws SQLException
 	{
-		String sql = "select program.name, day.id, programid, date, no, createdate, updatedate,(select COUNT(*) from image where dayid=Day.id) as imagenum from day join program on program.id=day.programid order by programid, convert(NUMERIC, no) desc";
+		String sql = "select program.name, day.id, programid, date, no, createdate, updatedate,(select COUNT(*) from image where dayid=Day.id) as imagenum from day join program on program.id=day.programid where sortorder=1 order by programid, convert(NUMERIC, no) desc";
 
 		PreparedStatement statement = connection.prepareStatement(sql);
 

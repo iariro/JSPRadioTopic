@@ -16,6 +16,7 @@ import org.apache.struts2.convention.annotation.Results;
 import com.microsoft.sqlserver.jdbc.SQLServerDriver;
 
 import kumagai.radiotopic.ProgramCollection;
+import kumagai.radiotopic.RadioTopicDatabase;
 
 /**
  * エラーチェックアクション。
@@ -29,6 +30,20 @@ import kumagai.radiotopic.ProgramCollection;
 })
 public class ErrorCheckAction
 {
+	public static void main(String[] args)
+		throws SQLException
+	{
+		DriverManager.registerDriver(new SQLServerDriver());
+		Connection connection = RadioTopicDatabase.getConnection();
+		ArrayList<String> invalidDates = ProgramCollection.checkDateFast(connection);
+		System.out.println(invalidDates.size());
+		for (String date : invalidDates)
+		{
+			System.out.println(date);
+		}
+		connection.close();
+	}
+
 	public String message;
 	public ArrayList<String> invalidDates = new ArrayList<String>();
 
@@ -42,8 +57,6 @@ public class ErrorCheckAction
 	{
 		ServletContext context = ServletActionContext.getServletContext();
 
-		DriverManager.registerDriver(new SQLServerDriver());
-
 		String url = context.getInitParameter("RadioTopicSqlserverUrl");
 
 		if (url != null)
@@ -55,6 +68,7 @@ public class ErrorCheckAction
 			{
 				Connection connection = DriverManager.getConnection(url);
 				invalidDates = ProgramCollection.checkDateFast(connection);
+				connection.close();
 				return "success";
 			}
 			catch (SQLException exception)
