@@ -1,25 +1,41 @@
 package kumagai.radiotopic.struts2;
 
-import java.sql.*;
-import javax.servlet.*;
-import com.microsoft.sqlserver.jdbc.*;
-import org.apache.struts2.*;
-import org.apache.struts2.convention.annotation.*;
-import kumagai.radiotopic.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+import javax.servlet.ServletContext;
+
+import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.Namespace;
+import org.apache.struts2.convention.annotation.Result;
+import org.apache.struts2.convention.annotation.Results;
+
+import com.microsoft.sqlserver.jdbc.SQLServerDriver;
+
+import kumagai.radiotopic.DayCollection;
+import kumagai.radiotopic.SortOrder;
+import kumagai.radiotopic.StringTool;
 
 /**
  * 日追加ページ表示アクション。
  * @author kumagai
  */
 @Namespace("/radiotopic")
-@Result(name="success", location="/radiotopic/addday.jsp")
+@Results
+({
+	@Result(name="success", location="/radiotopic/addday.jsp"),
+	@Result(name="error", location="/radiotopic/error.jsp")
+})
 public class AddDayAction
 {
 	public int programid;
+	public int sortOrder;
 	public String date;
 	public String no;
 
 	public int newid;
+	public String message;
 
 	/**
 	 * 日追加ページ表示アクション。
@@ -29,18 +45,54 @@ public class AddDayAction
 	public String execute()
 		throws Exception
 	{
-		ServletContext context = ServletActionContext.getServletContext();
+		try
+		{
+			SortOrder sortOrder2 = SortOrder.values()[sortOrder];
 
-		DriverManager.registerDriver(new SQLServerDriver());
+			if (sortOrder2 == SortOrder.NumberByNumeric)
+			{
+				// 回の列を数字として扱う
 
-		Connection connection =
-			DriverManager.getConnection
-				(context.getInitParameter("RadioTopicSqlserverUrl"));
+				if (no == null || no.isEmpty())
+				{
+					// 回数が空欄
 
-		date = StringTool.parseDate(date);
+					message = "回数が空欄です";
 
-		newid = DayCollection.insertDay(connection, programid, date, no);
+					return "error";
+				}
+			}
 
-		return "success";
+			ServletContext context = ServletActionContext.getServletContext();
+			String sql = context.getInitParameter("RadioTopicSqlserverUrl");
+			if (sql != null)
+			{
+				// パラメータ指定あり
+
+				DriverManager.registerDriver(new SQLServerDriver());
+
+				Connection connection = DriverManager.getConnection(sql);
+
+				date = StringTool.parseDate(date);
+
+				newid = DayCollection.insertDay(connection, programid, date, no);
+
+				return "success";
+			}
+			else
+			{
+				// パラメータ指定なし
+
+				message = "コンテキストパラメータ「RadioTopicSqlserverUrl」が未定義です";
+
+				return "error";
+			}
+		}
+		catch (Exception exception)
+		{
+			message = exception.toString();
+
+			return "error";
+		}
 	}
 }

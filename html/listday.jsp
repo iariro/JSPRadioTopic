@@ -136,6 +136,7 @@
 			<s:form action="addday" theme="simple">
 				<input type="hidden" name="programid" value="<s:property value="programid" />">
 				<input type="hidden" name="programName" value="<s:property value="name" />">
+				<input type="hidden" name="sortOrder" value="<s:property value="sortOrder" />">
 				<input type="text" name="no">回
 				日付：<input type="text" name="date">
 				<s:submit value="日追加" />
