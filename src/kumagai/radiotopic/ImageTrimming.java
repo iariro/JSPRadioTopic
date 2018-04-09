@@ -267,7 +267,7 @@ public class ImageTrimming
 				outline.y1 += 44;
 				outline.y2 -= 75;
 			}
-			else if (width == 685)
+			else if (width == 683 || width == 685)
 			{
 				// bilibili
 

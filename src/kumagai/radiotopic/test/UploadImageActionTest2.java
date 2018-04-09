@@ -64,9 +64,13 @@ public class UploadImageActionTest2
 	}
 
 	// bilibili
-	public void testBilibili() throws IOException
+	public void testBilibili1() throws IOException
 	{
 		trimAndSave("himitsukichi103");
+	}
+	public void testBilibili2() throws IOException
+	{
+		trimAndSave("shitamuki11");
 	}
 
 	// YouTube
