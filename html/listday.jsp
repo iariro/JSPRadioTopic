@@ -11,7 +11,7 @@
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
 		<script src="jquery/jquery.tablesorter.min.js"></script>
 		<script>
-		$(function() { $('#sorter').tablesorter({sortInitialOrder:"desc",headers:{4:{sorter:false},5:{sorter:false},6:{sorter:false},7:{sorter:false}}}); });
+		$(function() { $('#sorter').tablesorter({sortInitialOrder:"desc",headers:{4:{sorter:false},5:{sorter:false},6:{sorter:false},8:{sorter:false}}}); });
 		</script>
 		<script type="text/javascript" src="listday.js"></script>
 		<link rel="stylesheet" type="text/css" href="jquery/style.css">
@@ -53,6 +53,18 @@
 				<s:submit value="画像一覧" />
 			</s:form>
 			</td>
+
+			<td>
+			<s:form action="addday" theme="simple">
+				<input type="hidden" name="programid" value="<s:property value="programid" />">
+				<input type="hidden" name="programName" value="<s:property value="name" />">
+				<input type="hidden" name="sortOrder" value="<s:property value="sortOrder" />">
+				<input type="text" name="no">回
+				日付：<input type="text" name="date">
+				<s:submit value="日追加" />
+			</s:form>
+			</td>
+
 			</tr></table>
 
 			<table>
@@ -77,6 +89,7 @@
 					<th>操作</th>
 					<th>操作</th>
 					<th>画像</th>
+					<th>更新日</th>
 					<th></th>
 				</tr>
 			</thead>
@@ -110,10 +123,12 @@
 						</s:form>
 					</td>
 					<td align="right"><s:property value="imagenum" /></td>
+					<td align="right"><s:property value="updatedate" /></td>
 				</s:if>
 				<s:else>
 					<td><div style="color:red;"><s:property value="date" /></div></td>
 					<td align="right"><div style="color:red;"><s:property value="no" /></div></td>
+					<td></td>
 					<td></td>
 					<td></td>
 					<td></td>
@@ -130,17 +145,6 @@
 			</s:iterator>
 			</tbody>
 			</table>
-
-			<br>
-
-			<s:form action="addday" theme="simple">
-				<input type="hidden" name="programid" value="<s:property value="programid" />">
-				<input type="hidden" name="programName" value="<s:property value="name" />">
-				<input type="hidden" name="sortOrder" value="<s:property value="sortOrder" />">
-				<input type="text" name="no">回
-				日付：<input type="text" name="date">
-				<s:submit value="日追加" />
-			</s:form>
 
 		</div>
 		</div>
