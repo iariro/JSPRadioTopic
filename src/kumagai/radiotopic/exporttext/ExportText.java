@@ -36,18 +36,31 @@ import kumagai.radiotopic.TopicCollection;
 public class ExportText
 {
 	/**
-	 * @param args [0]=出力ディレクトリパス [1]=-n/-dn/-d
+	 * @param args [0]=出力ディレクトリパス [1]=startYear [2]=-n/-dn/-d
 	 */
 	public static void main(String[] args)
 		throws SQLException, ParseException, IOException
 	{
+		if (args.length < 2)
+		{
+			return;
+		}
+
+		Integer startYear = null;
+		if (!args[1].equals("-"))
+		{
+			// 無効「-」ではない
+
+			startYear = Integer.valueOf(args[1]);
+		}
+
 		String argFlag = "-dn";
 
-		if (args.length == 2)
+		if (args.length == 3)
 		{
 			// オプションあり
 
-			argFlag = args[1];
+			argFlag = args[2];
 		}
 
 		DriverManager.registerDriver(new SQLServerDriver());
@@ -142,7 +155,7 @@ public class ExportText
 
 		connection.close();
 
-		outputIndexHtml(args[0], programCollection);
+		outputIndexHtml(args[0], programCollection, startYear);
 	}
 
 	/**
@@ -233,11 +246,11 @@ public class ExportText
 	 * @param programCollection 全番組情報
 	 */
 	static protected void outputIndexHtml(String outputPath,
-		ProgramCollection programCollection)
+		ProgramCollection programCollection, int startYear)
 		throws ParseException, IOException
 	{
 		ChronologyGraphData chronologyGraphData =
-			new ChronologyGraphData(programCollection, 900, 600);
+			new ChronologyGraphData(programCollection, 900, 600, startYear);
 
 		BufferedImage readImage = new ChronologyBitmap(chronologyGraphData);
 

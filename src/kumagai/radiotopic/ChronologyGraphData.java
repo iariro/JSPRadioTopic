@@ -1,8 +1,10 @@
 package kumagai.radiotopic;
 
-import java.text.*;
-import java.util.*;
-import ktool.datetime.*;
+import java.text.ParseException;
+import java.util.ArrayList;
+
+import ktool.datetime.DateTime;
+import ktool.datetime.TimeSpan;
 
 /**
  * 年表グラフデータ。
@@ -26,15 +28,27 @@ public class ChronologyGraphData
 	 * @param programCollection 番組情報コレクション
 	 * @param width 横幅
 	 * @param height 縦幅
+	 * @param startYear グラフ対象開始年
 	 */
 	public ChronologyGraphData
-		(ProgramCollection programCollection, int width, int height)
+		(ProgramCollection programCollection, int width, int height, Integer startYear)
 		throws ParseException
 	{
 		this.width = width;
 		this.height = height;
 
+		// 期間で絞込み
+		ProgramCollection programCollection2 = new ProgramCollection();
 		for (Program program : programCollection)
+		{
+			String [] ageField = program.age.split("-");
+			if (DateTime.parseDateString(ageField[0]).getYear() >= startYear)
+			{
+				programCollection2.add(program);
+			}
+		}
+
+		for (Program program : programCollection2)
 		{
 			DateTime start = null;
 			DateTime end = null;
@@ -76,11 +90,11 @@ public class ChronologyGraphData
 
 		dayRange = max.diff(min);
 		scaleX = (float)width / (float)dayRange.getDay();
-		scaleY = Math.floor((double)(height - headerHeight) / (double)programCollection.size());
+		scaleY = Math.floor((double)(height - headerHeight) / (double)programCollection2.size());
 
-		for (int i=0 ; i<programCollection.size() ; i++)
+		for (int i=0 ; i<programCollection2.size() ; i++)
 		{
-			Program program = programCollection.get(i);
+			Program program = programCollection2.get(i);
 
 			DateTime start = program.getStartDate();
 			DateTime end = program.getEndDate();

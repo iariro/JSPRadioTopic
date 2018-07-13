@@ -20,6 +20,7 @@
 			<table><tr>
 			<td>
 			<s:form action="chronologygraph" theme="simple">
+				<input type="hidden" name="startYear" value="2000">
 				<s:submit value="年表グラフ" />
 			</s:form>
 			</td>

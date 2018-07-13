@@ -1,13 +1,22 @@
 package kumagai.radiotopic;
 
-import java.awt.*;
-import java.awt.image.*;
-import java.io.*;
-import java.sql.*;
-import java.text.*;
-import javax.imageio.*;
-import com.microsoft.sqlserver.jdbc.*;
-import ktool.datetime.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.text.ParseException;
+
+import javax.imageio.ImageIO;
+
+import com.microsoft.sqlserver.jdbc.SQLServerDriver;
+
+import ktool.datetime.DateTime;
 
 /**
  * 年表グラフイメージ。
@@ -48,7 +57,7 @@ public class ChronologyBitmap
 
 		BufferedImage readImage =
 			new ChronologyBitmap(
-				new ChronologyGraphData(programCollection, 800, 600));
+				new ChronologyGraphData(programCollection, 800, 600, 2000));
 
 		ImageIO.write(readImage, "png", new File("../Chronology.png"));
 	}

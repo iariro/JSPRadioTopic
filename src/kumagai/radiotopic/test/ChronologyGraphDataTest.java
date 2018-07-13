@@ -1,8 +1,12 @@
 package kumagai.radiotopic.test;
 
-import java.text.*;
-import kumagai.radiotopic.*;
-import junit.framework.*;
+import java.text.ParseException;
+
+import junit.framework.TestCase;
+import kumagai.radiotopic.ChronologyGraphData;
+import kumagai.radiotopic.ChronologyGraphDataElement;
+import kumagai.radiotopic.Program;
+import kumagai.radiotopic.ProgramCollection;
 
 public class ChronologyGraphDataTest
 	extends TestCase
@@ -16,7 +20,7 @@ public class ChronologyGraphDataTest
 		programCollection.add(new Program(0, "aりえしょん", null, "2015/04/09-", 0, null, null, null));
 		programCollection.add(new Program(0, "ぼーけんの書", null, "2007/10/05-2007/12/28", 0, null, null, null));
 		ChronologyGraphData chronologyGraphData =
-			new ChronologyGraphData(programCollection, 800, 600);
+			new ChronologyGraphData(programCollection, 800, 600, 2000);
 		System.out.printf(
 			"min=%s max=%s dayRange=%s\n",
 			chronologyGraphData.min,

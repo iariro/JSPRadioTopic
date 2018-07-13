@@ -1,11 +1,20 @@
 package kumagai.radiotopic.struts2;
 
-import java.sql.*;
-import javax.servlet.*;
-import com.microsoft.sqlserver.jdbc.*;
-import org.apache.struts2.*;
-import org.apache.struts2.convention.annotation.*;
-import kumagai.radiotopic.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+import javax.servlet.ServletContext;
+
+import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.Namespace;
+import org.apache.struts2.convention.annotation.Result;
+import org.apache.struts2.convention.annotation.Results;
+
+import com.microsoft.sqlserver.jdbc.SQLServerDriver;
+
+import kumagai.radiotopic.ChronologyGraphData;
+import kumagai.radiotopic.ProgramCollection;
 
 /**
  * 年表表示アクション。
@@ -20,6 +29,7 @@ import kumagai.radiotopic.*;
 public class ChronologyGraphAction
 {
 	public ChronologyGraphData chronologyGraphData;
+	public int startYear;
 
 	/**
 	 * 年表表示アクション。
@@ -45,7 +55,7 @@ public class ChronologyGraphAction
 			connection.close();
 
 			chronologyGraphData =
-				new ChronologyGraphData(programCollection, 1200, 600);
+				new ChronologyGraphData(programCollection, 1200, 600, startYear);
 
 			return "success";
 		}

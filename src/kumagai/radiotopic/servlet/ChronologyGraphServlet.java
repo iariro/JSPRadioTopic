@@ -1,14 +1,23 @@
 package kumagai.radiotopic.servlet;
 
-import java.awt.*;
-import java.awt.image.*;
-import java.io.*;
-import java.sql.*;
-import javax.imageio.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
-import com.microsoft.sqlserver.jdbc.*;
-import kumagai.radiotopic.*;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+import javax.imageio.ImageIO;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.microsoft.sqlserver.jdbc.SQLServerDriver;
+
+import kumagai.radiotopic.ChronologyBitmap;
+import kumagai.radiotopic.ChronologyGraphData;
+import kumagai.radiotopic.ProgramCollection;
 
 /**
  * 年表画像出力サーブレット。
@@ -35,6 +44,7 @@ public class ChronologyGraphServlet
 			DriverManager.registerDriver(new SQLServerDriver());
 
 			String url = context.getInitParameter("RadioTopicSqlserverUrl");
+			String startYear = request.getParameter("startYear");
 
 			if (url != null)
 			{
@@ -47,7 +57,7 @@ public class ChronologyGraphServlet
 
 				readImage =
 					new ChronologyBitmap(
-						new ChronologyGraphData(programCollection, 1200, 600));
+						new ChronologyGraphData(programCollection, 1200, 600, startYear != null ? Integer.valueOf(startYear) : null));
 			}
 			else
 			{
