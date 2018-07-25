@@ -42,7 +42,8 @@ public class ChronologyGraphData
 		for (Program program : programCollection)
 		{
 			String [] ageField = program.age.split("-");
-			if (DateTime.parseDateString(ageField[0]).getYear() >= startYear)
+			if (startYear == null ||
+				DateTime.parseDateString(ageField[0]).getYear() >= startYear)
 			{
 				programCollection2.add(program);
 			}

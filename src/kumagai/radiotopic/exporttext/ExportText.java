@@ -246,7 +246,7 @@ public class ExportText
 	 * @param programCollection 全番組情報
 	 */
 	static protected void outputIndexHtml(String outputPath,
-		ProgramCollection programCollection, int startYear)
+		ProgramCollection programCollection, Integer startYear)
 		throws ParseException, IOException
 	{
 		ChronologyGraphData chronologyGraphData =
