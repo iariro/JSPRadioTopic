@@ -12,6 +12,37 @@ import javax.imageio.ImageIO;
 public class ImageTrimming
 {
 	/**
+	 * 画像の動画部分の切り出し処理
+	 * @param args [0]=inputfile [1]=outputfile
+	 */
+	static public void main(String [] args)
+		throws IOException
+	{
+		if (args.length < 2)
+		{
+			System.out.println("Usage : [0]=inputfile [1]=outputfile");
+			return;
+		}
+
+		File file = new File(args[0]);
+		File destFile = new File(args[1]);
+		BufferedImage sourceImage = ImageIO.read(file);
+		MovieRectangle outline = ImageTrimming.findMovieOutline(sourceImage);
+		if (!outline.isAnyNull())
+		{
+			// 境界検出成功
+
+			ImageTrimming.cutImage(sourceImage, outline, destFile, "png");
+		}
+		else
+		{
+			// 境界検出失敗
+
+			System.out.printf("境界検出失敗 %s\n", outline.toString());
+		}
+	}
+
+	/**
 	 * 画像の一部を別ファイル化
 	 * @param sourceImage 対象イメージ
 	 * @param outline 切り出し座標
