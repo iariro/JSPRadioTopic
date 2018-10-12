@@ -19,6 +19,12 @@
 
 			dayid＝<s:property value="dayid" /><br>
 			番組名＝<s:property value="name" /><br>
+			<s:form action="editdayprogram" theme="simple">
+				<input type="hidden" name="dayid" value="<s:property value="dayid" />">
+				<s:select name="programid" list="programCollection" listKey="id" listValue="name" value="%{dayid}" />
+				<s:submit value="番組変更" />
+			</s:form>
+
 			<s:form action="editday2" theme="simple">
 				<input type="hidden" name="dayid" value="<s:property value="dayid" />">
 				回＝<input type="text" name="no" value="<s:property value="no" />">

@@ -123,6 +123,28 @@ public class DayCollection
 	}
 
 	/**
+	 * 日の番組ID更新
+	 * @param connection DB接続オブジェクト
+	 * @param dayId 日ID
+	 * @param programId 番組ID
+	 */
+	static public void updateDayProgram
+		(Connection connection, int dayId, int programId)
+		throws SQLException
+	{
+		String sql = "update day set programid=? where id=?";
+
+		PreparedStatement statement = connection.prepareStatement(sql);
+
+		statement.setInt(1, programId);
+		statement.setInt(2, dayId);
+
+		statement.executeUpdate();
+
+		statement.close();
+	}
+
+	/**
 	 * 日情報更新
 	 * @param connection DB接続オブジェクト
 	 * @param dayid 日ID

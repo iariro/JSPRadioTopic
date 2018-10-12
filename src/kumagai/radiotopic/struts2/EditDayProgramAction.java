@@ -2,6 +2,7 @@ package kumagai.radiotopic.struts2;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 
 import javax.servlet.ServletContext;
 
@@ -13,64 +14,57 @@ import org.apache.struts2.convention.annotation.Results;
 
 import com.microsoft.sqlserver.jdbc.SQLServerDriver;
 
-import kumagai.radiotopic.ProgramCollection;
-import kumagai.radiotopic.TopicCollection;
+import kumagai.radiotopic.DayCollection;
 
 /**
- * 日情報編集ページ表示アクション。
+ * 日の番組変更アクション。
  * @author kumagai
  */
 @Namespace("/radiotopic")
 @Results
 ({
-	@Result(name="success", location="/radiotopic/editday.jsp"),
+	@Result(name="success", location="/radiotopic/editdayprogram.jsp"),
 	@Result(name="error", location="/radiotopic/error.jsp")
 })
-public class EditDayAction
+public class EditDayProgramAction
 {
-	public int dayid;
-	public String name;
-	public String date;
-	public String no;
-	public ProgramCollection programCollection;
-
-	public TopicCollection topicCollection;
 	public String message;
+	public int dayid;
+	public int programid;
 
 	/**
-	 * 日情報編集ページ表示アクション。
+	 * 日の番組変更アクション。
 	 * @return 処理結果
 	 */
-	@Action("editday")
+	@Action("editdayprogram")
 	public String execute()
 		throws Exception
 	{
 		ServletContext context = ServletActionContext.getServletContext();
 
-		String sqlserverUrl =
-			context.getInitParameter("RadioTopicSqlserverUrl");
+		String url = context.getInitParameter("RadioTopicSqlserverUrl");
 
-		if (sqlserverUrl != null)
+		if (url != null)
 		{
+			DriverManager.registerDriver(new SQLServerDriver());
+
+			Connection connection = null;
 			try
 			{
-				DriverManager.registerDriver(new SQLServerDriver());
-
-				Connection connection =
-					DriverManager.getConnection(sqlserverUrl);
-
-				topicCollection = new TopicCollection(connection, dayid);
-				programCollection = new ProgramCollection(connection);
-
-				connection.close();
+				connection = DriverManager.getConnection(url);
+				DayCollection.updateDayProgram(connection, dayid, programid);
 
 				return "success";
 			}
-			catch (Exception exception)
+			catch (SQLException exception)
 			{
 				message = exception.getMessage();
 
 				return "error";
+			}
+			finally
+			{
+				connection.close();
 			}
 		}
 		else
