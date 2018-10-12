@@ -21,7 +21,7 @@
 			番組名＝<s:property value="name" /><br>
 			<s:form action="editdayprogram" theme="simple">
 				<input type="hidden" name="dayid" value="<s:property value="dayid" />">
-				<s:select name="programid" list="programCollection" listKey="id" listValue="name" value="%{dayid}" />
+				<s:select name="programid" list="programCollection" listKey="id" listValue="name" value="%{programid}" />
 				<s:submit value="番組変更" />
 			</s:form>
 

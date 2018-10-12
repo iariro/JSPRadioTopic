@@ -29,6 +29,7 @@ import kumagai.radiotopic.TopicCollection;
 public class EditDayAction
 {
 	public int dayid;
+	public int programid;
 	public String name;
 	public String date;
 	public String no;

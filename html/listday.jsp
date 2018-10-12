@@ -108,6 +108,7 @@
 					<td>
 						<s:form action="editday" theme="simple">
 							<input type="hidden" name="dayid" value="<s:property value="id" />">
+							<input type="hidden" name="programid" value="<s:property value="programid" />">
 							<input type="hidden" name="name" value="<s:property value="programName" />">
 							<input type="hidden" name="date" value="<s:property value="date" />">
 							<input type="hidden" name="no" value="<s:property value="no" />">
