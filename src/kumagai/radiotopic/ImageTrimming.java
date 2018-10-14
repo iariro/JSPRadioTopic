@@ -18,14 +18,27 @@ public class ImageTrimming
 	static public void main(String [] args)
 		throws IOException
 	{
-		if (args.length < 2)
+		String infile;
+		String outfile;
+
+		if (args.length < 1)
 		{
-			System.out.println("Usage : [0]=inputfile [1]=outputfile");
+			System.out.println("Usage : inputfile [outputfile]");
 			return;
 		}
+		infile = args[0];
+		if (args.length < 2)
+		{
+			int dotPosition = infile.lastIndexOf(".");
+			outfile = String.format("%s_%s", infile.substring(0, dotPosition), infile.substring(dotPosition));
+		}
+		else
+		{
+			outfile = args[1];
+		}
 
-		File file = new File(args[0]);
-		File destFile = new File(args[1]);
+		File file = new File(infile);
+		File destFile = new File(outfile);
 		BufferedImage sourceImage = ImageIO.read(file);
 		MovieRectangle outline = ImageTrimming.findMovieOutline(sourceImage);
 		if (!outline.isAnyNull())
