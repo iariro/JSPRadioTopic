@@ -10,7 +10,7 @@ import junit.framework.TestCase;
 import kumagai.radiotopic.ImageTrimming;
 import kumagai.radiotopic.MovieRectangle;
 
-public class UploadImageActionTest2
+public class ImageTrimmingTest
 	extends TestCase
 {
 	// bilibili
