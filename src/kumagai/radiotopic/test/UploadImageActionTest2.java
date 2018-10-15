@@ -48,6 +48,7 @@ public class UploadImageActionTest2
 	{
 		trimAndSave("adlib124");
 	}
+
 	public void testNiconicoOld2() throws IOException
 	{
 		trimAndSave("toshitai072-1");
