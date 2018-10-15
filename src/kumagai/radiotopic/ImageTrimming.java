@@ -232,38 +232,57 @@ public class ImageTrimming
 		int centerY = image.getHeight() / 2;
 		for (int y=centerY ; y<image.getHeight() ; y++)
 		{
-			int count = 0;
-			int eqCount = 0;
+			int xCount = 0;
+			int yCount = 0;
+			int xEqCount = 0;
+			int yEqCount = 0;
 			for (int x=1 ; x<image.getWidth()/3 ; x++)
 			{
-				int rgb1 = image.getRGB(centerX, y) & 0xf0f0f0;
-				int rgb2 = image.getRGB(centerX + x, y) & 0xf0f0f0;
-				int rgb3 = image.getRGB(centerX - x, y) & 0xf0f0f0;
+				int rgb11 = image.getRGB(centerX, y) & 0xf0f0f0;
+				int rgb12 = image.getRGB(centerX + x, y) & 0xf0f0f0;
+				int rgb13 = image.getRGB(centerX - x, y) & 0xf0f0f0;
+				int rgb21 = image.getRGB(centerX, y-1) & 0xf0f0f0;
+				int rgb22 = image.getRGB(centerX + x, y-1) & 0xf0f0f0;
+				int rgb23 = image.getRGB(centerX - x, y-1) & 0xf0f0f0;
 
-				if (rgb1 == rgb2)
+				if (rgb11 == rgb21)
 				{
-					eqCount++;
+					yEqCount++;
 				}
-				count++;
-				if (rgb1 == rgb3)
+				yCount++;
+				if (rgb12 == rgb22)
 				{
-					eqCount++;
+					yEqCount++;
 				}
-				count++;
+				yCount++;
+				if (rgb13 == rgb23)
+				{
+					yEqCount++;
+				}
+				yCount++;
 
-				if (eqCount <= 2 && count >= 20)
+				if (rgb11 == rgb12)
 				{
-					// 背景色の可能性はない
-
-					break;
+					xEqCount++;
 				}
+				xCount++;
+				if (rgb12 == rgb13)
+				{
+					xEqCount++;
+				}
+				xCount++;
 			}
 
-			if ((eqCount * 100 / count) > 95)
+			if ((yEqCount * 100 / yCount) < 20)
 			{
-				// 背景色と思われる
+				// １ドット上の行とほとんど色が一致しない
 
-				return y;
+				if ((xEqCount * 100 / xCount) > 60)
+				{
+					// 横一列の色が一致する
+
+					return y;
+				}
 			}
 		}
 		return null;

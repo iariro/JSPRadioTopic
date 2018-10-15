@@ -44,11 +44,11 @@ public class UploadImageActionTest2
 	}
 
 	// niconico old
-	public void testNiconicoold1() throws IOException
+	public void testNiconicoOld1() throws IOException
 	{
 		trimAndSave("adlib124");
 	}
-	public void testNiconicoOld1() throws IOException
+	public void testNiconicoOld2() throws IOException
 	{
 		trimAndSave("toshitai072-1");
 	}
@@ -89,6 +89,10 @@ public class UploadImageActionTest2
 	public void testYoutube4() throws IOException
 	{
 		trimAndSave("nolsol237");
+	}
+	public void testYoutube5() throws IOException
+	{
+		trimAndSave("gamemarket");
 	}
 
 	void trimAndSave(String file)
