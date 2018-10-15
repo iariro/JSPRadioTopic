@@ -230,43 +230,39 @@ public class ImageTrimming
 	{
 		int centerX = image.getWidth() / 3 + 3;
 		int centerY = image.getHeight() / 2;
+		int maxmaxYDiffCount = 0;
+		Integer maxmaxYDiffY = null;
 		for (int y=centerY ; y<image.getHeight() ; y++)
 		{
-			int count = 0;
-			int eqCount = 0;
-			for (int x=1 ; x<image.getWidth()/3 ; x++)
+			int yDiffCount = 0;
+			int maxYDiffCount = 0;
+			for (int x=1 ; x<image.getWidth()/2 ; x++)
 			{
-				int rgb1 = image.getRGB(centerX, y) & 0xf0f0f0;
-				int rgb2 = image.getRGB(centerX + x, y) & 0xf0f0f0;
-				int rgb3 = image.getRGB(centerX - x, y) & 0xf0f0f0;
+				int rgb1 = image.getRGB(centerX + x, y) & 0xf0f0f0;
+				int rgb2 = image.getRGB(centerX + x, y-1) & 0xf0f0f0;
 
 				if (rgb1 == rgb2)
 				{
-					eqCount++;
+					yDiffCount = 0;
 				}
-				count++;
-				if (rgb1 == rgb3)
+				else
 				{
-					eqCount++;
-				}
-				count++;
-
-				if (eqCount <= 2 && count >= 20)
-				{
-					// 背景色の可能性はない
-
-					break;
+					yDiffCount++;
+					if (maxYDiffCount < yDiffCount)
+					{
+						maxYDiffCount = yDiffCount;
+					}
 				}
 			}
 
-			if ((eqCount * 100 / count) > 95)
+			if (maxmaxYDiffCount <= maxYDiffCount)
 			{
-				// 背景色と思われる
-
-				return y;
+				maxmaxYDiffCount = maxYDiffCount;
+				maxmaxYDiffY = y;
 			}
 		}
-		return null;
+
+		return maxmaxYDiffY;
 	}
 
 	/**
@@ -279,6 +275,7 @@ public class ImageTrimming
 	{
 		Integer rightX = findLeftBorderline(image, 256, 0);
 		Integer topY = findTopBorderline(image);
+		//Integer bottomY = findBottomBorderline(image);
 		Integer bottomY = findBottomBorderline(image);
 
 		if (rightX != null && topY != null && bottomY != null)
@@ -295,6 +292,7 @@ public class ImageTrimming
 			//System.out.printf("\t%d,%d-%d,%d\n", outline.x1, outline.y1, outline.x2, outline.y2);
 			int width = outline.getWidth();
 			int height = outline.getHeight();
+			System.out.printf("%d,%d\n", width, height);
 			if (width == 636 || width == 640)
 			{
 				// ニコニコ旧形式
@@ -304,36 +302,67 @@ public class ImageTrimming
 				outline.y1 += 44;
 				outline.y2 -= 77;
 			}
-			else if (width == 672 && height == 503)
+			else if (width == 672)
 			{
 				// ニコニコ新形式
 
 				outline.y1 += 44;
-				outline.y2 -= 75;
+				outline.y2 -= (747 - 661);
 			}
 			else if (width == 683 || width == 685)
 			{
 				// bilibili
 
 				outline.x1 += 3;
-				outline.y1 += 51;
+				if (height == 581)
+				{
+					outline.y2 -= (726 - 604);
+				}
+				else
+				{
+					outline.y1 += (197 - 145);
+					outline.y2 -= (745 - 553);
+				}
 			}
-			else if (width == 854)
+			else if (width == 854 || width == 856)
 			{
 				// Youtube
 
+				if (height == 674)
+				{
+					outline.y2 -= (732 - 540);
+				}
+				else if (height == 574)
+				{
+					outline.y2 -= (653 - 560);
+				}
 				outline.x1 -= 1;
 				outline.x2 += 1;
 				outline.y1 += 1;
 				outline.y2 += 1;
 			}
+			else if (width == 893)
+			{
+				// Youtube
+
+				outline.y2 -= (699 - 582);
+			}
 			else if (width == 899)
 			{
 				// ニコニコ新形式
 
-				outline.x2 += 1;
-				outline.y1 += outline.getHeight() - (599 - 40);
-				outline.y2 -= 75;
+				if (height == 643)
+				{
+					outline.x2 += 1;
+					outline.y1 += outline.getHeight() - (599);
+					outline.y2 -= (767 - 636);
+				}
+				else
+				{
+					outline.x2 += 1;
+					outline.y1 += outline.getHeight() - (599 - 40);
+					outline.y2 -= 75;
+				}
 			}
 			else if (width == 960)
 			{
@@ -349,6 +378,7 @@ public class ImageTrimming
 				// Youtube - シリーズ
 
 				outline.x2 -= (1280 - 852);
+				outline.y2 -= (653 - 560);
 			}
 
 			return outline;
