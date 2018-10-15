@@ -266,7 +266,7 @@ public class ImageTrimming
 					xEqCount++;
 				}
 				xCount++;
-				if (rgb12 == rgb13)
+				if (rgb11 == rgb13)
 				{
 					xEqCount++;
 				}
@@ -277,7 +277,7 @@ public class ImageTrimming
 			{
 				// １ドット上の行とほとんど色が一致しない
 
-				if ((xEqCount * 100 / xCount) > 60)
+				if ((xEqCount * 100 / xCount) > 70)
 				{
 					// 横一列の色が一致する
 
@@ -313,7 +313,7 @@ public class ImageTrimming
 
 			//System.out.printf("\t%d,%d-%d,%d\n", outline.x1, outline.y1, outline.x2, outline.y2);
 			int width = outline.getWidth();
-			int height = outline.getHeight();
+			//int height = outline.getHeight();
 			if (width == 636 || width == 640)
 			{
 				// ニコニコ旧形式
@@ -323,12 +323,12 @@ public class ImageTrimming
 				outline.y1 += 44;
 				outline.y2 -= 77;
 			}
-			else if (width == 672 && height == 503)
+			else if (width == 672)
 			{
 				// ニコニコ新形式
 
 				outline.y1 += 44;
-				outline.y2 -= 75;
+				outline.y2 += 10;
 			}
 			else if (width == 683 || width == 685)
 			{
