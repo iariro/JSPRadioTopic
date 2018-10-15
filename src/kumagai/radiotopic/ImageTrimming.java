@@ -255,11 +255,12 @@ public class ImageTrimming
 				}
 			}
 
-			if (maxmaxYDiffCount <= maxYDiffCount)
+			if (maxmaxYDiffCount < maxYDiffCount)
 			{
 				maxmaxYDiffCount = maxYDiffCount;
 				maxmaxYDiffY = y;
 			}
+			//System.out.printf("%d : %d\n", y, maxmaxYDiffCount);
 		}
 
 		return maxmaxYDiffY;
@@ -292,15 +293,25 @@ public class ImageTrimming
 			//System.out.printf("\t%d,%d-%d,%d\n", outline.x1, outline.y1, outline.x2, outline.y2);
 			int width = outline.getWidth();
 			int height = outline.getHeight();
-			System.out.printf("%d,%d\n", width, height);
+			//System.out.printf("%d,%d\n", width, height);
 			if (width == 636 || width == 640)
 			{
 				// ニコニコ旧形式
 
-				outline.x1 -= 1;
-				outline.x2 += 1;
-				outline.y1 += 44;
-				outline.y2 -= 77;
+				if (height == 405)
+				{
+					outline.x1 -= 1;
+					outline.x2 += 1;
+					outline.y1 += 44;
+					outline.y2 -= 0;
+				}
+				else
+				{
+					outline.x1 -= 1;
+					outline.x2 += 1;
+					outline.y1 += 44;
+					outline.y2 -= 77;
+				}
 			}
 			else if (width == 672)
 			{
@@ -317,6 +328,17 @@ public class ImageTrimming
 				if (height == 581)
 				{
 					outline.y2 -= (726 - 604);
+				}
+				else if (height == 560)
+				{
+					outline.x1 -= 2;
+					outline.y1 += (197 - 147);
+					outline.y2 -= (707 - 639);
+				}
+				else if (height == 562)
+				{
+					outline.y1 += (197 - 147);
+					outline.y2 -= (707 - 638);
 				}
 				else
 				{
@@ -344,34 +366,43 @@ public class ImageTrimming
 			else if (width == 893)
 			{
 				// Youtube
-
-				outline.y2 -= (699 - 582);
 			}
 			else if (width == 899)
 			{
 				// ニコニコ新形式
 
-				if (height == 643)
+				if (height == 568)
 				{
 					outline.x2 += 1;
-					outline.y1 += outline.getHeight() - (599);
+					outline.y1 += 40;
+					outline.y2 -= (746 - 701) - 2;
+				}
+				else if (height == 608)
+				{
+					outline.x2 += 1;
+					outline.y1 += 40;
+					outline.y2 -= (732 - 635);
+				}
+				else if (height == 643)
+				{
+					outline.x2 += 1;
+					outline.y1 += 40;
 					outline.y2 -= (767 - 636);
 				}
 				else
 				{
 					outline.x2 += 1;
-					outline.y1 += outline.getHeight() - (599 - 40);
-					outline.y2 -= 75;
+					outline.y2 -= (610 - 525);
 				}
 			}
 			else if (width == 960)
 			{
 				// ニコ生
 
-				outline.x1 += 56;
-				outline.x2 -= 56;
-				outline.y1 += 58;
-				outline.y2 -= 37;
+				outline.x1 += 55;
+				outline.x2 -= 55;
+				outline.y1 += 61;
+				outline.y2 += 1;
 			}
 			else if (width == 1280)
 			{

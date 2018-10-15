@@ -13,87 +13,91 @@ import kumagai.radiotopic.MovieRectangle;
 public class UploadImageActionTest2
 	extends TestCase
 {
-	// niconico new
-	public void testNiconico1() throws IOException
+	// bilibili
+	public void testBilibili1() throws IOException
 	{
-		trimAndSave("futapathy11-2");
+		trimAndSave("bilibili_himitsukichi103");
 	}
-	public void testNiconico2() throws IOException
+	public void testBilibili2() throws IOException
 	{
-		trimAndSave("futapathy17-1");
-	}
-	public void testNiconico3() throws IOException
-	{
-		trimAndSave("nolsol22");
-	}
-	public void testNiconico4() throws IOException
-	{
-		trimAndSave("nolsol30");
-	}
-	public void testNiconico5() throws IOException
-	{
-		trimAndSave("nolsol34");
-	}
-	public void testNiconico6() throws IOException
-	{
-		trimAndSave("nolsol83");
-	}
-	public void testNiconico7() throws IOException
-	{
-		trimAndSave("delicate123");
-	}
-
-	// niconico old
-	public void testNiconicoOld1() throws IOException
-	{
-		trimAndSave("adlib124");
-	}
-
-	public void testNiconicoOld2() throws IOException
-	{
-		trimAndSave("toshitai072-1");
+		trimAndSave("bilibili_shitamuki11");
 	}
 
 	// nico生
 	public void testNiconama1() throws IOException
 	{
-		trimAndSave("shitamuki27-1");
+		trimAndSave("niconama_shitamuki27-1");
 	}
 	public void testNiconama2() throws IOException
 	{
-		trimAndSave("shitamuki40");
+		trimAndSave("niconama_shitamuki40");
 	}
 
-	// bilibili
-	public void testBilibili1() throws IOException
+	// niconico new
+	public void testNiconico1() throws IOException
 	{
-		trimAndSave("himitsukichi103");
+		trimAndSave("niconico_new_futapathy11-2");
 	}
-	public void testBilibili2() throws IOException
+	public void testNiconico2() throws IOException
 	{
-		trimAndSave("shitamuki11");
+		trimAndSave("niconico_new_futapathy17-1");
+	}
+	public void testNiconico3() throws IOException
+	{
+		trimAndSave("niconico_new_nolsol22");
+	}
+	public void testNiconico4() throws IOException
+	{
+		trimAndSave("niconico_new_nolsol30");
+	}
+	public void testNiconico5() throws IOException
+	{
+		trimAndSave("niconico_new_nolsol34");
+	}
+	public void testNiconico6() throws IOException
+	{
+		trimAndSave("niconico_new_nolsol83");
+	}
+	public void testNiconico7() throws IOException
+	{
+		trimAndSave("niconico_new_delicate123");
+	}
+	public void testNiconico8() throws IOException
+	{
+		trimAndSave("niconico_new_tesapuru");
+	}
+
+	// niconico old
+	public void testNiconicoOld1() throws IOException
+	{
+		trimAndSave("niconico_old_adlib124");
+	}
+
+	public void testNiconicoOld2() throws IOException
+	{
+		trimAndSave("niconico_old_toshitai072-1");
 	}
 
 	// YouTube
 	public void testYoutube1() throws IOException
 	{
-		trimAndSave("shitamuki27-3");
+		trimAndSave("youtube_shitamuki27-3");
 	}
 	public void testYoutube2() throws IOException
 	{
-		trimAndSave("shitamuki27-5");
+		trimAndSave("youtube_shitamuki27-5");
 	}
 	public void testYoutube3() throws IOException
 	{
-		trimAndSave("nolsol102");
+		trimAndSave("youtube_nolsol102");
 	}
 	public void testYoutube4() throws IOException
 	{
-		trimAndSave("nolsol237");
+		trimAndSave("youtube_nolsol237");
 	}
 	public void testYoutube5() throws IOException
 	{
-		trimAndSave("gamemarket");
+		trimAndSave("youtube_gamemarket");
 	}
 
 	void trimAndSave(String file)
