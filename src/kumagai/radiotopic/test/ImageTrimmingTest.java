@@ -16,91 +16,95 @@ public class ImageTrimmingTest
 	// bilibili
 	public void testBilibili1() throws IOException
 	{
-		trimAndSave("bilibili_himitsukichi103");
+		trimAndSave("bilibili_himitsukichi103", 684, 442);
 	}
 	public void testBilibili2() throws IOException
 	{
-		trimAndSave("bilibili_shitamuki11");
+		trimAndSave("bilibili_himitsukichi155", 822, 463);
+	}
+	public void testBilibili3() throws IOException
+	{
+		trimAndSave("bilibili_shitamuki11", 682, 441);
 	}
 
 	// nico生
 	public void testNiconama1() throws IOException
 	{
-		trimAndSave("niconama_shitamuki27-1");
+		trimAndSave("niconama_shitamuki27-1", 850, 489);
 	}
 	public void testNiconama2() throws IOException
 	{
-		trimAndSave("niconama_shitamuki40");
+		trimAndSave("niconama_shitamuki40", 850, 489);
 	}
 
 	// niconico new
 	public void testNiconico1() throws IOException
 	{
-		trimAndSave("niconico_new_futapathy11-2");
+		trimAndSave("niconico_new_futapathy11-2", 900, 481);
 	}
 	public void testNiconico2() throws IOException
 	{
-		trimAndSave("niconico_new_futapathy17-1");
+		trimAndSave("niconico_new_futapathy17-1", 900, 482);
 	}
 	public void testNiconico3() throws IOException
 	{
-		trimAndSave("niconico_new_nolsol22");
+		trimAndSave("niconico_new_nolsol22", 900, 482);
 	}
 	public void testNiconico4() throws IOException
 	{
-		trimAndSave("niconico_new_nolsol30");
+		trimAndSave("niconico_new_nolsol30", 900, 482);
 	}
 	public void testNiconico5() throws IOException
 	{
-		trimAndSave("niconico_new_nolsol34");
+		trimAndSave("niconico_new_nolsol34", 900, 482);
 	}
 	public void testNiconico6() throws IOException
 	{
-		trimAndSave("niconico_new_nolsol83");
+		trimAndSave("niconico_new_nolsol83", 900, 482);
 	}
 	public void testNiconico7() throws IOException
 	{
-		trimAndSave("niconico_new_delicate123");
+		trimAndSave("niconico_new_delicate123", 672, 383);
 	}
 	public void testNiconico8() throws IOException
 	{
-		trimAndSave("niconico_new_tesapuru");
+		trimAndSave("niconico_new_tesapuru", 900, 483);
 	}
 
 	// niconico old
 	public void testNiconicoOld1() throws IOException
 	{
-		trimAndSave("niconico_old_adlib124");
+		trimAndSave("niconico_old_adlib124", 642, 364);
 	}
 
 	public void testNiconicoOld2() throws IOException
 	{
-		trimAndSave("niconico_old_toshitai072-1");
+		trimAndSave("niconico_old_toshitai072-1", 642, 364);
 	}
 
 	// YouTube
 	public void testYoutube1() throws IOException
 	{
-		trimAndSave("youtube_shitamuki27-3");
+		trimAndSave("youtube_shitamuki27-3", 856, 492);
 	}
 	public void testYoutube2() throws IOException
 	{
-		trimAndSave("youtube_shitamuki27-5");
+		trimAndSave("youtube_shitamuki27-5", 856, 492);
 	}
 	public void testYoutube3() throws IOException
 	{
-		trimAndSave("youtube_nolsol102");
+		trimAndSave("youtube_nolsol102", 852, 481);
 	}
 	public void testYoutube4() throws IOException
 	{
-		trimAndSave("youtube_nolsol237");
+		trimAndSave("youtube_nolsol237", 856, 481);
 	}
 	public void testYoutube5() throws IOException
 	{
-		trimAndSave("youtube_gamemarket");
+		trimAndSave("youtube_gamemarket", 893, 503);
 	}
 
-	void trimAndSave(String file)
+	void trimAndSave(String file, int width, int height)
 		throws IOException
 	{
 		File sourceFile = new File(String.format("testdata/%s.png", file));
@@ -120,5 +124,7 @@ public class ImageTrimmingTest
 		assertNotNull(outline.y1);
 		assertNotNull(outline.x2);
 		assertNotNull(outline.y2);
+		assertEquals(width, outline.getWidth().intValue());
+		assertEquals(height, outline.getHeight().intValue());
 	}
 }

@@ -238,8 +238,8 @@ public class ImageTrimming
 			int maxYDiffCount = 0;
 			for (int x=1 ; x<image.getWidth()/2 ; x++)
 			{
-				int rgb1 = image.getRGB(centerX + x, y) & 0xf0f0f0;
-				int rgb2 = image.getRGB(centerX + x, y-1) & 0xf0f0f0;
+				int rgb1 = image.getRGB(centerX + x, y) & 0xf8f8f8;
+				int rgb2 = image.getRGB(centerX + x, y-1) & 0xf8f8f8;
 
 				if (rgb1 == rgb2)
 				{
@@ -276,7 +276,6 @@ public class ImageTrimming
 	{
 		Integer rightX = findLeftBorderline(image, 256, 0);
 		Integer topY = findTopBorderline(image);
-		//Integer bottomY = findBottomBorderline(image);
 		Integer bottomY = findBottomBorderline(image);
 
 		if (rightX != null && topY != null && bottomY != null)
@@ -329,7 +328,7 @@ public class ImageTrimming
 				{
 					outline.y2 -= (726 - 604);
 				}
-				else if (height == 560)
+				else if (height == 559 || height == 560)
 				{
 					outline.x1 -= 2;
 					outline.y1 += (197 - 147);
@@ -371,11 +370,22 @@ public class ImageTrimming
 			{
 				// ニコニコ新形式
 
-				if (height == 568)
+				if (height == 523)
+				{
+					outline.x2 += 1;
+					outline.y1 += 40;
+				}
+				else if (height == 568)
 				{
 					outline.x2 += 1;
 					outline.y1 += 40;
 					outline.y2 -= (746 - 701) - 2;
+				}
+				else if (height == 599)
+				{
+					outline.x2 += 1;
+					outline.y1 += 40;
+					outline.y2 -= 77;
 				}
 				else if (height == 608)
 				{
@@ -409,7 +419,13 @@ public class ImageTrimming
 				// Youtube - シリーズ
 
 				outline.x2 -= (1280 - 852);
-				outline.y2 -= (653 - 560);
+				if (height == 481)
+				{
+				}
+				else
+				{
+					outline.y2 -= (653 - 560);
+				}
 			}
 
 			return outline;
