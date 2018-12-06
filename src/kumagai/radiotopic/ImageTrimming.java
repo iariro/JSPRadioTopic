@@ -405,14 +405,24 @@ public class ImageTrimming
 					outline.y2 -= (610 - 525);
 				}
 			}
-			else if (width == 960)
+			else if (width == 960 || width == 1239)
 			{
 				// ニコ生
 
-				outline.x1 += 55;
-				outline.x2 -= 55;
-				outline.y1 += 61;
-				outline.y2 += 1;
+				if (width == 960)
+				{
+					outline.x1 += 55;
+					outline.x2 -= 55;
+					outline.y1 += 61;
+					outline.y2 += 1;
+				}
+				else if (width == 1239)
+				{
+					//outline.x1 -= 5;
+					outline.x2 -= 384;
+					outline.y1 += 92;
+					outline.y2 -= 79;
+				}
 			}
 			else if (width == 1280)
 			{

@@ -104,7 +104,7 @@
 
 	<target name="compile">
 		<javac srcdir="src" destdir="bin" classpath="../KTool/bin:../lib/junit.jar" includeantruntime="false">
-			<include name="src/kumagai/radiotopic/test/UploadImageActionTest.java" />
+			<include name="src/kumagai/radiotopic/test/ImageTrimmingTest.java" />
 		</javac>
 	</target>
 
@@ -114,7 +114,7 @@
 			<formatter type="plain" usefile="no" />
 
 			<batchtest todir=".">
-				<fileset dir="bin" includes="kumagai/radiotopic/test/UploadImageActionTest2.class" />
+				<fileset dir="bin" includes="kumagai/radiotopic/test/ImageTrimmingTest.class" />
 			</batchtest>
 		</junit>
 	</target>
