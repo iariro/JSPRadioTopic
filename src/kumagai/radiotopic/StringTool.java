@@ -12,7 +12,7 @@ import ktool.datetime.DateTime;
 public class StringTool
 {
 	static private final Pattern dateSlash2 =
-		Pattern.compile("[\\(（]*([0-9]{2})/([0-9]*)/([0-9]*)[\\)）]*");
+		Pattern.compile("[\\(（]*([0-9]{1,2})/([0-9]*)/([0-9]*)[\\)）]*");
 	static private final Pattern dateSlash4 =
 			Pattern.compile("[\\(（]*([0-9]{4})/([0-9]*)/([0-9]*)[\\)）]*");
 	static private final Pattern dateDot0 =
