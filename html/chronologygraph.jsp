@@ -17,7 +17,8 @@
 		<div class=main>
 		<div class=day>
 
-		<img src="/kumagai/RadioTopicChronologyGraph?startYear=2000" usemap="#menu">
+		<!-- <img src="/kumagai/RadioTopicChronologyGraph?startYear=2000" usemap="#menu"> -->
+		<img src="data:image/png;base64,<s:property value='graphBase64' />" usemap="#menu"/>
 
 		<map name="menu">
 			<s:iterator value="chronologyGraphData">
