@@ -1,8 +1,12 @@
 package kumagai.radiotopic.struts2;
 
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.util.Base64;
 
+import javax.imageio.ImageIO;
 import javax.servlet.ServletContext;
 
 import org.apache.struts2.ServletActionContext;
@@ -13,6 +17,7 @@ import org.apache.struts2.convention.annotation.Results;
 
 import com.microsoft.sqlserver.jdbc.SQLServerDriver;
 
+import kumagai.radiotopic.ChronologyBitmap;
 import kumagai.radiotopic.ChronologyGraphData;
 import kumagai.radiotopic.ProgramCollection;
 
@@ -30,6 +35,7 @@ public class ChronologyGraphAction
 {
 	public ChronologyGraphData chronologyGraphData;
 	public int startYear;
+	public String graphBase64;
 
 	/**
 	 * 年表表示アクション。
@@ -54,8 +60,17 @@ public class ChronologyGraphAction
 				new ProgramCollection(connection);
 			connection.close();
 
+			// 句立夏ブルマップデータ生成
 			chronologyGraphData =
 				new ChronologyGraphData(programCollection, 1200, 600, startYear);
+
+			// インライン画像生成
+			ChronologyBitmap chronologyBitmap = new ChronologyBitmap(chronologyGraphData);
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			BufferedOutputStream bos = new BufferedOutputStream(baos);
+			ImageIO.write(chronologyBitmap, "png", bos);
+			byte[] bImage = baos.toByteArray();
+			graphBase64 = Base64.getEncoder().encodeToString(bImage);
 
 			return "success";
 		}

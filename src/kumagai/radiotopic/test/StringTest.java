@@ -24,6 +24,7 @@ public class StringTest extends TestCase
 
 	public void testParseDate1()
 	{
+		assertEquals("2009/01/01", StringTool.parseDate("9/1/1"));
 		assertEquals("2015/02/02", StringTool.parseDate("15/2/2"));
 		assertEquals("1995/02/02", StringTool.parseDate("95/2/2"));
 		assertEquals("2015/02/02", StringTool.parseDate("15.2.2"));
@@ -53,8 +54,8 @@ public class StringTest extends TestCase
 		assertEquals("2015/12/22", StringTool.parseDate("（2015年12月22）"));
 		assertEquals("2015/12/22", StringTool.parseDate("（2015年12月22日）"));
 
-		assertEquals("2018/07/18", StringTool.parseDate("7/18"));
-		assertEquals("2018/07/18", StringTool.parseDate("7.18"));
-		assertEquals("2018/07/18", StringTool.parseDate("7月18日"));
+		assertEquals("2019/07/18", StringTool.parseDate("7/18"));
+		assertEquals("2019/07/18", StringTool.parseDate("7.18"));
+		assertEquals("2019/07/18", StringTool.parseDate("7月18日"));
 	}
 }

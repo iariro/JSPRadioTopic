@@ -250,7 +250,7 @@ public class ExportText
 		throws ParseException, IOException
 	{
 		ChronologyGraphData chronologyGraphData =
-			new ChronologyGraphData(programCollection, 900, 600, startYear);
+			new ChronologyGraphData(programCollection, 1200, 600, startYear);
 
 		BufferedImage readImage = new ChronologyBitmap(chronologyGraphData);
 
