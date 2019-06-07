@@ -365,6 +365,13 @@ public class ImageTrimming
 			else if (width == 893)
 			{
 				// Youtube
+
+				if (height == 595)
+				{
+					outline.x2 += 1;
+					//outline.y1 += 40;
+					outline.y2 -= 77;
+				}
 			}
 			else if (width == 899)
 			{
