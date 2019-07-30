@@ -40,6 +40,10 @@ public class ImageTrimmingTest
 	{
 		trimAndSave("niconama_shitamuki64", 855, 482);
 	}
+	public void testNiconama4() throws IOException
+	{
+		trimAndSave("niconama_shitamuki81", 855, 482);
+	}
 
 	// niconico new
 	public void testNiconico1() throws IOException
