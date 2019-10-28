@@ -37,6 +37,7 @@ public class UploadImageAction
 	public String [] uploadfileContentType;
 	public String [] uploadfileFileName;
 	public int dayid;
+	public boolean trimming;
 	public ArrayList<String> uploadedFiles = new ArrayList<>();
 	public String message;
 
@@ -67,21 +68,34 @@ public class UploadImageAction
 					String [] contentType =uploadfileContentType[i].split("/");
 					File destFile = new File(imageFolder, uploadfileFileName[i]);
 					BufferedImage sourceImage = ImageIO.read(file);
-					MovieRectangle outline = ImageTrimming.findMovieOutline(sourceImage);
-					if (!outline.isAnyNull())
+					if (trimming)
 					{
-						// 境界検出成功
+						// トリミングする
 
-						ImageTrimming.cutImage(sourceImage, outline, destFile, contentType[1]);
-						DayCollection.insertImage(connection, dayid, uploadfileFileName[i]);
-						uploadedFiles.add(uploadfileFileName[i]);
+						MovieRectangle outline = ImageTrimming.findMovieOutline(sourceImage);
+						if (!outline.isAnyNull())
+						{
+							// 境界検出成功
+
+							ImageTrimming.cutImage(sourceImage, outline, destFile, contentType[1]);
+							DayCollection.insertImage(connection, dayid, uploadfileFileName[i]);
+							uploadedFiles.add(uploadfileFileName[i]);
+						}
+						else
+						{
+							// 境界検出失敗
+
+							message = String.format("境界検出失敗 %s", outline.toString());
+							return "error";
+						}
 					}
 					else
 					{
-						// 境界検出失敗
+						// トリミングしない
 
-						message = String.format("境界検出失敗 %s", outline.toString());
-						return "error";
+						ImageIO.write(sourceImage, contentType[1], destFile);
+						DayCollection.insertImage(connection, dayid, uploadfileFileName[i]);
+						uploadedFiles.add(uploadfileFileName[i]);
 					}
 				}
 

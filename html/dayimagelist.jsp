@@ -20,6 +20,7 @@
 
 			<s:form action="uploadimage" method="post" enctype="multipart/form-data" theme="simple">
 				<input type="file" name="uploadfile" multiple="multiple" size="75" />
+				<input type="checkbox" name="trimming" checked="checked" />動画部分の切り出しを行う<br>
 				<input type="hidden" name="dayid" value="<s:property value='dayid' />">
 				<input type="submit" value="画像アップロード" />
 			</s:form>
