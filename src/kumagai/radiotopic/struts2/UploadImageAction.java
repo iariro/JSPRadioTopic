@@ -37,7 +37,7 @@ public class UploadImageAction
 	public String [] uploadfileContentType;
 	public String [] uploadfileFileName;
 	public int dayid;
-	public boolean trimming;
+	public String trimming;
 	public ArrayList<String> uploadedFiles = new ArrayList<>();
 	public String message;
 
@@ -68,7 +68,7 @@ public class UploadImageAction
 					String [] contentType =uploadfileContentType[i].split("/");
 					File destFile = new File(imageFolder, uploadfileFileName[i]);
 					BufferedImage sourceImage = ImageIO.read(file);
-					if (trimming)
+					if (trimming != null)
 					{
 						// トリミングする
 
