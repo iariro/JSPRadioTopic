@@ -104,7 +104,7 @@
 
 	<target name="compile">
 		<javac srcdir="src" destdir="bin" classpath="../KTool/bin:../lib/junit.jar" includeantruntime="false">
-			<include name="src/kumagai/radiotopic/test/ImageTrimmingTest.java" />
+			<include name="kumagai/radiotopic/test/ImageTrimmingTest.java" />
 		</javac>
 	</target>
 
