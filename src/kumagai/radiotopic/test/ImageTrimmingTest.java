@@ -16,15 +16,15 @@ public class ImageTrimmingTest
 	// bilibili
 	public void testBilibili1() throws IOException
 	{
-		trimAndSave("bilibili_himitsukichi103", 684, 442);
+		trimAndSave("bilibili_himitsukichi103", 680, 440);
 	}
 	public void testBilibili2() throws IOException
 	{
-		trimAndSave("bilibili_himitsukichi155", 822, 463);
+		trimAndSave("bilibili_himitsukichi155", 831, 467);
 	}
 	public void testBilibili3() throws IOException
 	{
-		trimAndSave("bilibili_shitamuki11", 682, 441);
+		trimAndSave("bilibili_shitamuki11", 680, 440);
 	}
 
 	// nico生
@@ -38,11 +38,11 @@ public class ImageTrimmingTest
 	}
 	public void testNiconama3() throws IOException
 	{
-		trimAndSave("niconama_shitamuki64", 855, 482);
+		trimAndSave("niconama_shitamuki64", 855, 480);
 	}
 	public void testNiconama4() throws IOException
 	{
-		trimAndSave("niconama_shitamuki81", 855, 482);
+		trimAndSave("niconama_shitamuki81", 855, 480);
 	}
 
 	// niconico new
@@ -76,7 +76,7 @@ public class ImageTrimmingTest
 	}
 	public void testNiconico8() throws IOException
 	{
-		trimAndSave("niconico_new_tesapuru", 900, 483);
+		trimAndSave("niconico_new_tesapuru", 900, 482);
 	}
 
 	// niconico old
@@ -93,11 +93,11 @@ public class ImageTrimmingTest
 	// YouTube
 	public void testYoutube1() throws IOException
 	{
-		trimAndSave("youtube_shitamuki27-3", 856, 492);
+		trimAndSave("youtube_shitamuki27-3", 858, 482);
 	}
 	public void testYoutube2() throws IOException
 	{
-		trimAndSave("youtube_shitamuki27-5", 856, 492);
+		trimAndSave("youtube_shitamuki27-5", 858, 482);
 	}
 	public void testYoutube3() throws IOException
 	{
@@ -114,6 +114,10 @@ public class ImageTrimmingTest
 	public void testYoutube6() throws IOException
 	{
 		trimAndSave("youtube_oharae20160303", 894, 518);
+	}
+	public void testYoutube7() throws IOException
+	{
+		trimAndSave("youtube_takamina", 869, 582);
 	}
 
 	void trimAndSave(String file, int width, int height)

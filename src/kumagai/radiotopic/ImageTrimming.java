@@ -11,6 +11,8 @@ import javax.imageio.ImageIO;
  */
 public class ImageTrimming
 {
+	static int colorThresh = 0xfcfcfc;
+
 	/**
 	 * 画像の動画部分の切り出し処理
 	 * @param args [0]=inputfile [1]=outputfile
@@ -96,8 +98,8 @@ public class ImageTrimming
 			int eqCount = 0;
 			for (int y=0 ; y<image.getHeight() ; y+=20)
 			{
-				int rgb1 = (image.getRGB(startX, y) & 0xf0f0f0);
-				int rgb2 = (image.getRGB(x1, y) & 0xf0f0f0);
+				int rgb1 = (image.getRGB(startX, y) & colorThresh);
+				int rgb2 = (image.getRGB(x1, y) & colorThresh);
 				if (rgb1 == rgb2)
 				{
 					// 近い色
@@ -145,9 +147,9 @@ public class ImageTrimming
 			int eqCount = 0;
 			for (int x=1 ; x<image.getWidth()/2-3 ; x++)
 			{
-				int rgb1 = image.getRGB(centerX, y) & 0xf0f0f0;
-				int rgb2 = image.getRGB(centerX + x, y) & 0xf0f0f0;
-				int rgb3 = image.getRGB(centerX - x, y) & 0xf0f0f0;
+				int rgb1 = image.getRGB(centerX, y) & colorThresh;
+				int rgb2 = image.getRGB(centerX + x, y) & colorThresh;
+				int rgb3 = image.getRGB(centerX - x, y) & colorThresh;
 
 				if (rgb1 == rgb2)
 				{
@@ -193,8 +195,8 @@ public class ImageTrimming
 			int eqCount = 0;
 			for (int y=topY ; y<=bottomY ; y++)
 			{
-				int rgb1 = image.getRGB(leftX, y) & 0xf0f0f0;
-				int rgb2 = image.getRGB(x, y) & 0xf0f0f0;
+				int rgb1 = image.getRGB(leftX, y) & colorThresh;
+				int rgb2 = image.getRGB(x, y) & colorThresh;
 				if (rgb1 == rgb2)
 				{
 					// 近い色
@@ -238,8 +240,8 @@ public class ImageTrimming
 			int maxYDiffCount = 0;
 			for (int x=1 ; x<image.getWidth()/2 ; x++)
 			{
-				int rgb1 = image.getRGB(centerX + x, y) & 0xf8f8f8;
-				int rgb2 = image.getRGB(centerX + x, y-1) & 0xf8f8f8;
+				int rgb1 = image.getRGB(centerX + x, y) & colorThresh;
+				int rgb2 = image.getRGB(centerX + x, y-1) & colorThresh;
 
 				if (rgb1 == rgb2)
 				{
@@ -293,9 +295,16 @@ public class ImageTrimming
 			int width = outline.getWidth();
 			int height = outline.getHeight();
 			//System.out.printf("%d,%d\n", width, height);
-			if (width == 636 || width == 640)
+			if (width == 636 || width == 640 || width == 1024)
 			{
 				// ニコニコ旧形式
+
+				if (width == 1024)
+				{
+					// コメント欄
+
+					outline.x2 -= (1024 - 640);
+				}
 
 				if (height == 405)
 				{
@@ -319,7 +328,7 @@ public class ImageTrimming
 				outline.y1 += 44;
 				outline.y2 -= (747 - 661);
 			}
-			else if (width == 683 || width == 685)
+			else if (width == 683 || width == 685 || width == 992)
 			{
 				// bilibili
 
@@ -337,6 +346,12 @@ public class ImageTrimming
 				else if (height == 562)
 				{
 					outline.y1 += (197 - 147);
+					outline.y2 -= (707 - 638);
+				}
+				else if (width == 992)
+				{
+					outline.x2 -= (992 - 680 - 3);
+					outline.y1 += (197 - 147 + 4);
 					outline.y2 -= (707 - 638);
 				}
 				else
@@ -377,7 +392,12 @@ public class ImageTrimming
 			{
 				// ニコニコ新形式
 
-				if (height == 523)
+				if (height == 522)
+				{
+					outline.x2 += 1;
+					outline.y1 += 40;
+				}
+				else if (height == 523)
 				{
 					outline.x2 += 1;
 					outline.y1 += 40;
@@ -412,11 +432,14 @@ public class ImageTrimming
 					outline.y2 -= (610 - 525);
 				}
 			}
-			else if (width == 855 || width == 960 || width == 1239)
+			else if (width == 854 || width == 855 || width == 960 || width == 1239)
 			{
 				// ニコ生
 
-				if (width == 855)
+				if (width == 626)
+				{
+				}
+				else if (width == 854 || width == 855)
 				{
 					outline.y2 -= 144;
 				}
@@ -431,8 +454,15 @@ public class ImageTrimming
 				{
 					//outline.x1 -= 5;
 					outline.x2 -= 384;
-					outline.y1 += 92;
-					outline.y2 -= 79;
+				}
+
+				if (height == 626)
+				{
+					outline.y2 -= 626 - 480;
+				}
+				else if (height == 653)
+				{
+					outline.y2 -= 653 - 480;
 				}
 			}
 			else if (width == 1280)
