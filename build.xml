@@ -97,20 +97,29 @@
 	</target>
 
 	<target name="export">
+		<java classname="kumagai.radiotopic.exporttext.ExportText" classpath="bin;${KTOOL_LIB};${SQLSERVER_JDBC_LIB}">
+			<arg value="localhost"/>
+			<arg value="${PDA_HOME}/Private/wradio"/>
+			<arg value="2000"/>
+		</java>
+	</target>
+
+	<target name="export_pi">
 		<property name="SQLSERVER" value="192.168.10.10" />
 		<property name="FTPSERVER" value="ftp.gol.com" />
 		<property name="FTPID" value="ip0601170243" />
 		<property name="FTP_PW" value="Z#5uqBpt" />
+		<property name="GOL_HOME" value="/home/pi/doc/gol/" />
 		<property name="RELATIVEPATH_WEBWRADIO" value="private/web/hobby/wradio" />
 
 		<java classname="kumagai.radiotopic.exporttext.ExportText" classpath="bin;${KTOOL_LIB};${SQLSERVER_JDBC_LIB}">
 			<arg value="${SQLSERVER}"/>
-			<arg value="../../../../gol/${RELATIVEPATH_WEBWRADIO}"/>
+			<arg value="${GOL_HOME}${RELATIVEPATH_WEBWRADIO}"/>
 			<arg value="2000"/>
 		</java>
 
 		<ftp server="${FTPSERVER}" userid="${FTPID}" password="${FTP_PW}" remotedir="${RELATIVEPATH_WEBWRADIO}" passive="yes" depends="yes" verbose="yes" >
-			<fileset dir="../../../../gol/${RELATIVEPATH_WEBWRADIO}">
+			<fileset dir="${GOL_HOME}${RELATIVEPATH_WEBWRADIO}">
 				<include name="*" />
 			</fileset>
 		</ftp>

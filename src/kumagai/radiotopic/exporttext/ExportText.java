@@ -147,7 +147,10 @@ public class ExportText
 			}
 			finally
 			{
-				writer.close();
+				if (writer != null)
+				{
+					writer.close();
+				}
 			}
 
 			System.out.printf("%s written.\n", htmlFile);
