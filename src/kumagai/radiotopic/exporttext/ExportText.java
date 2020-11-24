@@ -36,36 +36,36 @@ import kumagai.radiotopic.TopicCollection;
 public class ExportText
 {
 	/**
-	 * @param args [0]=出力ディレクトリパス [1]=startYear [2]=-n/-dn/-d
+	 * @param args [0]=DBサーバアドレス [1]=出力ディレクトリパス [2]=startYear [3]=-n/-dn/-d
 	 */
 	public static void main(String[] args)
 		throws SQLException, ParseException, IOException
 	{
-		if (args.length < 2)
+		if (args.length < 3)
 		{
 			return;
 		}
 
 		Integer startYear = null;
-		if (!args[1].equals("-"))
+		if (!args[2].equals("-"))
 		{
 			// 無効「-」ではない
 
-			startYear = Integer.valueOf(args[1]);
+			startYear = Integer.valueOf(args[2]);
 		}
 
 		String argFlag = "-dn";
 
-		if (args.length == 3)
+		if (args.length == 4)
 		{
 			// オプションあり
 
-			argFlag = args[2];
+			argFlag = args[3];
 		}
 
 		DriverManager.registerDriver(new SQLServerDriver());
 
-		Connection connection = RadioTopicDatabase.getConnection();
+		Connection connection = RadioTopicDatabase.getConnection(args[0]);
 
 		ProgramCollection programCollection = new ProgramCollection(connection);
 
@@ -97,7 +97,7 @@ public class ExportText
 			}
 
 			File htmlFile =
-				new File(args[0], entry.getKey().shortname + ".html");
+				new File(args[1], entry.getKey().shortname + ".html");
 
 			PrintWriter writer = null;
 			try
@@ -155,7 +155,7 @@ public class ExportText
 
 		connection.close();
 
-		outputIndexHtml(args[0], programCollection, startYear);
+		outputIndexHtml(args[1], programCollection, startYear);
 	}
 
 	/**
