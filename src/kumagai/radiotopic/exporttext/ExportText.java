@@ -153,7 +153,7 @@ public class ExportText
 				}
 			}
 
-			System.out.printf("%s written.\n", htmlFile);
+			// System.out.printf("%s written.\n", htmlFile);
 		}
 
 		connection.close();
