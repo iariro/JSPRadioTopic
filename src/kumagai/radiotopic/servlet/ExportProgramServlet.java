@@ -1,6 +1,7 @@
 package kumagai.radiotopic.exporttext;
 
 import java.awt.image.BufferedImage;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -51,12 +52,10 @@ public class ExportProgramServlet
 	{
 		request.setCharacterEncoding("utf-8");
 
-		ServletContext context = getServletConfig().getServletContext();
-
 		String [] args =
 			new String []
 				{
-					context.getInitParameter("RadioTopicSqlserverUrl"),
+					getInitParameter("RadioTopicSqlserverUrl"),
 					null,
 					request.getParameter("startYear"),
 					request.getParameter("outoutOption")
@@ -174,7 +173,7 @@ public class ExportProgramServlet
 
 		connection.close();
 
-		outputIndexHtml(args[1], programCollection, startYear);
+		outputIndexHtml(zos, args[1], programCollection, startYear);
 	}
 
 	/**
@@ -264,7 +263,7 @@ public class ExportProgramServlet
 	 * @param outputPath 出力パス
 	 * @param programCollection 全番組情報
 	 */
-	static protected void outputIndexHtml(String outputPath,
+	static protected void outputIndexHtml(ZipOutputStream zos, String outputPath,
 		ProgramCollection programCollection, Integer startYear)
 		throws ParseException, IOException
 	{
