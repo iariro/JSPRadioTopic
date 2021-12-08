@@ -6,6 +6,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -63,6 +65,47 @@ public class ExportText
 			argFlag = args[3];
 		}
 
+		exportFromServlet(args[0]);
+	}
+
+	/**
+	 * サーブレットからZIP圧縮されたHTMLをエクスポート
+	 * @param servletHost DBサーバアドレス
+	 */
+	static private void exportFromServlet(String servletHost)
+	{
+		// URLを作成してGET通信を行う
+		URL url = new URL(String.format("http://%d/radiotopic/exportprogram", servletHost));
+		HttpURLConnection http = (HttpURLConnection)url.openConnection();
+		http.setRequestMethod("GET");
+		http.connect();
+
+		ZipInputStream inputStream = new ZipInputStream(new BufferedInputStream(http.getInputStream()));
+
+		ZipEntry zipEntry;
+		while ((zipEntry = inputStream.getNextEntry()) !=null)
+		{
+			FileOutputStream fos = new FileOutputStream(zipEntry.getName());
+			BufferedOutputStream bos = new BufferedOutputStream(fos);
+
+			byte[] data = new byte[1024];
+			int count;
+			while ((count = inputStream.read(data)) > 0)
+			{
+				bos.write(data,0,count);
+			}
+		}
+
+		inputStream.close();
+		http.close();
+	}
+
+	/**
+	 * SQL Serverに接続しエクスポート
+	 * @param args [0]=DBサーバアドレス [1]=出力ディレクトリパス [2]=startYear [3]=-n/-dn/-d
+	 */
+	static private void exportFromSQLServer(String [] args)
+	{
 		DriverManager.registerDriver(new SQLServerDriver());
 
 		Connection connection = RadioTopicDatabase.getConnection(args[0]);
