@@ -1,9 +1,12 @@
 package kumagai.radiotopic.exporttext;
 
 import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
@@ -14,6 +17,9 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 import javax.imageio.ImageIO;
 
@@ -54,8 +60,10 @@ public class ExportText
 	/**
 	 * サーブレットからZIP圧縮されたHTMLをエクスポート
 	 * @param args [0]=DBサーバアドレス [1]=出力ディレクトリパス [2]=startYear [3]=-n/-dn/-d
+	 * @throws IOException
 	 */
 	static private void exportFromServlet(String [] args)
+		throws IOException
 	{
 		// URLを作成してGET通信を行う
 		URL url =
@@ -74,26 +82,30 @@ public class ExportText
 		ZipEntry zipEntry;
 		while ((zipEntry = inputStream.getNextEntry()) !=null)
 		{
-			FileOutputStream fos = new FileOutputStream(zipEntry.getName());
-			BufferedOutputStream bos = new BufferedOutputStream(fos);
+			BufferedOutputStream stream =
+				new BufferedOutputStream(new FileOutputStream(zipEntry.getName()));
 
 			byte[] data = new byte[1024];
 			int count;
 			while ((count = inputStream.read(data)) > 0)
 			{
-				bos.write(data,0,count);
+				stream.write(data,0,count);
 			}
+			stream.close();
 		}
 
 		inputStream.close();
-		http.close();
+		http.disconnect();
 	}
 
 	/**
 	 * SQL Serverに接続しエクスポート
 	 * @param args [0]=DBサーバアドレス [1]=出力ディレクトリパス [2]=startYear [3]=-n/-dn/-d
+	 * @throws SQLException
+	 * @throws IOException
+	 * @throws ParseException
 	 */
-	static private void exportFromSQLServer(String [] args)
+	static private void exportFromSQLServer(String [] args) throws SQLException, ParseException, IOException
 	{
 		Integer startYear = null;
 		if (!args[2].equals("-"))
@@ -316,6 +328,200 @@ public class ExportText
 			new PrintWriter(
 				new OutputStreamWriter(
 					new FileOutputStream(indexFile), "utf-8"));
+
+		writer.println("<html>");
+		writer.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />");
+		writer.println("<body>");
+
+		writer.println("<img src='Chronology.png' usemap='#menu'>");
+		writer.println("<map name='menu'>");
+		for (ChronologyGraphDataElement element : chronologyGraphData)
+		{
+			writer.printf(
+				"<area shape='rect' coords='%s' href='%s.html'>",
+				element.getCoords(),
+				element.shortname);
+			writer.println();
+		}
+		writer.println("</map>");
+		writer.println("<br>");
+
+		for (ChronologyGraphDataElement element : chronologyGraphData)
+		{
+			writer.printf("<li><a href='%s.html'>%s</a>", element.shortname, element.shortname);
+			writer.println();
+		}
+		writer.println("<br>");
+
+		writer.printf("%s<br>", new DateTime().toFullString());
+		writer.println();
+
+		writer.println("</body>");
+		writer.println("</html>");
+
+		writer.close();
+	}
+
+	/**
+	 * @param args [0]=DBサーバアドレス [1]=出力ディレクトリパス [2]=startYear [3]=-n/-dn/-d
+	 * @throws SQLException
+	 * @throws IOException
+	 * @throws ParseException
+	 */
+	public static void exportAndZip(String [] args)
+		throws SQLException, IOException, ParseException
+	{
+		Integer startYear = null;
+		if (!args[2].equals("-"))
+		{
+			// 無効「-」ではない
+
+			startYear = Integer.valueOf(args[2]);
+		}
+
+		String argFlag = "-dn";
+
+		if (args.length == 4)
+		{
+			// オプションあり
+
+			argFlag = args[3];
+		}
+
+		DriverManager.registerDriver(new SQLServerDriver());
+
+		Connection connection = RadioTopicDatabase.getConnection(args[0]);
+
+		ProgramCollection programCollection = new ProgramCollection(connection);
+
+		HashMap<Program, DayCollection> programAndTopic =
+			new HashMap<Program, DayCollection>();
+
+		for (Program program : programCollection)
+		{
+			SortOrder sortOrder = SortOrder.values()[program.sortOrder];
+
+			DayCollection dayCollection =
+				new DayCollection(connection, program.id, sortOrder);
+
+			programAndTopic.put(program, dayCollection);
+		}
+
+		OutputStream outputStream;
+		if (args[1] == null)
+		{
+			// 引数なし＝Servlet
+
+			outputStream = System.out;
+		}
+		else
+		{
+			// 引数あり＝単体テスト実行
+
+			outputStream = new FileOutputStream(args[1]);
+		}
+
+		ZipOutputStream zipStream =
+			new ZipOutputStream(new BufferedOutputStream(outputStream));
+
+		DateTime today = new DateTime();
+
+		for (Map.Entry<Program, DayCollection> entry
+			: programAndTopic.entrySet())
+		{
+			DateTime lastUpdate = entry.getValue().getLastUpdate();
+
+			if (today.diff(lastUpdate).getDay() >= 10)
+			{
+				// 最終更新から10日経っている
+
+				continue;
+			}
+
+			ZipEntry zip = new ZipEntry(entry.getKey().shortname + ".html");
+			zipStream.putNextEntry(zip);
+
+			PrintWriter writer = null;
+			try
+			{
+				writer = new PrintWriter(new OutputStreamWriter(zipStream, "utf-8"));
+
+				DateNoPrinter dateNoPrinter;
+
+				if (entry.getKey().exportformat != null)
+				{
+					// エクスポート形式指定あり
+
+					argFlag = entry.getKey().exportformat;
+
+					if (argFlag.equals("-dn"))
+					{
+						dateNoPrinter =
+							new DateNoPrinter(writer, entry.getValue().getMaxNo());
+					}
+					else if (argFlag.equals("-d"))
+					{
+						dateNoPrinter = new DatePrinter(writer);
+					}
+					else if (argFlag.equals("-n"))
+					{
+						dateNoPrinter =
+							new NoPrinter(writer, entry.getValue().getMaxNo());
+					}
+					else
+					{
+						throw new IllegalArgumentException(argFlag);
+					}
+				}
+				else
+				{
+					// エクスポート形式指定なし
+
+					dateNoPrinter =
+						new DateNoPrinter(writer, entry.getValue().getMaxNo());
+				}
+
+				outputProgramHtml
+					(connection, entry.getKey(), entry.getValue(), writer, dateNoPrinter);
+			}
+			finally
+			{
+				if (writer != null)
+				{
+					writer.close();
+				}
+			}
+		}
+
+		connection.close();
+
+		ExportText.outputIndexHtml(zipStream, programCollection, startYear);
+	}
+
+	/**
+	 * インデックスHTML出力。年表イメージも含む。
+	 * @param zipStream 出力ストリーム
+	 * @param programCollection 全番組情報
+	 * @param startYear 開始年
+	 */
+	public static void outputIndexHtml(ZipOutputStream zipStream,
+		ProgramCollection programCollection, Integer startYear)
+		throws ParseException, IOException
+	{
+		ChronologyGraphData chronologyGraphData =
+			new ChronologyGraphData(programCollection, 1200, 600, startYear);
+
+		BufferedImage readImage = new ChronologyBitmap(chronologyGraphData);
+
+		ZipEntry zip = new ZipEntry("Chronology.png");
+		zipStream.putNextEntry(zip);
+
+		ImageIO.write(readImage, "png", zipStream);
+
+		zip = new ZipEntry("index.html");
+		zipStream.putNextEntry(zip);
+
+		PrintWriter writer = new PrintWriter(new OutputStreamWriter(zipStream, "utf-8"));
 
 		writer.println("<html>");
 		writer.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />");
