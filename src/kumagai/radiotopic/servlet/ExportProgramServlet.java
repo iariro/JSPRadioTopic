@@ -2,7 +2,6 @@ package kumagai.radiotopic.exporttext;
 
 import java.awt.image.BufferedImage;
 import java.io.BufferedOutputStream;
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -17,7 +16,6 @@ import java.util.zip.ZipOutputStream;
 import java.util.zip.ZipEntry;
 
 import javax.imageio.ImageIO;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -50,8 +48,6 @@ public class ExportProgramServlet
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 		throws ServletException, IOException
 	{
-		request.setCharacterEncoding("utf-8");
-
 		String [] args =
 			new String []
 				{
@@ -61,6 +57,22 @@ public class ExportProgramServlet
 					request.getParameter("outoutOption")
 				};
 
+		exportAndZip(args);
+	}
+
+	/**
+	 * @param args [0]=DBサーバアドレス [1]=出力ファイルパス [2]=startYear [3]=-n/-dn/-d
+	 */
+	static public void main(String [] args)
+	{
+		exportAndZip(args);
+	}
+
+	/**
+	 * @param args [0]=DBサーバアドレス [1]=出力ディレクトリパス [2]=startYear [3]=-n/-dn/-d
+	 */
+	static private void exportAndZip(String [] args)
+	{
 		Integer startYear = null;
 		if (!args[2].equals("-"))
 		{
@@ -97,8 +109,22 @@ public class ExportProgramServlet
 			programAndTopic.put(program, dayCollection);
 		}
 
-		BufferedOutputStream bos = new BufferedOutputStream(System.out);
-		ZipOutputStream zos = new ZipOutputStream(bos);
+		OutputStream outputStream;
+		if (args[1] == null)
+		{
+			// 引数なし＝Servlet
+
+			outputStream = System.out;
+		}
+		else
+		{
+			// 引数あり＝単体テスト実行
+
+			outputStream = new FileOutputStream(args[1]);
+		}
+
+		ZipOutputStream zipStream =
+			new ZipOutputStream(new BufferedOutputStream(outputStream));
 
 		DateTime today = new DateTime();
 
@@ -115,12 +141,12 @@ public class ExportProgramServlet
 			}
 
 			ZipEntry zip = new ZipEntry(entry.getKey().shortname + ".html");
-			zos.putNextEntry(zip);
+			zipStream.putNextEntry(zip);
 
 			PrintWriter writer = null;
 			try
 			{
-				writer = new PrintWriter(new OutputStreamWriter(zos, "utf-8"));
+				writer = new PrintWriter(new OutputStreamWriter(zipStream, "utf-8"));
 
 				DateNoPrinter dateNoPrinter;
 
@@ -167,13 +193,11 @@ public class ExportProgramServlet
 					writer.close();
 				}
 			}
-
-			// System.out.printf("%s written.\n", htmlFile);
 		}
 
 		connection.close();
 
-		outputIndexHtml(zos, args[1], programCollection, startYear);
+		outputIndexHtml(zipStream, programCollection, startYear);
 	}
 
 	/**
@@ -260,10 +284,11 @@ public class ExportProgramServlet
 
 	/**
 	 * インデックスHTML出力。年表イメージも含む。
-	 * @param outputPath 出力パス
+	 * @param zipStream 出力ストリーム
 	 * @param programCollection 全番組情報
+	 * @param startYear 開始年
 	 */
-	static protected void outputIndexHtml(ZipOutputStream zos, String outputPath,
+	static protected void outputIndexHtml(ZipOutputStream zipStream,
 		ProgramCollection programCollection, Integer startYear)
 		throws ParseException, IOException
 	{
@@ -272,14 +297,15 @@ public class ExportProgramServlet
 
 		BufferedImage readImage = new ChronologyBitmap(chronologyGraphData);
 
-		File imageFile = new File(outputPath, "Chronology.png");
+		ZipEntry zip = new ZipEntry("Chronology.png");
+		zipStream.putNextEntry(zip);
 
-		ImageIO.write(readImage, "png", imageFile);
+		ImageIO.write(readImage, "png", zipStream);
 
-		ZipEntry zip = new ZipEntry("index.html");
-		zos.putNextEntry(zip);
+		zip = new ZipEntry("index.html");
+		zipStream.putNextEntry(zip);
 
-		PrintWriter writer = new PrintWriter(new OutputStreamWriter(zos, "utf-8"));
+		PrintWriter writer = new PrintWriter(new OutputStreamWriter(zipStream, "utf-8"));
 
 		writer.println("<html>");
 		writer.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />");
