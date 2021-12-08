@@ -48,34 +48,23 @@ public class ExportText
 			return;
 		}
 
-		Integer startYear = null;
-		if (!args[2].equals("-"))
-		{
-			// 無効「-」ではない
-
-			startYear = Integer.valueOf(args[2]);
-		}
-
-		String argFlag = "-dn";
-
-		if (args.length == 4)
-		{
-			// オプションあり
-
-			argFlag = args[3];
-		}
-
-		exportFromServlet(args[0]);
+		exportFromServlet(args);
 	}
 
 	/**
 	 * サーブレットからZIP圧縮されたHTMLをエクスポート
-	 * @param servletHost DBサーバアドレス
+	 * @param args [0]=DBサーバアドレス [1]=出力ディレクトリパス [2]=startYear [3]=-n/-dn/-d
 	 */
-	static private void exportFromServlet(String servletHost)
+	static private void exportFromServlet(String [] args)
 	{
 		// URLを作成してGET通信を行う
-		URL url = new URL(String.format("http://%d/radiotopic/exportprogram", servletHost));
+		URL url =
+			new URL(
+				String.format(
+					"http://%d/radiotopic/exportprogram?startYear=%s&outoutOption=%s",
+					args[0],
+					args[2],
+					args[3]));
 		HttpURLConnection http = (HttpURLConnection)url.openConnection();
 		http.setRequestMethod("GET");
 		http.connect();
@@ -106,6 +95,23 @@ public class ExportText
 	 */
 	static private void exportFromSQLServer(String [] args)
 	{
+		Integer startYear = null;
+		if (!args[2].equals("-"))
+		{
+			// 無効「-」ではない
+
+			startYear = Integer.valueOf(args[2]);
+		}
+
+		String argFlag = "-dn";
+
+		if (args.length == 4)
+		{
+			// オプションあり
+
+			argFlag = args[3];
+		}
+
 		DriverManager.registerDriver(new SQLServerDriver());
 
 		Connection connection = RadioTopicDatabase.getConnection(args[0]);
