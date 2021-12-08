@@ -300,8 +300,6 @@ public class ExportText
 		writer.println("</pre>");
 		writer.println("</body>");
 		writer.println("</html>");
-
-		writer.close();
 	}
 
 	/**
@@ -442,55 +440,45 @@ public class ExportText
 			zipStream.putNextEntry(zip);
 
 			PrintWriter writer = null;
-			try
+			writer = new PrintWriter(new OutputStreamWriter(zipStream, "utf-8"));
+
+			DateNoPrinter dateNoPrinter;
+
+			if (entry.getKey().exportformat != null)
 			{
-				writer = new PrintWriter(new OutputStreamWriter(zipStream, "utf-8"));
+				// エクスポート形式指定あり
 
-				DateNoPrinter dateNoPrinter;
+				argFlag = entry.getKey().exportformat;
 
-				if (entry.getKey().exportformat != null)
+				if (argFlag.equals("-dn"))
 				{
-					// エクスポート形式指定あり
-
-					argFlag = entry.getKey().exportformat;
-
-					if (argFlag.equals("-dn"))
-					{
-						dateNoPrinter =
-							new DateNoPrinter(writer, entry.getValue().getMaxNo());
-					}
-					else if (argFlag.equals("-d"))
-					{
-						dateNoPrinter = new DatePrinter(writer);
-					}
-					else if (argFlag.equals("-n"))
-					{
-						dateNoPrinter =
-							new NoPrinter(writer, entry.getValue().getMaxNo());
-					}
-					else
-					{
-						throw new IllegalArgumentException(argFlag);
-					}
-				}
-				else
-				{
-					// エクスポート形式指定なし
-
 					dateNoPrinter =
 						new DateNoPrinter(writer, entry.getValue().getMaxNo());
 				}
-
-				outputProgramHtml
-					(connection, entry.getKey(), entry.getValue(), writer, dateNoPrinter);
-			}
-			finally
-			{
-				if (writer != null)
+				else if (argFlag.equals("-d"))
 				{
-					writer.close();
+					dateNoPrinter = new DatePrinter(writer);
+				}
+				else if (argFlag.equals("-n"))
+				{
+					dateNoPrinter =
+						new NoPrinter(writer, entry.getValue().getMaxNo());
+				}
+				else
+				{
+					throw new IllegalArgumentException(argFlag);
 				}
 			}
+			else
+			{
+				// エクスポート形式指定なし
+
+				dateNoPrinter =
+					new DateNoPrinter(writer, entry.getValue().getMaxNo());
+			}
+
+			outputProgramHtml
+				(connection, entry.getKey(), entry.getValue(), writer, dateNoPrinter);
 		}
 
 		connection.close();
