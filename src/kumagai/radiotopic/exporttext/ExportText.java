@@ -66,7 +66,7 @@ public class ExportText
 		throws IOException
 	{
 		// URLを作成してGET通信を行う
-		String urlString = "http://%d/radiotopic/exportprogram?startYear=%s";
+		String urlString = "http://%s/radiotopic/exportprogram?startYear=%s";
 		if (args.length < 4)
 		{
 			urlString = String.format(urlString, args[0], args[2]);
