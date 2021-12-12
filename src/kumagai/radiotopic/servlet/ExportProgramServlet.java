@@ -30,7 +30,7 @@ public class ExportProgramServlet
 					getInitParameter("RadioTopicSqlserverUrl"),
 					null,
 					request.getParameter("startYear"),
-					request.getParameter("outoutOption")
+					request.getParameter("outputOption")
 				};
 
 		try

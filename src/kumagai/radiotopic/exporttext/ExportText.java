@@ -66,13 +66,18 @@ public class ExportText
 		throws IOException
 	{
 		// URLを作成してGET通信を行う
-		URL url =
-			new URL(
-				String.format(
-					"http://%d/radiotopic/exportprogram?startYear=%s&outoutOption=%s",
-					args[0],
-					args[2],
-					args[3]));
+		String urlString = "http://%d/radiotopic/exportprogram?startYear=%s";
+		if (args.length < 4)
+		{
+			urlString = String.format(urlString, args[0], args[2]);
+		}
+		else
+		{
+			urlString += "&outputOption=%s";
+			urlString = String.format(urlString, args[0], args[2], args[3]);
+		}
+
+		URL url = new URL(urlString);
 		HttpURLConnection http = (HttpURLConnection)url.openConnection();
 		http.setRequestMethod("GET");
 		http.connect();
