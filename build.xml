@@ -127,8 +127,12 @@
 	</target>
 
 	<target name="compile">
-		<javac srcdir="src" destdir="bin" classpath="../KTool/bin:../lib/junit.jar" includeantruntime="false">
+		<javac srcdir="src" destdir="bin" classpath="../../../../java/lib/KTool.jar:../../../../java/lib/junit.jar" includeantruntime="false">
 			<include name="kumagai/radiotopic/test/ImageTrimmingTest.java" />
+		</javac>
+
+		<javac srcdir="src" destdir="bin" classpath="../../../../java/lib/KTool.jar:../../../../java/lib/junit.jar:../../../../java/lib/sqljdbc4.jar" includeantruntime="false">
+			<include name="kumagai/radiotopic/exporttext/ExportText.java" />
 		</javac>
 	</target>
 
