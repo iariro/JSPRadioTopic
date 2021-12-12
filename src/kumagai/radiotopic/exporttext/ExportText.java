@@ -67,7 +67,7 @@ public class ExportText
 		throws IOException
 	{
 		// URLを作成してGET通信を行う
-		String urlString = "http://%s/RadioTopicExportProgram?startYear=%s";
+		String urlString = "http://%s:8080/kumagai/RadioTopicExportProgram?startYear=%s";
 		if (args.length < 4)
 		{
 			urlString = String.format(urlString, args[0], args[2]);
@@ -88,8 +88,9 @@ public class ExportText
 		ZipEntry zipEntry;
 		while ((zipEntry = inputStream.getNextEntry()) !=null)
 		{
-			BufferedOutputStream stream =
-				new BufferedOutputStream(new FileOutputStream(zipEntry.getName()));
+			File file = new File(args[1], zipEntry.getName());
+			System.out.println(file.getName());
+			BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(file));
 
 			byte[] data = new byte[1024];
 			int count;

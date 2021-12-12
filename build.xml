@@ -113,7 +113,7 @@
 		<property name="GOL_HOME" value="/home/pi/doc/gol/" />
 		<property name="RELATIVEPATH_WEBWRADIO" value="private/web/hobby/wradio" />
 
-		<java classname="kumagai.radiotopic.exporttext.ExportText" classpath="bin;${KTOOL_LIB};${SQLSERVER_JDBC_LIB}">
+		<java classname="kumagai.radiotopic.exporttext.ExportText" classpath="bin;${KTOOL_LIB};${SQLSERVER_JDBC_LIB}:${SERVLET_LIB}">
 			<arg value="${SQLSERVER}"/>
 			<arg value="${GOL_HOME}${RELATIVEPATH_WEBWRADIO}"/>
 			<arg value="2000"/>
@@ -131,7 +131,7 @@
 			<include name="kumagai/radiotopic/test/ImageTrimmingTest.java" />
 		</javac>
 
-		<javac srcdir="src" destdir="bin" classpath="../../../../java/lib/KTool.jar:../../../../java/lib/junit.jar:../../../../java/lib/sqljdbc4.jar" includeantruntime="false">
+		<javac srcdir="src" destdir="bin" classpath="${KTOOL_LIB}:${JUNIT_LIB}:${SQLSERVER_JDBC_LIB}:${SERVLET_LIB}" includeantruntime="false">
 			<include name="kumagai/radiotopic/exporttext/ExportText.java" />
 		</javac>
 	</target>
