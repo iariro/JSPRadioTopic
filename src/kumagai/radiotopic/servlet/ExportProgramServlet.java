@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -24,10 +25,12 @@ public class ExportProgramServlet
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 		throws ServletException, IOException
 	{
+		ServletContext context = getServletConfig().getServletContext();
+
 		String [] args =
 			new String []
 				{
-					getInitParameter("RadioTopicSqlserverUrl"),
+					context.getInitParameter("RadioTopicSqlserverUrl"),
 					null,
 					request.getParameter("startYear"),
 					request.getParameter("outputOption")
@@ -35,7 +38,7 @@ public class ExportProgramServlet
 
 		try
 		{
-			ExportText.exportAndZip(args);
+			ExportText.exportAndZip(args, response);
 		}
 		catch (SQLException | ParseException e)
 		{
@@ -52,6 +55,6 @@ public class ExportProgramServlet
 	static public void main(String [] args)
 		throws SQLException, IOException, ParseException
 	{
-		ExportText.exportAndZip(args);
+		ExportText.exportAndZip(args, null);
 	}
 }

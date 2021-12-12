@@ -22,6 +22,7 @@ import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletResponse;
 
 import com.microsoft.sqlserver.jdbc.SQLServerDriver;
 
@@ -66,7 +67,7 @@ public class ExportText
 		throws IOException
 	{
 		// URLを作成してGET通信を行う
-		String urlString = "http://%s/radiotopic/exportprogram?startYear=%s";
+		String urlString = "http://%s/RadioTopicExportProgram?startYear=%s";
 		if (args.length < 4)
 		{
 			urlString = String.format(urlString, args[0], args[2]);
@@ -367,11 +368,12 @@ public class ExportText
 
 	/**
 	 * @param args [0]=DBサーバアドレス [1]=出力ディレクトリパス [2]=startYear [3]=-n/-dn/-d
+	 * @param response HTTPレスポンス
 	 * @throws SQLException
 	 * @throws IOException
 	 * @throws ParseException
 	 */
-	public static void exportAndZip(String [] args)
+	public static void exportAndZip(String [] args, HttpServletResponse response)
 		throws SQLException, IOException, ParseException
 	{
 		Integer startYear = null;
@@ -393,7 +395,7 @@ public class ExportText
 
 		DriverManager.registerDriver(new SQLServerDriver());
 
-		Connection connection = RadioTopicDatabase.getConnection(args[0]);
+		Connection connection = DriverManager.getConnection(args[0]);
 
 		ProgramCollection programCollection = new ProgramCollection(connection);
 
@@ -415,7 +417,7 @@ public class ExportText
 		{
 			// 引数なし＝Servlet
 
-			outputStream = System.out;
+			outputStream = response.getOutputStream();
 		}
 		else
 		{

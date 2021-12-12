@@ -68,6 +68,7 @@
 				<include name="kumagai/radiotopic/*.class" />
 				<include name="kumagai/radiotopic/struts2/*.class" />
 				<include name="kumagai/radiotopic/servlet/*.class" />
+				<include name="kumagai/radiotopic/exporttext/*.class" />
 			</fileset>
 		</copy>
 
