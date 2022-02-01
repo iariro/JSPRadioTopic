@@ -82,10 +82,15 @@ public class ImageTrimmingTest
 	// niconico old
 	public void testNiconicoOld1() throws IOException
 	{
-		trimAndSave("niconico_old_adlib124", 642, 364);
+		trimAndSave("niconico_old_adlib120", 642, 364);
 	}
 
 	public void testNiconicoOld2() throws IOException
+	{
+		trimAndSave("niconico_old_adlib124", 642, 364);
+	}
+
+	public void testNiconicoOld3() throws IOException
 	{
 		trimAndSave("niconico_old_toshitai072-1", 642, 364);
 	}

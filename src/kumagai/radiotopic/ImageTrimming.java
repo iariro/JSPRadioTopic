@@ -328,6 +328,14 @@ public class ImageTrimming
 				outline.y1 += 44;
 				outline.y2 -= (747 - 661);
 			}
+			else if (width == 1255)
+			{
+				// ニコニコ
+
+				outline.x1 += 9;
+				outline.x2 -= (1255 - 862);
+				outline.y1 += 52;
+			}
 			else if (width == 683 || width == 685 || width == 992)
 			{
 				// bilibili
