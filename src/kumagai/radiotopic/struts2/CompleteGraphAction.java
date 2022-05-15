@@ -1,17 +1,42 @@
 package kumagai.radiotopic.struts2;
 
-import java.io.*;
-import java.sql.*;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.StringWriter;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.text.ParseException;
-import java.util.*;
-import javax.servlet.*;
+import java.util.Map;
+import java.util.TreeMap;
+
+import javax.servlet.ServletContext;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.*;
-import com.microsoft.sqlserver.jdbc.*;
-import org.apache.struts2.*;
-import org.apache.struts2.convention.annotation.*;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerFactoryConfigurationError;
+
+import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.Result;
-import kumagai.radiotopic.*;
+import org.apache.struts2.convention.annotation.Results;
+
+import com.microsoft.sqlserver.jdbc.SQLServerDriver;
+
+import ktool.datetime.DateTime;
+import kumagai.radiotopic.CompleteGraphDocument;
+import kumagai.radiotopic.CountAndMax;
+import kumagai.radiotopic.DayCollection;
+import kumagai.radiotopic.NameAndData;
+import kumagai.radiotopic.RadioTopicDatabase;
+import kumagai.radiotopic.SortOrder;
+import net.arnx.jsonic.JSON;
 
 /**
  * コンプリートグラフページ表示アクション。
@@ -21,6 +46,7 @@ import kumagai.radiotopic.*;
 @Results
 ({
 	@Result(name="success", location="/radiotopic/completegraph.jsp"),
+	@Result(name="success2", location="/radiotopic/completegraph_hc.jsp"),
 	@Result(name="error", location="/radiotopic/error.jsp")
 })
 public class CompleteGraphAction
@@ -34,7 +60,7 @@ public class CompleteGraphAction
 	{
 		CompleteGraphAction action = new CompleteGraphAction();
 
-		action.programid = 3;
+		action.programid = 2051;
 		action.sortOrder = 1;
 		action.back = true;
 		action.originUpdateDate = "2015/10/01";
@@ -43,18 +69,26 @@ public class CompleteGraphAction
 
 		action.action(connection, "abc");
 
-		Transformer transformer =
-			TransformerFactory.newInstance().newTransformer();
-		transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-		transformer.setOutputProperty(OutputKeys.ENCODING, "utf-8");
-		transformer.setOutputProperty(OutputKeys.STANDALONE, "yes");
+		int graph = 2;
+		if (graph == 1)
+		{
+			Transformer transformer =
+				TransformerFactory.newInstance().newTransformer();
+			transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+			transformer.setOutputProperty(OutputKeys.ENCODING, "utf-8");
+			transformer.setOutputProperty(OutputKeys.STANDALONE, "yes");
 
-		FileOutputStream stream = new FileOutputStream("../out.svg");
+			FileOutputStream stream = new FileOutputStream("../out.svg");
 
-		action.completeGraphDocument.write
-			(transformer, new OutputStreamWriter(stream));
+			action.completeGraphDocument.write
+				(transformer, new OutputStreamWriter(stream));
 
-		stream.close();
+			stream.close();
+		}
+		else
+		{
+			System.out.println(JSON.encode(action.dateAndPercentageList));
+		}
 	}
 
 	public int programid;
@@ -65,6 +99,7 @@ public class CompleteGraphAction
 
 	public CompleteGraphDocument completeGraphDocument;
 	public String message;
+	public NameAndData dateAndPercentageList;
 
 	/**
 	 * グラフSVGドキュメントを文字列として取得。
@@ -86,6 +121,11 @@ public class CompleteGraphAction
 		completeGraphDocument.write(transformer, writer);
 
 		return writer.toString();
+	}
+
+	public String getDateAndPercentageList()
+	{
+		return JSON.encode(dateAndPercentageList);
 	}
 
 	/**
@@ -183,10 +223,30 @@ public class CompleteGraphAction
 			TreeMap<String, CountAndMax> dateAndCount =
 				updateMap.getDateAndCount(dayCollection, back);
 
-			completeGraphDocument =
-				new CompleteGraphDocument(dateAndCount, maxNo, programName);
+			int graph = 2;
+			if (graph == 1)
+			{
+				completeGraphDocument =
+					new CompleteGraphDocument(dateAndCount, maxNo, programName);
 
-			return "success";
+				return "success";
+			}
+			else // if (graph == 2)
+			{
+				dateAndPercentageList = new NameAndData(programName);
+				float total = 0;
+				for (Map.Entry<String, CountAndMax> entry : dateAndCount.entrySet())
+				{
+					total += entry.getValue().count;
+					float percentage = total * 100L / (float)entry.getValue().total;
+					dateAndPercentageList.data.add(
+						new Object [] {
+							DateTime.parseDateString(entry.getKey()).getCalendar().getTimeInMillis(),
+							new BigDecimal(percentage).setScale(2, RoundingMode.HALF_UP)});
+				}
+
+				return "success2";
+			}
 		}
 		catch (SQLException exception)
 		{
