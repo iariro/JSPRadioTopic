@@ -8,5 +8,6 @@
 	<classpathentry kind="var" path="STRUTS2_CORE_LIB"/>
 	<classpathentry kind="var" path="JUNIT_LIB"/>
 	<classpathentry kind="var" path="KTOOL_LIB"/>
+	<classpathentry kind="var" path="JSONIC_LIB"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
