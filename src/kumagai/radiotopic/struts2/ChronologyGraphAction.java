@@ -60,7 +60,7 @@ public class ChronologyGraphAction
 				new ProgramCollection(connection);
 			connection.close();
 
-			// 句立夏ブルマップデータ生成
+			// クリッカブルマップデータ生成
 			chronologyGraphData =
 				new ChronologyGraphData(programCollection, 1200, 600, startYear);
 

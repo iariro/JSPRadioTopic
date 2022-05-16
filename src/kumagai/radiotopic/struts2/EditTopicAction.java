@@ -1,11 +1,18 @@
 package kumagai.radiotopic.struts2;
 
-import java.sql.*;
-import javax.servlet.*;
-import com.microsoft.sqlserver.jdbc.*;
-import org.apache.struts2.*;
-import org.apache.struts2.convention.annotation.*;
-import kumagai.radiotopic.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+import javax.servlet.ServletContext;
+
+import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.Namespace;
+import org.apache.struts2.convention.annotation.Result;
+
+import com.microsoft.sqlserver.jdbc.SQLServerDriver;
+
+import kumagai.radiotopic.TopicCollection;
 
 /**
  * トピック編集アクション。
@@ -41,7 +48,7 @@ public class EditTopicAction
 		{
 			// 変更
 
-			TopicCollection.updateTopic(connection, dayid, topicid, text);
+			TopicCollection.updateTopic(connection, dayid, topicid, text.trim());
 			methodString = "変更";
 		}
 		else if (method == 2)
