@@ -19,7 +19,7 @@
 		<div class=main>
 		<div class=day>
 
-			<div id="chart" style="width:1200px; height:700px"></div>
+			<div id="chart" style="width:1200px; height:600px"></div>
 			<script type="text/javascript">
 			function draw()
 			{
