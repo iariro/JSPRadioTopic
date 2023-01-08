@@ -82,7 +82,7 @@ public class ImageTrimmingTest
 	// niconico old
 	public void testNiconicoOld1() throws IOException
 	{
-		trimAndSave("niconico_old_adlib120", 642, 364);
+		trimAndSave("niconico_old_adlib120", 853, 528);
 	}
 
 	public void testNiconicoOld2() throws IOException
@@ -127,6 +127,10 @@ public class ImageTrimmingTest
 	public void testYoutube8() throws IOException
 	{
 		trimAndSave("youtube_otaku46", 869, 490);
+	}
+	public void testYoutube9() throws IOException
+	{
+		trimAndSave("youtube_haitu", 869, 490);
 	}
 
 	void trimAndSave(String file, int width, int height)
