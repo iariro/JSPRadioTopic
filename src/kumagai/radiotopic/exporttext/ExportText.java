@@ -427,71 +427,74 @@ public class ExportText
 			outputStream = new FileOutputStream(args[1]);
 		}
 
-		ZipOutputStream zipStream =
-			new ZipOutputStream(new BufferedOutputStream(outputStream));
-
-		DateTime today = new DateTime();
-
-		for (Map.Entry<Program, DayCollection> entry
-			: programAndTopic.entrySet())
+		try(
+			ZipOutputStream zipStream =
+				new ZipOutputStream(new BufferedOutputStream(outputStream));)
 		{
-			DateTime lastUpdate = entry.getValue().getLastUpdate();
+			DateTime today = new DateTime();
 
-			if (today.diff(lastUpdate).getDay() >= 10)
+			for (Map.Entry<Program, DayCollection> entry
+				: programAndTopic.entrySet())
 			{
-				// 最終更新から10日経っている
+				DateTime lastUpdate = entry.getValue().getLastUpdate();
 
-				continue;
-			}
-
-			ZipEntry zip = new ZipEntry(entry.getKey().shortname + ".html");
-			zipStream.putNextEntry(zip);
-
-			PrintWriter writer = null;
-			writer = new PrintWriter(new OutputStreamWriter(zipStream, "utf-8"));
-
-			DateNoPrinter dateNoPrinter;
-
-			if (entry.getKey().exportformat != null)
-			{
-				// エクスポート形式指定あり
-
-				argFlag = entry.getKey().exportformat;
-
-				if (argFlag.equals("-dn"))
+				if (today.diff(lastUpdate).getDay() >= 10)
 				{
-					dateNoPrinter =
-						new DateNoPrinter(writer, entry.getValue().getMaxNo());
+					// 最終更新から10日経っている
+
+					continue;
 				}
-				else if (argFlag.equals("-d"))
+
+				ZipEntry zip = new ZipEntry(entry.getKey().shortname + ".html");
+				zipStream.putNextEntry(zip);
+
+				PrintWriter writer = null;
+				writer = new PrintWriter(new OutputStreamWriter(zipStream, "utf-8"));
+
+				DateNoPrinter dateNoPrinter;
+
+				if (entry.getKey().exportformat != null)
 				{
-					dateNoPrinter = new DatePrinter(writer);
-				}
-				else if (argFlag.equals("-n"))
-				{
-					dateNoPrinter =
-						new NoPrinter(writer, entry.getValue().getMaxNo());
+					// エクスポート形式指定あり
+
+					argFlag = entry.getKey().exportformat;
+
+					if (argFlag.equals("-dn"))
+					{
+						dateNoPrinter =
+							new DateNoPrinter(writer, entry.getValue().getMaxNo());
+					}
+					else if (argFlag.equals("-d"))
+					{
+						dateNoPrinter = new DatePrinter(writer);
+					}
+					else if (argFlag.equals("-n"))
+					{
+						dateNoPrinter =
+							new NoPrinter(writer, entry.getValue().getMaxNo());
+					}
+					else
+					{
+						throw new IllegalArgumentException(argFlag);
+					}
 				}
 				else
 				{
-					throw new IllegalArgumentException(argFlag);
+					// エクスポート形式指定なし
+
+					dateNoPrinter =
+						new DateNoPrinter(writer, entry.getValue().getMaxNo());
 				}
-			}
-			else
-			{
-				// エクスポート形式指定なし
 
-				dateNoPrinter =
-					new DateNoPrinter(writer, entry.getValue().getMaxNo());
+				outputProgramHtml
+					(connection, entry.getKey(), entry.getValue(), writer, dateNoPrinter);
+				writer.flush();
 			}
 
-			outputProgramHtml
-				(connection, entry.getKey(), entry.getValue(), writer, dateNoPrinter);
+			ExportText.outputIndexHtml(zipStream, programCollection, startYear);
 		}
 
 		connection.close();
-
-		ExportText.outputIndexHtml(zipStream, programCollection, startYear);
 	}
 
 	/**
