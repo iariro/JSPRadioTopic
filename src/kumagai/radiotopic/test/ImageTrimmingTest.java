@@ -132,6 +132,10 @@ public class ImageTrimmingTest
 	{
 		trimAndSave("youtube_haitu", 869, 490);
 	}
+	public void testYoutube10() throws IOException
+	{
+		trimAndSave("youtube_amasso1", 869, 490);
+	}
 
 	void trimAndSave(String file, int width, int height)
 		throws IOException
