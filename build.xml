@@ -10,6 +10,11 @@
 	</context-param>
 
 	<context-param>
+		<param-name>RadioTopicChronologyBitmapSize</param-name>
+		<param-value>1200,800</param-value>
+	</context-param>
+
+	<context-param>
 		<param-name>RadioTopicImageFolder</param-name>
 		<param-value>C:\Users\kumagai\Pictures\RadioTopic</param-value>
 	</context-param>

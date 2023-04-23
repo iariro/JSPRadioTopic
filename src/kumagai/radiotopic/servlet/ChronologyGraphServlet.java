@@ -44,6 +44,7 @@ public class ChronologyGraphServlet
 			DriverManager.registerDriver(new SQLServerDriver());
 
 			String url = context.getInitParameter("RadioTopicSqlserverUrl");
+			String chronologyBitmapSize = context.getInitParameter("RadioTopicChronologyBitmapSize");
 			String startYear = request.getParameter("startYear");
 
 			if (url != null)
@@ -55,9 +56,15 @@ public class ChronologyGraphServlet
 					new ProgramCollection(connection);
 				connection.close();
 
+				String [] chronologyBitmapSizeXY = chronologyBitmapSize.split(",");
+
 				readImage =
 					new ChronologyBitmap(
-						new ChronologyGraphData(programCollection, 1200, 600, startYear != null ? Integer.valueOf(startYear) : null));
+						new ChronologyGraphData(
+							programCollection,
+							Integer.valueOf(chronologyBitmapSizeXY[0]),
+							Integer.valueOf(chronologyBitmapSizeXY[1]),
+							startYear != null ? Integer.valueOf(startYear) : null));
 			}
 			else
 			{

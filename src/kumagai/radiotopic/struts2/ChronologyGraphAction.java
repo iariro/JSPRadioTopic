@@ -48,6 +48,7 @@ public class ChronologyGraphAction
 		ServletContext context = ServletActionContext.getServletContext();
 
 		String url = context.getInitParameter("RadioTopicSqlserverUrl");
+		String chronologyBitmapSize = context.getInitParameter("RadioTopicChronologyBitmapSize");
 
 		if (url != null)
 		{
@@ -60,9 +61,15 @@ public class ChronologyGraphAction
 				new ProgramCollection(connection);
 			connection.close();
 
+			String [] chronologyBitmapSizeXY = chronologyBitmapSize.split(",");
+
 			// クリッカブルマップデータ生成
 			chronologyGraphData =
-				new ChronologyGraphData(programCollection, 1200, 600, startYear);
+				new ChronologyGraphData(
+					programCollection,
+					Integer.valueOf(chronologyBitmapSizeXY[0]),
+					Integer.valueOf(chronologyBitmapSizeXY[1]),
+					startYear);
 
 			// インライン画像生成
 			ChronologyBitmap chronologyBitmap = new ChronologyBitmap(chronologyGraphData);
