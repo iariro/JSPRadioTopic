@@ -41,11 +41,14 @@ public class ChronologyGraphData
 		ProgramCollection programCollection2 = new ProgramCollection();
 		for (Program program : programCollection)
 		{
-			String [] ageField = program.age.split("-");
-			if (startYear == null ||
-				DateTime.parseDateString(ageField[0]).getYear() >= startYear)
+			if (program.age != null && program.age.indexOf("-") >= 0)
 			{
-				programCollection2.add(program);
+				String [] ageField = program.age.split("-");
+				if (startYear == null ||
+					DateTime.parseDateString(ageField[0]).getYear() >= startYear)
+				{
+					programCollection2.add(program);
+				}
 			}
 		}
 

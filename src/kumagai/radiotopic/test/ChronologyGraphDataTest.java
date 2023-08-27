@@ -1,5 +1,7 @@
 package kumagai.radiotopic.test;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.text.ParseException;
 
 import junit.framework.TestCase;
@@ -7,6 +9,7 @@ import kumagai.radiotopic.ChronologyGraphData;
 import kumagai.radiotopic.ChronologyGraphDataElement;
 import kumagai.radiotopic.Program;
 import kumagai.radiotopic.ProgramCollection;
+import kumagai.radiotopic.RadioTopicDatabase;
 
 public class ChronologyGraphDataTest
 	extends TestCase
@@ -26,10 +29,25 @@ public class ChronologyGraphDataTest
 			chronologyGraphData.min,
 			chronologyGraphData.max,
 			chronologyGraphData.dayRange.getDay());
-		
+
 		for (ChronologyGraphDataElement element : chronologyGraphData)
 		{
 			System.out.println(element);
 		}
+	}
+
+	public void test2()
+		throws ParseException, SQLException
+	{
+		Connection connection = RadioTopicDatabase.getConnection();
+		ProgramCollection programCollection =
+			new ProgramCollection(connection);
+		connection.close();
+
+		ChronologyGraphData chronologyGraphData = new ChronologyGraphData(
+			programCollection,
+			1200,
+			800,
+			2020);
 	}
 }
