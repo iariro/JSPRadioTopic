@@ -112,23 +112,27 @@
 					</s:form>
 				</td>
 				<td>
-					<s:form action="completetable" theme="simple">
-						<input type="hidden" name="programid" value="<s:property value="id" />">
-						<input type="hidden" name="programName" value="<s:property value="name" />">
-						<input type="hidden" name="sortOrder" value="<s:property value="sortOrder" />">
-						<input type="hidden" name="originUpdateDate" value="<s:property value="originUpdateDate" />">
-						<s:submit value="表" />
-					</s:form>
+					<s:if test="%{sortOrder < 2}">
+						<s:form action="completetable" theme="simple">
+							<input type="hidden" name="programid" value="<s:property value="id" />">
+							<input type="hidden" name="programName" value="<s:property value="name" />">
+							<input type="hidden" name="sortOrder" value="<s:property value="sortOrder" />">
+							<input type="hidden" name="originUpdateDate" value="<s:property value="originUpdateDate" />">
+							<s:submit value="表" />
+						</s:form>
+					</s:if>
 				</td>
 				<td>
-					<s:form action="completegraph" theme="simple">
-						<input type="hidden" name="programid" value="<s:property value="id" />">
-						<input type="hidden" name="programName" value="<s:property value="name" />">
-						<input type="hidden" name="sortOrder" value="<s:property value="sortOrder" />">
-						<input type="hidden" name="originUpdateDate" value="<s:property value="originUpdateDate" />">
-						<input type="hidden" name="checkbox" value="false">
-						<s:submit value="コンプリートグラフ" />
-					</s:form>
+					<s:if test="%{sortOrder < 2}">
+						<s:form action="completegraph" theme="simple">
+							<input type="hidden" name="programid" value="<s:property value="id" />">
+							<input type="hidden" name="programName" value="<s:property value="name" />">
+							<input type="hidden" name="sortOrder" value="<s:property value="sortOrder" />">
+							<input type="hidden" name="originUpdateDate" value="<s:property value="originUpdateDate" />">
+							<input type="hidden" name="checkbox" value="false">
+							<s:submit value="コンプリートグラフ" />
+						</s:form>
+					</s:if>
 				</td>
 				<td>
 					<s:form action="linecountstatgraph" theme="simple">
