@@ -411,8 +411,20 @@ public class DayCollection
 	 * @param programid 番組ID
 	 * @param sortOrder ソートオーダー
 	 */
+	public DayCollection(Connection connection, int programid, SortOrder sortOrder) throws SQLException
+	{
+		this(connection, programid, sortOrder, "desc");
+	}
+
+	/**
+	 * 回コレクションを構築
+	 * @param connection DB接続オブジェクト
+	 * @param programid 番組ID
+	 * @param sortOrder ソートオーダー
+	 * @param ascDesc ソート昇順／降順
+	 */
 	public DayCollection
-		(Connection connection, int programid, SortOrder sortOrder)
+		(Connection connection, int programid, SortOrder sortOrder, String ascDesc)
 		throws SQLException
 	{
 		String sql =
@@ -420,15 +432,15 @@ public class DayCollection
 
 		if (sortOrder == SortOrder.NumberByNumeric)
 		{
-			sql += "order by convert(NUMERIC, no) desc";
+			sql += "order by convert(NUMERIC, no) " + ascDesc;
 		}
 		else if (sortOrder == SortOrder.NumberByText)
 		{
-			sql += "order by no desc";
+			sql += "order by no " + ascDesc;
 		}
 		else if (sortOrder == SortOrder.Date)
 		{
-			sql += "order by date desc";
+			sql += "order by date " + ascDesc;
 		}
 
 		PreparedStatement statement = connection.prepareStatement(sql);

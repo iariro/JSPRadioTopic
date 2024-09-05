@@ -96,7 +96,7 @@
 				<tr>
 					<th>ID</th>
 					<th>番組名</th>
-					<th colspan="5">操作</th>
+					<th colspan="6">操作</th>
 					<th>年代</th>
 				</tr>
 			<s:iterator value="programCollection">
@@ -131,6 +131,18 @@
 							<input type="hidden" name="originUpdateDate" value="<s:property value="originUpdateDate" />">
 							<input type="hidden" name="checkbox" value="false">
 							<s:submit value="コンプリートグラフ" />
+						</s:form>
+					</s:if>
+				</td>
+				<td>
+					<s:if test="%{sortOrder < 2}">
+						<s:form action="watchdategraph" theme="simple">
+							<input type="hidden" name="programid" value="<s:property value="id" />">
+							<input type="hidden" name="programName" value="<s:property value="name" />">
+							<input type="hidden" name="sortOrder" value="<s:property value="sortOrder" />">
+							<input type="hidden" name="originUpdateDate" value="<s:property value="originUpdateDate" />">
+							<input type="hidden" name="checkbox" value="false">
+							<s:submit value="視聴日グラフ" />
 						</s:form>
 					</s:if>
 				</td>
