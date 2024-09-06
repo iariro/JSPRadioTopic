@@ -13,7 +13,7 @@
 	</head>
 
 	<body>
-		<h1>ラジオ番組一覧 - 年表</h1>
+		<h1>ラジオ番組一覧</h1>
 
 		<div class=hatena-body>
 		<div class=main>
@@ -27,7 +27,7 @@
 				options =
 				{
 					chart: {renderTo: "chart", zoomType:'xy', plotBackgroundColor: 'lightgray'},
-					title: {text: 'ラジオ番組一覧 - 視聴日グラフ'},
+					title: {text: '<s:property value="programName" /> - 視聴日グラフ'},
 					xAxis: {title: null, allowDecimals: false},
 					yAxis: {type: 'datetime', title: {text: '視聴日'}, },
 					plotOptions: {series:{marker:{enabled:true, radius:3}}},

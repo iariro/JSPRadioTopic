@@ -73,7 +73,7 @@ public class Day
 	 */
 	public String getCreateDateAsString()
 	{
-		return createdate.toString();
+		return createdate != null ? createdate.toString() : null;
 	}
 
 	/**
@@ -82,7 +82,7 @@ public class Day
 	 */
 	public String getUpdateDateAsString()
 	{
-		return updatedate.toString();
+		return updatedate != null ? updatedate.toString() : null;
 	}
 
 	/**

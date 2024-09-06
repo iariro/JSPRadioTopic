@@ -44,7 +44,7 @@ public class WatchDateGraphAction
 	{
 		WatchDateGraphAction action = new WatchDateGraphAction();
 
-		action.programid = 3;
+		action.programid = 7;
 
 		Connection connection = RadioTopicDatabase.getConnection();
 

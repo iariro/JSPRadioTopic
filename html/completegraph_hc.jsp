@@ -13,7 +13,7 @@
 	</head>
 
 	<body>
-		<h1>ラジオ番組一覧 - 年表</h1>
+		<h1>ラジオ番組一覧</h1>
 
 		<div class=hatena-body>
 		<div class=main>
@@ -27,7 +27,7 @@
 				options =
 				{
 					chart: {renderTo: "chart", zoomType:'xy', plotBackgroundColor: 'lightgray'},
-					title: {text: 'ラジオ番組一覧 - 年表'},
+					title: {text: '<s:property value="programName" /> - コンプリートグラフ'},
 					xAxis: {title: null, type: 'datetime'},
 					yAxis: {allowDecimals: false, title: {text: 'コンプリート率(%)'}, },
 					plotOptions: {series:{marker:{enabled:true}}},
