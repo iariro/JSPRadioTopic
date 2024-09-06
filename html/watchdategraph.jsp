@@ -30,11 +30,11 @@
 					title: {text: 'ラジオ番組一覧 - 視聴日グラフ'},
 					xAxis: {title: null, allowDecimals: false},
 					yAxis: {type: 'datetime', title: {text: '視聴日'}, },
-					plotOptions: {series:{marker:{enabled:true}}},
+					plotOptions: {series:{marker:{enabled:true, radius:3}}},
 					tooltip: { formatter: function () { const date = new Date(this.y); const y = date.getYear() + 1900; const m = date.getMonth()+1; const d = date.getDate(); return y + "/" + m + "/" + d; } },
 					series: [
-						{'name': 'オンエア日', 'data': <s:property value='onairDateList' escapeHtml='false' /> },
-						{'name': '視聴日', 'data': <s:property value='watchDateList' escapeHtml='false' />, 'lineWidth': 0 }
+						{'name': 'オンエア日', 'type': 'line', 'data': <s:property value='onairDateList' escapeHtml='false' /> },
+						{'name': '視聴日', 'type': 'scatter', 'lineWidth': 0, 'data': <s:property value='watchDateList' escapeHtml='false' /> }
 					]
 				};
 				chart = new Highcharts.Chart(options);
