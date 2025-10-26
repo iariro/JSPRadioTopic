@@ -26,6 +26,7 @@
 				Highcharts.setOptions({ global: { useUTC: false } });
 				options =
 				{
+					time: { useUTC: false },
 					chart: {renderTo: "chart", zoomType:'xy', plotBackgroundColor: 'lightgray'},
 					title: {text: '<s:property value="programName" /> - コンプリートグラフ'},
 					xAxis: {title: null, type: 'datetime'},
